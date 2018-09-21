@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import RealmSwift
 
 class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
@@ -17,7 +18,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         collectionView.register(AssetCell.self, forCellWithReuseIdentifier: "ASSET_CELL")
         collectionView.register(UINib(nibName: "AssetCell", bundle:nil), forCellWithReuseIdentifier: "ASSET_CELL")
@@ -26,23 +27,43 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         
         self.title = album.name
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.assets.removeAll()
+        
         let ccasset = CCAsset()
         ccasset.type = .add
         self.assets.append(ccasset)
-
         
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
-        let result:PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: self.album.asset!, options: fetchOptions)
-
-        result.enumerateObjects({ (object, count, stop) in
-            let ccasset = CCAsset()
-            ccasset.type = .video
-            ccasset.asset = object
-            self.assets.append(ccasset)
-        })
-
-        self.collectionView.reloadData()
+        if album.type == .video {
+            
+            let fetchOptions = PHFetchOptions()
+            fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+            let result:PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: self.album.asset!, options: fetchOptions)
+            
+            result.enumerateObjects({ (object, count, stop) in
+                let ccasset = CCAsset()
+                ccasset.type = .video
+                ccasset.asset = object
+                self.assets.append(ccasset)
+            })
+            
+            self.collectionView.reloadData()
+            
+        } else {
+            let realm = try! Realm()
+            let audios = realm.objects(CCAudio.self).sorted(byKeyPath: "local_time_start", ascending: false)
+            for audio:CCAudio in audios {
+                let ccasset = CCAsset()
+                ccasset.type = .audio
+                ccasset.audio = audio
+                self.assets.append(ccasset)
+            }
+            self.collectionView.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,22 +104,19 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         if assets[indexPath.row].type == .add {
             
-            let detailVC:AudioCaptureVC = AudioCaptureVC(nibName: "AudioCaptureVC", bundle: nil)
-            detailVC.album = self.album
-            self.navigationController!.pushViewController(detailVC, animated: true)
 
             if self.album.type == .video {
                 
             } else if self.album.type == .audio {
-                
+                let detailVC:AudioCaptureVC = AudioCaptureVC(nibName: "AudioCaptureVC", bundle: nil)
+                detailVC.album = self.album
+                self.navigationController!.pushViewController(detailVC, animated: true)
             }
         } else {
             
-            /*
-            let detailVC:AlbumDetailVC = AlbumDetailVC(nibName: "AlbumDetailVC", bundle: nil)
-            detailVC.album = self.albums[indexPath.row]
+            let detailVC:ItemDetailVC = ItemDetailVC(nibName: "ItemDetailVC", bundle: nil)
+            detailVC.asset = self.assets[indexPath.row]
             self.navigationController!.pushViewController(detailVC, animated: true)
-            */
         }
     }
 
@@ -113,6 +131,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         
         return CGSize(width: width, height: width)
     }
+
 
 
 }

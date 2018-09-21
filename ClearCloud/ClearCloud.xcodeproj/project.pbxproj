@@ -31,6 +31,15 @@
 		0DB57B5D2151DC0600EFBDD6 /* AudioCaptureVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB57B5B2151DC0600EFBDD6 /* AudioCaptureVC.xib */; };
 		0DB57B602151E5BC00EFBDD6 /* CCAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B5F2151E5BC00EFBDD6 /* CCAudio.swift */; };
 		0DB57B622151E5D400EFBDD6 /* CCEnhancedVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B612151E5D400EFBDD6 /* CCEnhancedVideo.swift */; };
+		0DB57B64215482A900EFBDD6 /* BabbleLabsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B63215482A900EFBDD6 /* BabbleLabsApi.swift */; };
+		0DB57B682154832C00EFBDD6 /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B672154832C00EFBDD6 /* LoginResponse.swift */; };
+		0DB57B6A2154839200EFBDD6 /* ServerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B692154839200EFBDD6 /* ServerError.swift */; };
+		0DB57B6C2154846F00EFBDD6 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B6B2154846F00EFBDD6 /* LoginManager.swift */; };
+		0DB57B6E2154848E00EFBDD6 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B6D2154848E00EFBDD6 /* Keychain.swift */; };
+		0DB57B722155790F00EFBDD6 /* ItemDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B702155790F00EFBDD6 /* ItemDetailVC.swift */; };
+		0DB57B732155790F00EFBDD6 /* ItemDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB57B712155790F00EFBDD6 /* ItemDetailVC.xib */; };
+		0DB57B76215579D300EFBDD6 /* AudioVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B74215579D300EFBDD6 /* AudioVideoCell.swift */; };
+		0DB57B77215579D300EFBDD6 /* AudioVideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB57B75215579D300EFBDD6 /* AudioVideoCell.xib */; };
 		3E2269042446DADEDA30FF2A /* Pods_ClearCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EB20CAE0755E73EB971FB56 /* Pods_ClearCloud.framework */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +91,15 @@
 		0DB57B5B2151DC0600EFBDD6 /* AudioCaptureVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioCaptureVC.xib; sourceTree = "<group>"; };
 		0DB57B5F2151E5BC00EFBDD6 /* CCAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCAudio.swift; sourceTree = "<group>"; };
 		0DB57B612151E5D400EFBDD6 /* CCEnhancedVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCEnhancedVideo.swift; sourceTree = "<group>"; };
+		0DB57B63215482A900EFBDD6 /* BabbleLabsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabbleLabsApi.swift; sourceTree = "<group>"; };
+		0DB57B672154832C00EFBDD6 /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		0DB57B692154839200EFBDD6 /* ServerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerError.swift; sourceTree = "<group>"; };
+		0DB57B6B2154846F00EFBDD6 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
+		0DB57B6D2154848E00EFBDD6 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		0DB57B702155790F00EFBDD6 /* ItemDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailVC.swift; sourceTree = "<group>"; };
+		0DB57B712155790F00EFBDD6 /* ItemDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemDetailVC.xib; sourceTree = "<group>"; };
+		0DB57B74215579D300EFBDD6 /* AudioVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioVideoCell.swift; sourceTree = "<group>"; };
+		0DB57B75215579D300EFBDD6 /* AudioVideoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioVideoCell.xib; sourceTree = "<group>"; };
 		1EB20CAE0755E73EB971FB56 /* Pods_ClearCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6074BD564377A56F4AB095 /* Pods-ClearCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-ClearCloud/Pods-ClearCloud.release.xcconfig"; sourceTree = "<group>"; };
 		5C6613A06A84876D0E31E8B8 /* Pods-ClearCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ClearCloud/Pods-ClearCloud.debug.xcconfig"; sourceTree = "<group>"; };
@@ -180,6 +198,7 @@
 		0D937B8421519E1D00A240A1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				0DB57B6F215578E700EFBDD6 /* ItemDetail */,
 				0DB57B592151DB1100EFBDD6 /* AudioCapture */,
 				0D937B9D2151D22E00A240A1 /* AlbumDetail */,
 				0D937B8E2151A14B00A240A1 /* Albums */,
@@ -192,6 +211,12 @@
 		0D937B8521519E2100A240A1 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				0DB57B662154832000EFBDD6 /* Response */,
+				0DB57B652154831900EFBDD6 /* Request */,
+				0DB57B63215482A900EFBDD6 /* BabbleLabsApi.swift */,
+				0DB57B692154839200EFBDD6 /* ServerError.swift */,
+				0DB57B6B2154846F00EFBDD6 /* LoginManager.swift */,
+				0DB57B6D2154848E00EFBDD6 /* Keychain.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -253,6 +278,32 @@
 				0DB57B612151E5D400EFBDD6 /* CCEnhancedVideo.swift */,
 			);
 			path = Persistent;
+			sourceTree = "<group>";
+		};
+		0DB57B652154831900EFBDD6 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		0DB57B662154832000EFBDD6 /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				0DB57B672154832C00EFBDD6 /* LoginResponse.swift */,
+			);
+			path = Response;
+			sourceTree = "<group>";
+		};
+		0DB57B6F215578E700EFBDD6 /* ItemDetail */ = {
+			isa = PBXGroup;
+			children = (
+				0DB57B702155790F00EFBDD6 /* ItemDetailVC.swift */,
+				0DB57B712155790F00EFBDD6 /* ItemDetailVC.xib */,
+				0DB57B74215579D300EFBDD6 /* AudioVideoCell.swift */,
+				0DB57B75215579D300EFBDD6 /* AudioVideoCell.xib */,
+			);
+			path = ItemDetail;
 			sourceTree = "<group>";
 		};
 		882B00F05A2AC795826F4083 /* Frameworks */ = {
@@ -381,9 +432,11 @@
 				0D937BA12151D24A00A240A1 /* AlbumDetailVC.xib in Resources */,
 				0DB57B5D2151DC0600EFBDD6 /* AudioCaptureVC.xib in Resources */,
 				0D937B602151990C00A240A1 /* LaunchScreen.storyboard in Resources */,
+				0DB57B77215579D300EFBDD6 /* AudioVideoCell.xib in Resources */,
 				0D937B9A2151C91B00A240A1 /* AlbumCell.xib in Resources */,
 				0D937B5D2151990C00A240A1 /* Assets.xcassets in Resources */,
 				0D937B922151A17100A240A1 /* AlbumsVC.xib in Resources */,
+				0DB57B732155790F00EFBDD6 /* ItemDetailVC.xib in Resources */,
 				0D937B5B2151990A00A240A1 /* Main.storyboard in Resources */,
 				0DB57B562151D45400EFBDD6 /* AssetCell.xib in Resources */,
 				0D937B962151A18100A240A1 /* LeftNavVC.xib in Resources */,
@@ -418,6 +471,7 @@
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityLogger/AlamofireNetworkActivityLogger.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/Cache/Cache.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/DateTimePicker/DateTimePicker.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
@@ -437,6 +491,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityLogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cache.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateTimePicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
@@ -480,10 +535,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DB57B64215482A900EFBDD6 /* BabbleLabsApi.swift in Sources */,
 				0DB57B552151D45400EFBDD6 /* AssetCell.swift in Sources */,
 				0D937B582151990A00A240A1 /* ViewController.swift in Sources */,
 				0DB57B582151D4D400EFBDD6 /* CCAsset.swift in Sources */,
+				0DB57B76215579D300EFBDD6 /* AudioVideoCell.swift in Sources */,
 				0D937B8D21519E7800A240A1 /* CCViewController.swift in Sources */,
+				0DB57B6E2154848E00EFBDD6 /* Keychain.swift in Sources */,
+				0DB57B6C2154846F00EFBDD6 /* LoginManager.swift in Sources */,
 				0D937B912151A17100A240A1 /* AlbumsVC.swift in Sources */,
 				0DB57B622151E5D400EFBDD6 /* CCEnhancedVideo.swift in Sources */,
 				0D937BA02151D24A00A240A1 /* AlbumDetailVC.swift in Sources */,
@@ -492,7 +551,10 @@
 				0DB57B602151E5BC00EFBDD6 /* CCAudio.swift in Sources */,
 				0D937B952151A18100A240A1 /* LeftNavVC.swift in Sources */,
 				0D937B9C2151C92900A240A1 /* Album.swift in Sources */,
+				0DB57B6A2154839200EFBDD6 /* ServerError.swift in Sources */,
 				0D937B992151C91B00A240A1 /* AlbumCell.swift in Sources */,
+				0DB57B682154832C00EFBDD6 /* LoginResponse.swift in Sources */,
+				0DB57B722155790F00EFBDD6 /* ItemDetailVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

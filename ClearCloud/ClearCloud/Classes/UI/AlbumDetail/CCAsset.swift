@@ -20,5 +20,6 @@ class CCAsset: NSObject {
     var name:String? = nil
     var asset:PHAsset? = nil
     var type:AssetType? = nil
+    var audio:CCAudio? = nil
 
 }

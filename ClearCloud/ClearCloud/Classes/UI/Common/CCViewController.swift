@@ -105,6 +105,17 @@ class CCViewController: UIViewController {
     }
 
 }
+extension UIView{
+    
+    func boundInside(superView: UIView){
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: NSLayoutFormatOptions.directionLeadingToTrailing, metrics:nil, views:["subview":self]))
+        superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: NSLayoutFormatOptions.directionLeadingToTrailing, metrics:nil, views:["subview":self]))
+        
+        
+    }
+}
 extension UIColor {
     convenience init(hex: String, alpha: CGFloat = 1) {
         assert(hex[hex.startIndex] == "#", "Expected hex string of format #RRGGBB")

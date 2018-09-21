@@ -17,5 +17,6 @@ class CCAudio: Object {
     @objc dynamic var duration: Int = 0
     @objc dynamic var local_time_start:Date?
     @objc dynamic var local_audio_path: String? = nil
+    @objc dynamic var enhanced_audio_path: String? = nil
 
 }

@@ -74,4 +74,91 @@ class BabbleLabsApi: NSObject {
             completionHandler(ServerError.noInternet, nil)
         }
     }
+    
+    
+    func convertAudio(filepath: String, email: String, destination: URL, completion:@escaping ((Bool, ServerError?) -> Void)) {
+        if let reachability = reachability, reachability.isReachable {
+            
+            var urlComponents = URLComponents()
+            urlComponents.scheme = "https"
+            urlComponents.host = "api.babblelabs.com"
+            urlComponents.path = "/audioEnhancer/api/audio/stream/\(email)"
+            guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
+            
+            // Specify this request as being a POST method
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            // Make sure that we include headers specifying that our request's HTTP body
+            // will be JSON encoded
+            var headers = request.allHTTPHeaderFields ?? [:]
+            headers["Content-Type"] = "audio/aac"
+            headers["Authorization"] = "Bearer \(sessionToken!)"
+            request.allHTTPHeaderFields = headers
+            
+            // Now let's encode out Post struct into JSON data...
+            let file: FileHandle? = FileHandle(forReadingAtPath: filepath)
+            
+            if file != nil {
+                // Read all the data
+                let data = file?.readDataToEndOfFile()
+                request.httpBody = data
+                //print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
+                
+                // Close the file
+                file?.closeFile()
+                
+            } else {
+                completion(false, ServerError.readingFile)
+            }
+            // ... and set our request's HTTP body
+            
+            // Create and run a URLSession data task with our JSON encoded POST request
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            let task = session.dataTask(with: request) { (responseData, response, responseError) in
+                guard responseError == nil else {
+                    completion(false,ServerError(WithMessage: (responseError?.localizedDescription)!) )
+                    return
+                }
+                
+                let httpresponse = response as! HTTPURLResponse
+                print("response \(httpresponse.statusCode)")
+                print("response data \(responseData)")
+                print("destination \(destination)")
+                
+                // APIs usually respond with the data you just sent in your POST request
+                if let data = responseData {
+                    
+                    do {
+                        try data.write(to: destination)
+                    } catch {
+                        // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+                        print("Ooops! Something went wrong!")
+                        completion(false, ServerError.writingFile)
+                        return
+                    }
+                    /*
+                     let file: FileHandle? = FileHandle(forWritingAtPath: destinationpath)
+                     if file != nil {
+                     
+                     // Write it to the file
+                     file?.write(data)
+                     
+                     // Close the file
+                     file?.closeFile()
+                     } else {
+                     print("Ooops! Something went wrong!")
+                     completion?(false,"error writing file")
+                     }*/
+                    completion(true,nil)
+                } else {
+                    print("no readable data received in response")
+                }
+            }
+            task.resume()
+        } else {
+            completion(false, ServerError.noInternet)
+        }
+        
+    }
 }

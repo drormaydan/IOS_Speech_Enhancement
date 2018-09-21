@@ -83,6 +83,12 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         print("loadAlbums")
         
         self.albums.removeAll()
+        
+        let album = Album()
+        album.name = "Audio Files"
+        album.type = .audio
+        self.albums.append(album)
+
         let fetchOptions = PHFetchOptions()
         
         let smartAlbums:PHFetchResult<PHCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumVideos, options: fetchOptions) as! PHFetchResult<PHCollection>

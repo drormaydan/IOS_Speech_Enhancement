@@ -22,6 +22,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     var startRecordingTime: Date?
     var isRecording:Bool = false
     var album:Album!
+    var endTime:Date? = nil
 
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
@@ -114,6 +115,11 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 let fileSize = attr[FileAttributeKey.size] as! UInt64
                 print("audio \(audio.local_audio_path!) fileSize \(fileSize)")
                 audio.audio_size = Double(fileSize)
+                
+                let userCalendar = Calendar.current
+                let requestedComponent: Set<Calendar.Component> = [.hour,.minute,.second]
+                let timeDifference = userCalendar.dateComponents(requestedComponent, from: startRecordingTime!, to: endTime!)
+                audio.duration = timeDifference.second! + (timeDifference.minute!*60) + (timeDifference.hour!*3600)
             } catch {
                 print("audio Error: \(error)")
             }
@@ -129,15 +135,29 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             
             
             
-            var options = AKConverter.Options()
+            //var options = AKConverter.Options()
             // any options left nil will assume the value of the input file
            // options.format = "mp3"
             //options.sampleRate == 48000
             //options.bitDepth = 24
+            
+            
+            /*
             let audiourl2 = newDir.appendingPathComponent("audio.mp3")
 
             
-            convertAudio(audioFilename, outputURL: audiourl2)
+            BabbleLabsApi.shared.convertAudio(filepath: audioFilename.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
+                print("POST SUCCESS \(success) error \(error)")
+                if (success) {
+
+                }
+            }*/
+            
+           // convertAudio(audioFilename, outputURL: audiourl2)
+            
+            
+            
+            /*
             print("audiourl2 \(audiourl2)")
             PHPhotoLibrary.shared().performChanges({
                 PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: audiourl2)
@@ -151,14 +171,14 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                     alertController.addAction(defaultAction)
                     self.present(alertController, animated: true, completion: nil)
                 }
-            }
+            }*/
 /*
             let converter = AKConverter(inputURL: audioFilename, outputURL: audiourl2, options: options)
             converter.start(completionHandler: { error in
                 print("1 error \(error)")
 
             })*/
-/*
+
             // delete old file
             if FileManager.default.fileExists(atPath: audioFilename.path) {
                 do {
@@ -167,7 +187,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 catch {
                     print("Could not remove file at url: \(audioFilename)")
                 }
-            }*/
+            }
             
         } catch let error as NSError {
             let alertController = UIAlertController(title:NSLocalizedString("Error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
@@ -389,7 +409,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     func finishRecording(success: Bool) {
         audioRecorder.stop()
         audioRecorder = nil
-        
+        endTime = Date()
         if success {
             recordButton.setTitle("Tap to Re-record", for: .normal)
         } else {

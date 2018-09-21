@@ -123,6 +123,7 @@ class BabbleLabsApi: NSObject {
                 
                 let httpresponse = response as! HTTPURLResponse
                 print("response \(httpresponse.statusCode)")
+                print("response headers \(httpresponse.allHeaderFields)")
                 print("response data \(responseData)")
                 print("destination \(destination)")
                 

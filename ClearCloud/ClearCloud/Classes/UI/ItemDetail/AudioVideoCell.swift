@@ -51,8 +51,13 @@ class AudioVideoCell: UITableViewCell {
         } catch let error as NSError {
             print(error.description)
         }
+        print("PLAYER URL \(url!)")
+       // let player = AVPlayer(url: url!)
+        
+        let avPlayerItem = AVPlayerItem.init(url: url! as URL)
+        let player = AVPlayer.init(playerItem: avPlayerItem)
 
-        let player = AVPlayer(url: url!)
+        
         av.player = player
         av.view.frame = self.videoView.frame
         self.owner.addChildViewController(av)

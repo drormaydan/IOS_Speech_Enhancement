@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -23,9 +24,22 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         self.tableView.register(UINib(nibName: "AudioVideoCell", bundle: nil), forCellReuseIdentifier: "AUDIO_VIDEO_CELL")
         self.tableView.backgroundColor = UIColor.clear
         self.tableView.backgroundView = nil
-
+        
+        refresh()
     }
 
+    func refresh() {
+        if asset.type == .audio {
+            if asset.audio!.enhanced_audio_path == nil {
+                self.enhanceButton.isHidden = false
+            } else {
+                self.enhanceButton.isHidden = true
+            }
+        } else {
+            
+        }
+        self.tableView.reloadData()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -34,6 +48,40 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     // MARK: - Actions
 
     @IBAction func clickEnhance(_ sender: Any) {
+        if asset.type == .audio {
+            self.showHud()
+            if let audio = self.asset.audio {
+                let filemgr = FileManager.default
+                let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+                let docsDir = dirPaths.first!
+                let newDir = docsDir.appendingPathComponent(audio.unique_id!)
+                
+                let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
+                
+                let path = asset.audio!.local_audio_path
+                let url = docsDir.appendingPathComponent(path!)
+
+                
+                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
+                    self.hideHud()
+                    print("POST SUCCESS \(success) error \(error)")
+                    if (success) {
+                        DispatchQueue.main.async {
+                            let realm = try! Realm()
+                            try! realm.write {
+                                audio.enhanced_audio_path = audiourl2.path.replacingOccurrences(of: docsDir.path, with: "")
+                            }
+                            self.refresh()
+                        }
+
+                    } else {
+                        
+                    }
+                }
+            }
+        } else {
+            
+        }
     }
     // MARK: - TableView
     

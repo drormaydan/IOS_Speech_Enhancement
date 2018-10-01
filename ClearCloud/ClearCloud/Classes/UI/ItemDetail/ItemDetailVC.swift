@@ -12,6 +12,7 @@ import RealmSwift
 class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
 
     var asset:CCAsset!
+    var enhancedVideo:CCEnhancedVideo? = nil
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var enhanceButton: UIButton!
     
@@ -25,6 +26,12 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         self.tableView.backgroundColor = UIColor.clear
         self.tableView.backgroundView = nil
         
+        if asset.type == .video {
+print("ASSET ID \(self.asset.asset!.localIdentifier)")
+            let realm = try! Realm()
+            self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
+        }
+        
         refresh()
     }
 
@@ -36,8 +43,9 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                 self.enhanceButton.isHidden = true
             }
         } else {
-            
+            print("UNIQ ID \(self.asset.asset!.localIdentifier)")
         }
+        
         self.tableView.reloadData()
     }
     override func didReceiveMemoryWarning() {
@@ -101,12 +109,14 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             }
             return 1
         } else {
-            
-            
+            if (self.enhancedVideo == nil) {
+                return 1
+            }
+            return 2
+
         }
-        
-        return 0;
     }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         print("END SCROLL")
         self.tableView.reloadData()
@@ -130,7 +140,14 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         } else {
             cell.type = .video
 
-            
+            if indexPath.row == 0 {
+                if self.enhancedVideo == nil {
+                    cell.asset = self.asset.asset!
+                }
+            } else {
+
+            }
+
         }
         cell.selectionStyle = .none
         cell.owner = self

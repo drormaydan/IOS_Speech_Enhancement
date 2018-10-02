@@ -91,7 +91,7 @@ class BabbleLabsApi: NSObject {
             // Make sure that we include headers specifying that our request's HTTP body
             // will be JSON encoded
             var headers = request.allHTTPHeaderFields ?? [:]
-            headers["Content-Type"] = "audio/m4a"
+            headers["Content-Type"] = "audio/aiff"
             headers["Authorization"] = "Bearer \(sessionToken!)"
             request.allHTTPHeaderFields = headers
             

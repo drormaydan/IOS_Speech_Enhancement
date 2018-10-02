@@ -93,7 +93,8 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         let docsDir = dirPaths.first!
         let newDir = docsDir.appendingPathComponent(audio.unique_id!)
         let audiourl = newDir.appendingPathComponent("audio.m4a")
-        
+        let testaudiourl = newDir.appendingPathComponent("caf")
+
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         
@@ -108,6 +109,22 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             audio.local_audio_path = audiourl.path.replacingOccurrences(of: docsDir.path, with: "")
             print("FINAL AUDIO PATH \(audio.local_audio_path!)")
             
+            // test
+            var options = AKConverter.Options()
+            options.format = "caf"
+            options.sampleRate = 22500
+            options.channels = UInt32(1)
+            let br = UInt32(16)
+            options.bitRate = br * 1_000
+            let converter = AKConverter(inputURL: audiourl, outputURL: testaudiourl, options: options)
+            converter.start(completionHandler: { error in
+                if let error = error {
+                    AKLog("Error during convertion: \(error)")
+                } else {
+                    AKLog("Conversion Complete! \(testaudiourl)")
+                }
+            })
+
             
             do {
                 let attr = try filemgr.attributesOfItem(atPath: audiourl.path)

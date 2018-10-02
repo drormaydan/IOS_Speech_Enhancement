@@ -186,7 +186,7 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
 
         
         let width = ((screenSize.width-20)/2)-10
-        print("width =\(width)")
+        //print("width =\(width)")
         
         return CGSize(width: width, height: width-12+12+59)
     }

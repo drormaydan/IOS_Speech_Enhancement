@@ -16,7 +16,9 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     var album:Album!
     var assets:[CCAsset] = []
     var select_mode = false
+    var total_selected = 0
 
+    @IBOutlet weak var enhanceButtonView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,7 +32,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(clickSelect))
 
-        
+        enhanceButtonView.isHidden = true
     }
     
     
@@ -39,6 +41,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         if (select_mode) {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(clickSelect))
         } else {
+            self.total_selected = 0
             for asset in self.assets {
                 asset.selected = false
             }
@@ -90,6 +93,33 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Actions
+    
+    var assets_to_enhance:[CCAsset] = []
+    
+    @IBAction func clickEnhance(_ sender: Any) {
+        self.showHud(message: "Enhancing...")
+        assets_to_enhance.removeAll()
+        for asset in self.assets {
+            if asset.selected {
+                assets_to_enhance.append(asset)
+            }
+        }
+        self.enhanceNext()
+    }
+    
+    func enhanceNext() {
+        if self.assets_to_enhance.count == 0 {
+            self.hideHud()
+        } else {
+            let asset = self.assets_to_enhance.remove(at: 0)
+            
+            self.doEnhance(asset, album: self.album) { (success:Bool, error:String?) in
+                self.enhanceNext()
+            }
+        }
+    }
+    
     // MARK: - CollectionView
     
     
@@ -136,6 +166,17 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
             
             if select_mode {
                 assets[indexPath.row].selected = !assets[indexPath.row].selected
+                if assets[indexPath.row].selected {
+                    self.total_selected += 1
+                } else {
+                    self.total_selected -= 1
+                }
+                if self.total_selected > 0 {
+                    enhanceButtonView.isHidden = false
+                } else {
+                    enhanceButtonView.isHidden = true
+                }
+                    
                 self.collectionView.reloadData()
             } else {
                 let detailVC:ItemDetailVC = ItemDetailVC(nibName: "ItemDetailVC", bundle: nil)
@@ -153,7 +194,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         
         
         let width = ((screenSize.width-20)/2)-10
-        print("width =\(width)")
+        //print("width =\(width)")
         
         return CGSize(width: width, height: width)
     }

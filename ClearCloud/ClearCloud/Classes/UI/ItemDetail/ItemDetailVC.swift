@@ -18,6 +18,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     var album:Album!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var enhanceButton: UIButton!
+    var reload = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,26 +31,39 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         self.tableView.backgroundView = nil
         
         if asset.type == .video {
-print("ASSET ID \(self.asset.asset!.localIdentifier)")
+            print("ASSET ID \(self.asset.asset!.localIdentifier)")
             let realm = try! Realm()
             self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
+            print("self.enhancedVideo \(self.enhancedVideo)")
         }
         
         refresh()
     }
 
     func refresh() {
-        if asset.type == .audio {
-            if asset.audio!.enhanced_audio_path == nil {
-                self.enhanceButton.isHidden = false
+        DispatchQueue.main.async {
+            
+            if self.asset.type == .audio {
+                if self.asset.audio!.enhanced_audio_path == nil {
+                    self.enhanceButton.isHidden = false
+                } else {
+                    self.enhanceButton.isHidden = true
+                }
             } else {
-                self.enhanceButton.isHidden = true
+                print("UNIQ ID \(self.asset.asset!.localIdentifier)")
+                if self.enhancedVideo!.enhanced_video_id == nil {
+                    self.enhanceButton.isHidden = false
+                } else {
+                    self.enhanceButton.isHidden = true
+                }
             }
-        } else {
-            print("UNIQ ID \(self.asset.asset!.localIdentifier)")
+            
+            self.reload = true
+            self.tableView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.reload = false
+            }
         }
-        
-        self.tableView.reloadData()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -58,7 +72,17 @@ print("ASSET ID \(self.asset.asset!.localIdentifier)")
     
     // MARK: - Actions
     @IBAction func clickEnhance(_ sender: Any) {
+        self.showHud(message: "Enhancing...")
         self.doEnhance(self.asset, album: self.album) { (success:Bool, error:String?) in
+            self.hideHud()
+            
+            if self.asset.type == .video {
+                print("REFRESH ASSET ID \(self.asset.asset!.localIdentifier)")
+                let realm = try! Realm()
+                self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
+                print("NEW ENHANCED ID \(self.enhancedVideo!.enhanced_video_id)")
+            }
+
             self.refresh()
         }
     }
@@ -81,6 +105,9 @@ print("ASSET ID \(self.asset.asset!.localIdentifier)")
             return 1
         } else {
             if (self.enhancedVideo == nil) {
+                return 1
+            }
+            if self.enhancedVideo!.enhanced_video_id == nil {
                 return 1
             }
             return 2
@@ -118,13 +145,23 @@ print("ASSET ID \(self.asset.asset!.localIdentifier)")
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [self.enhancedVideo!.original_video_id!], options: .none)
                     cell.asset = phassets[0]
                 }
+                cell.typeLabel.text = "Original"
             } else {
-
+                if let enhanced_video_id = self.enhancedVideo!.enhanced_video_id {
+                    let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [enhanced_video_id], options: .none)
+                    if phassets.count > 0 {
+                        cell.asset = phassets[0]
+                    }
+                }
+                cell.typeLabel.text = "Enhanced"
             }
-
         }
+
         cell.selectionStyle = .none
         cell.owner = self
+        if self.reload {
+            cell.loaded = false
+        }
         cell.populate()
         return cell
     }
@@ -157,6 +194,7 @@ extension AVAsset {
             return
         }
         
+        exportSession.shouldOptimizeForNetworkUse = true
         exportSession.outputFileType = AVFileType.m4a
         exportSession.outputURL = url
         print("OUTPUT \(url)")

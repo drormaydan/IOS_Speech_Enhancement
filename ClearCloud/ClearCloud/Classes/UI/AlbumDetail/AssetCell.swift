@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import RealmSwift
 
 class AssetCell: UICollectionViewCell {
     
@@ -16,6 +17,7 @@ class AssetCell: UICollectionViewCell {
     var owner:AlbumDetailVC!
     @IBOutlet weak var durationLabel: UILabel!
     
+    @IBOutlet weak var enhancedLabel: UIImageView!
     @IBOutlet weak var checkmark: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,6 +31,7 @@ class AssetCell: UICollectionViewCell {
             self.thumbnail.image = #imageLiteral(resourceName: "blue_plus")
             self.durationLabel.isHidden = true
             self.checkmark.isHidden = true
+            self.enhancedLabel.isHidden = true
         } else {
             self.checkmark.isHidden = true
             if self.owner.select_mode && asset.selected {
@@ -53,6 +56,18 @@ class AssetCell: UICollectionViewCell {
                 formatter.zeroFormattingBehavior = [ .pad ]
                 
                 self.durationLabel.text = formatter.string(from: self.asset.asset!.duration)
+                
+                self.enhancedLabel.isHidden = true
+                let realm = try! Realm()
+                let enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
+                if let enhancedVideo = enhancedVideo {
+                    if let enhanced_video_id = enhancedVideo.enhanced_video_id {
+                        if enhanced_video_id == self.asset.asset!.localIdentifier {
+                            self.enhancedLabel.isHidden = false
+                        }
+                    }
+                }
+                
                 
             } else {
                 self.durationLabel.isHidden = false

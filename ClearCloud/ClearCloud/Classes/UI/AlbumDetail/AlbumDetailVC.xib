@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AlbumDetailVC" customModule="ClearCloud" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="gWj-bl-uAZ" id="jNh-fE-Adu"/>
+                <outlet property="enhanceButtonView" destination="5bx-ny-Bht" id="9SC-hG-BoI"/>
                 <outlet property="view" destination="AZP-Tt-uEN" id="Ewb-h0-qaj"/>
             </connections>
         </placeholder>
@@ -21,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="gWj-bl-uAZ">
-                    <rect key="frame" x="16" y="40" width="343" height="607"/>
+                    <rect key="frame" x="16" y="60" width="343" height="587"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="yDX-j1-yYP">
                         <size key="itemSize" width="50" height="50"/>
@@ -34,16 +36,48 @@
                         <outlet property="delegate" destination="-1" id="jG9-AC-QhL"/>
                     </connections>
                 </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bx-ny-Bht">
+                    <rect key="frame" x="0.0" y="23" width="375" height="32"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="enhance_selected_file_green_bar1" translatesAutoresizingMaskIntoConstraints="NO" id="fkN-fO-GTf">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KeB-YI-1Zi">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
+                            <connections>
+                                <action selector="clickEnhance:" destination="-1" eventType="touchUpInside" id="WOe-Jd-F5M"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="KeB-YI-1Zi" firstAttribute="top" secondItem="5bx-ny-Bht" secondAttribute="top" id="0r2-1o-agC"/>
+                        <constraint firstItem="fkN-fO-GTf" firstAttribute="top" secondItem="5bx-ny-Bht" secondAttribute="top" id="1hP-QK-WHu"/>
+                        <constraint firstItem="KeB-YI-1Zi" firstAttribute="leading" secondItem="5bx-ny-Bht" secondAttribute="leading" id="2tW-wO-3nY"/>
+                        <constraint firstItem="fkN-fO-GTf" firstAttribute="leading" secondItem="5bx-ny-Bht" secondAttribute="leading" id="MFx-ec-q24"/>
+                        <constraint firstAttribute="height" constant="32" id="d1H-0f-7sU"/>
+                        <constraint firstAttribute="trailing" secondItem="KeB-YI-1Zi" secondAttribute="trailing" id="kMW-Ci-pgK"/>
+                        <constraint firstAttribute="bottom" secondItem="fkN-fO-GTf" secondAttribute="bottom" id="m77-ug-gaO"/>
+                        <constraint firstAttribute="trailing" secondItem="fkN-fO-GTf" secondAttribute="trailing" id="oUw-Vx-Xks"/>
+                        <constraint firstAttribute="bottom" secondItem="KeB-YI-1Zi" secondAttribute="bottom" id="t0Z-5G-sYD"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.94901960780000005" green="0.94509803920000002" blue="0.94509803920000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="gWj-bl-uAZ" firstAttribute="top" secondItem="lXv-SL-clu" secondAttribute="top" constant="20" id="YEX-sW-otb"/>
+                <constraint firstItem="5bx-ny-Bht" firstAttribute="top" secondItem="lXv-SL-clu" secondAttribute="top" constant="3" id="IO9-Ti-72f"/>
+                <constraint firstItem="5bx-ny-Bht" firstAttribute="leading" secondItem="lXv-SL-clu" secondAttribute="leading" id="WP8-Og-pxw"/>
+                <constraint firstItem="gWj-bl-uAZ" firstAttribute="top" secondItem="lXv-SL-clu" secondAttribute="top" constant="40" id="YEX-sW-otb"/>
+                <constraint firstItem="5bx-ny-Bht" firstAttribute="trailing" secondItem="lXv-SL-clu" secondAttribute="trailing" id="jIN-Tb-9OQ"/>
                 <constraint firstItem="gWj-bl-uAZ" firstAttribute="leading" secondItem="lXv-SL-clu" secondAttribute="leading" constant="16" id="kFL-EF-nWa"/>
                 <constraint firstItem="lXv-SL-clu" firstAttribute="bottom" secondItem="gWj-bl-uAZ" secondAttribute="bottom" constant="20" id="mfI-he-riO"/>
                 <constraint firstItem="lXv-SL-clu" firstAttribute="trailing" secondItem="gWj-bl-uAZ" secondAttribute="trailing" constant="16" id="tdO-mx-8mz"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="lXv-SL-clu"/>
-            <point key="canvasLocation" x="33.5" y="53.5"/>
+            <point key="canvasLocation" x="32.799999999999997" y="52.623688155922046"/>
         </view>
     </objects>
+    <resources>
+        <image name="enhance_selected_file_green_bar1" width="556" height="33.5"/>
+    </resources>
 </document>

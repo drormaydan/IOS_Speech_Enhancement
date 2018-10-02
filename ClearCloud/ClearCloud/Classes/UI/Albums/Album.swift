@@ -19,5 +19,4 @@ class Album: NSObject {
     var name:String? = nil
     var asset:PHAssetCollection? = nil
     var type:AlbumType? = nil
-    
 }

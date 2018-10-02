@@ -61,6 +61,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D10881E2162E5EC004597F1 /* ClearCloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearCloud-Bridging-Header.h"; sourceTree = "<group>"; };
 		0D937B522151990A00A240A1 /* ClearCloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearCloud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D937B552151990A00A240A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D937B572151990A00A240A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -225,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				0D937B8C21519E7800A240A1 /* CCViewController.swift */,
+				0D10881E2162E5EC004597F1 /* ClearCloud-Bridging-Header.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -393,6 +395,7 @@
 				TargetAttributes = {
 					0D937B512151990A00A240A1 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 					0D937B652151990C00A240A1 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -728,16 +731,28 @@
 			baseConfigurationReference = 5C6613A06A84876D0E31E8B8 /* Pods-ClearCloud.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MR9FEBC46L;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/include/**",
+					"$(PROJECT_DIR)/FFmpegWrapper/FFmpegWrapper/**",
+				);
 				INFOPLIST_FILE = ClearCloud/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ClearCloud/FFmpeg-iOS/lib",
+					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/lib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.cts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -748,16 +763,27 @@
 			baseConfigurationReference = 4D6074BD564377A56F4AB095 /* Pods-ClearCloud.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MR9FEBC46L;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/include/**",
+					"$(PROJECT_DIR)/FFmpegWrapper/FFmpegWrapper/**",
+				);
 				INFOPLIST_FILE = ClearCloud/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ClearCloud/FFmpeg-iOS/lib",
+					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/lib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.cts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

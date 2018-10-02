@@ -21,5 +21,6 @@ class CCAsset: NSObject {
     var asset:PHAsset? = nil
     var type:AssetType? = nil
     var audio:CCAudio? = nil
+    var selected:Bool = false
 
 }

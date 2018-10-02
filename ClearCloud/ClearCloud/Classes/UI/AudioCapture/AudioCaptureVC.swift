@@ -92,7 +92,6 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
         let docsDir = dirPaths.first!
         let newDir = docsDir.appendingPathComponent(audio.unique_id!)
-        
         let audiourl = newDir.appendingPathComponent("audio.m4a")
         
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")

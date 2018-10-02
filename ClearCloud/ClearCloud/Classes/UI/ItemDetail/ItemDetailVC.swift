@@ -8,11 +8,14 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
+import Photos
 
 class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
 
     var asset:CCAsset!
     var enhancedVideo:CCEnhancedVideo? = nil
+    var album:Album!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var enhanceButton: UIButton!
     
@@ -54,41 +57,9 @@ print("ASSET ID \(self.asset.asset!.localIdentifier)")
     }
     
     // MARK: - Actions
-
     @IBAction func clickEnhance(_ sender: Any) {
-        if asset.type == .audio {
-            self.showHud()
-            if let audio = self.asset.audio {
-                let filemgr = FileManager.default
-                let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
-                let docsDir = dirPaths.first!
-                let newDir = docsDir.appendingPathComponent(audio.unique_id!)
-                
-                let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
-                
-                let path = asset.audio!.local_audio_path
-                let url = docsDir.appendingPathComponent(path!)
-
-                
-                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
-                    self.hideHud()
-                    print("POST SUCCESS \(success) error \(error)")
-                    if (success) {
-                        DispatchQueue.main.async {
-                            let realm = try! Realm()
-                            try! realm.write {
-                                audio.enhanced_audio_path = audiourl2.path.replacingOccurrences(of: docsDir.path, with: "")
-                            }
-                            self.refresh()
-                        }
-
-                    } else {
-                        
-                    }
-                }
-            }
-        } else {
-            
+        self.doEnhance(self.asset, album: self.album) { (success:Bool, error:String?) in
+            self.refresh()
         }
     }
     // MARK: - TableView
@@ -143,6 +114,9 @@ print("ASSET ID \(self.asset.asset!.localIdentifier)")
             if indexPath.row == 0 {
                 if self.enhancedVideo == nil {
                     cell.asset = self.asset.asset!
+                } else {
+                    let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [self.enhancedVideo!.original_video_id!], options: .none)
+                    cell.asset = phassets[0]
                 }
             } else {
 
@@ -165,3 +139,57 @@ print("ASSET ID \(self.asset.asset!.localIdentifier)")
     */
 
 }
+extension AVAsset {
+    func writeAudioTrack(to url: URL, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        do {
+            let asset = try audioAsset()
+            asset.write(to: url, success: success, failure: failure)
+        } catch {
+            failure(error)
+        }
+    }
+    
+    private func write(to url: URL, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        guard let exportSession = AVAssetExportSession(asset: self, presetName: AVAssetExportPresetAppleM4A) else {
+            let error = NSError(domain: "domain", code: 0, userInfo: nil)
+            failure(error)
+            
+            return
+        }
+        
+        exportSession.outputFileType = AVFileType.m4a
+        exportSession.outputURL = url
+        print("OUTPUT \(url)")
+        
+        exportSession.exportAsynchronously {
+            switch exportSession.status {
+            case .completed:
+                success()
+            case .unknown, .waiting, .exporting, .failed, .cancelled:
+                print("EXPORT STATUS \(exportSession.status.rawValue)")
+                let error = NSError(domain: "domain", code: 0, userInfo: nil)
+                failure(error)
+            }
+        }
+    }
+    
+    private func audioAsset() throws -> AVAsset {
+        let composition = AVMutableComposition()
+        let audioTracks = tracks(withMediaType: AVMediaType.audio)
+        
+        for track in audioTracks {
+            print("track \(track)")
+            let compositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+            do {
+                try compositionTrack?.insertTimeRange(track.timeRange, of: track, at: track.timeRange.start)
+            } catch {
+                throw error
+            }
+            compositionTrack!.preferredTransform = track.preferredTransform
+        }
+        
+        print("composition \(composition)")
+        return composition
+    }
+}
+

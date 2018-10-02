@@ -15,6 +15,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     @IBOutlet weak var collectionView: UICollectionView!
     var album:Album!
     var assets:[CCAsset] = []
+    var select_mode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +28,25 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         
         self.title = album.name
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(clickSelect))
+
+        
     }
+    
+    
+    @objc func clickSelect(sender: UIButton?) {
+        self.select_mode = !select_mode
+        if (select_mode) {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(clickSelect))
+        } else {
+            for asset in self.assets {
+                asset.selected = false
+            }
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(clickSelect))
+        }
+        self.collectionView.reloadData()
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -85,6 +104,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: AssetCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ASSET_CELL", for: indexPath) as! AssetCell
         cell.asset = assets[indexPath.row]
+        cell.owner = self
         cell.populate()
         return cell
     }
@@ -114,9 +134,15 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
             }
         } else {
             
-            let detailVC:ItemDetailVC = ItemDetailVC(nibName: "ItemDetailVC", bundle: nil)
-            detailVC.asset = self.assets[indexPath.row]
-            self.navigationController!.pushViewController(detailVC, animated: true)
+            if select_mode {
+                assets[indexPath.row].selected = !assets[indexPath.row].selected
+                self.collectionView.reloadData()
+            } else {
+                let detailVC:ItemDetailVC = ItemDetailVC(nibName: "ItemDetailVC", bundle: nil)
+                detailVC.asset = self.assets[indexPath.row]
+                detailVC.album = self.album
+                self.navigationController!.pushViewController(detailVC, animated: true)
+            }
         }
     }
 

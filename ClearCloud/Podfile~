@@ -1,6 +1,7 @@
 platform :ios, '10.0'
   use_frameworks!
   def shared_pods
+  pod 'FFmpegWrapper'
   pod 'UITextView+Placeholder'
   pod 'RealmSwift' 
   pod 'Alamofire'
@@ -18,6 +19,7 @@ platform :ios, '10.0'
   pod 'MBAutoGrowingTextView', '~> 0.1.0'
   pod "PGSideMenu"
   pod 'AudioKit', '~> 4.0'
+  pod 'CryptoSwift'
 end
 
 target 'ClearCloud' do

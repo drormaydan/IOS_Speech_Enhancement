@@ -13,8 +13,10 @@ class AssetCell: UICollectionViewCell {
     
     @IBOutlet weak var thumbnail: UIImageView!
     var asset:CCAsset!
+    var owner:AlbumDetailVC!
     @IBOutlet weak var durationLabel: UILabel!
     
+    @IBOutlet weak var checkmark: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,7 +28,13 @@ class AssetCell: UICollectionViewCell {
         if (self.asset.type == .add) {
             self.thumbnail.image = #imageLiteral(resourceName: "blue_plus")
             self.durationLabel.isHidden = true
+            self.checkmark.isHidden = true
         } else {
+            self.checkmark.isHidden = true
+            if self.owner.select_mode && asset.selected {
+                self.checkmark.isHidden = false
+            }
+            
             if (self.asset.type == .video) {
                 
                 self.durationLabel.isHidden = false

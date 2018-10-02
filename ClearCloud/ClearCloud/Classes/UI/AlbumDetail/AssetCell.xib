@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,12 +31,21 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white_check_green_circle_100px" translatesAutoresizingMaskIntoConstraints="NO" id="Y76-1A-M2u">
+                        <rect key="frame" x="10" y="90" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="O51-QT-W1r"/>
+                            <constraint firstAttribute="width" constant="30" id="j4x-eq-0Ku"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="zbK-eV-47D" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="6" id="5jm-fO-sFx"/>
                 <constraint firstAttribute="bottom" secondItem="zbK-eV-47D" secondAttribute="bottom" constant="6" id="7wv-FC-frp"/>
                 <constraint firstAttribute="trailing" secondItem="zbK-eV-47D" secondAttribute="trailing" constant="6" id="JLf-UW-QSa"/>
+                <constraint firstItem="Y76-1A-M2u" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Lxl-0L-4qa"/>
+                <constraint firstAttribute="bottom" secondItem="Y76-1A-M2u" secondAttribute="bottom" constant="10" id="ch4-4Z-axH"/>
                 <constraint firstItem="zbK-eV-47D" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="6" id="frZ-7c-PJt"/>
                 <constraint firstAttribute="bottom" secondItem="MxJ-Xz-T69" secondAttribute="bottom" constant="17" id="tIi-8K-beM"/>
                 <constraint firstAttribute="trailing" secondItem="MxJ-Xz-T69" secondAttribute="trailing" constant="16" id="zRs-Be-z38"/>
@@ -43,10 +53,14 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="141" height="130"/>
             <connections>
+                <outlet property="checkmark" destination="Y76-1A-M2u" id="Mb0-DC-hjf"/>
                 <outlet property="durationLabel" destination="MxJ-Xz-T69" id="3ba-x8-COz"/>
                 <outlet property="thumbnail" destination="zbK-eV-47D" id="EZr-Ok-PTm"/>
             </connections>
             <point key="canvasLocation" x="79.5" y="94"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="white_check_green_circle_100px" width="33.5" height="33.5"/>
+    </resources>
 </document>

@@ -33,6 +33,22 @@ class AudioVideoCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        NotificationCenter.default.addObserver(forName:Notification.Name(rawValue:"StopPlayers"),
+                                               object:nil, queue:nil,
+                                               using:catchNotification)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func catchNotification(notification: Notification) -> Void {
+
+        DispatchQueue.main.async {
+            if let player = self.av.player {
+                player.pause()
+            }
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

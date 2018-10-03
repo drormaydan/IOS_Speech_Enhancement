@@ -1,7 +1,8 @@
 platform :ios, '10.0'
   use_frameworks!
   def shared_pods
-  pod 'FFmpegWrapper'
+#  pod 'FFmpegWrapper'
+   pod 'IQKeyboardManagerSwift', '5.0.0' 
   pod 'UITextView+Placeholder'
   pod 'RealmSwift' 
   pod 'Alamofire'

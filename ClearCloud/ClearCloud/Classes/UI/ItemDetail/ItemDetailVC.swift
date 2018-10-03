@@ -40,6 +40,15 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         refresh()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.post(name:Notification.Name(rawValue:"StopPlayers"),
+                                        object: nil,
+                                        userInfo: nil)
+        
+        super.viewWillDisappear(animated)
+    }
+
+    
     func refresh() {
         DispatchQueue.main.async {
             
@@ -79,15 +88,17 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         self.showHud(message: "Enhancing...")
         self.doEnhance(self.asset, album: self.album) { (success:Bool, error:String?) in
             self.hideHud()
-            
-            if self.asset.type == .video {
-                print("REFRESH ASSET ID \(self.asset.asset!.localIdentifier)")
-                let realm = try! Realm()
-                self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
-                print("NEW ENHANCED ID \(self.enhancedVideo!.enhanced_video_id)")
+            print("DONE ENHANCE")
+            if success {
+                if self.asset.type == .video {
+                    print("REFRESH ASSET ID \(self.asset.asset!.localIdentifier)")
+                    let realm = try! Realm()
+                    self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
+                    print("NEW ENHANCED ID \(self.enhancedVideo!.enhanced_video_id)")
+                }
+                
+                self.refresh()
             }
-
-            self.refresh()
         }
     }
     

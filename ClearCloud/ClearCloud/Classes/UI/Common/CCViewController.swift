@@ -63,6 +63,24 @@ class CCViewController: UIViewController {
         
     }
     
+    func makeCloseButton() {
+        let buttonBack: UIButton = UIButton(type: UIButtonType.custom) as UIButton
+        buttonBack.frame = CGRect(x: 0, y: 0, width: 40, height: 40) // CGFloat, Double, Int
+        buttonBack.setImage(#imageLiteral(resourceName: "ic_close_48pt"), for: UIControlState.normal)
+        buttonBack.addTarget(self, action: #selector(clickClose(sender:)), for: UIControlEvents.touchUpInside)
+        
+        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        negativeSpacer.width = -13
+        
+        let rightBarButtonItem: UIBarButtonItem = UIBarButtonItem(customView: buttonBack)
+        navigationItem.rightBarButtonItems = [negativeSpacer, rightBarButtonItem]
+        //self.navigationItem.setRightBarButton(rightBarButtonItem, animated: false)
+    }
+    
+    @objc func clickClose(sender:UIButton?) {
+        self.dismiss(animated: true, completion: nil)
+    }
+
     @objc func clickBack(sender:UIButton?) {
         self.navigationController!.popViewController(animated: true)
     }
@@ -109,7 +127,32 @@ class CCViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+        
     func doEnhance(_ asset:CCAsset, album:Album, completion:@escaping ((Bool, String?) -> Void)) {
+        LoginManager.shared.checkRegistration(force: true, completion: { (status:LoginManager.LoginStatus, error:String?) in
+            switch status {
+            case .success:
+                print("REG SUCCESS")
+                self.doEnhanceImpl(asset, album: album, completion: completion)
+                break
+            case .error:
+                print("REG ERROR")
+                self.showError(message: error!)
+                completion(false,nil)
+                break
+            case .notLoggedIn:
+                print("REG NOT LOGGED")
+                completion(false,nil)
+                let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                break
+            }
+        })
+    }
+
+    func doEnhanceImpl(_ asset:CCAsset, album:Album, completion:@escaping ((Bool, String?) -> Void)) {
         if asset.type == .audio {
             if let audio = asset.audio {
                 let filemgr = FileManager.default
@@ -126,7 +169,7 @@ class CCViewController: UIViewController {
                 let url = docsDir.appendingPathComponent(path!)
                 
                 
-                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
+                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false) { (success:Bool, error:ServerError?, trialover:Bool ) in
                     print("POST SUCCESS \(success) error \(error)")
                     if (success) {
                         DispatchQueue.main.async {
@@ -138,7 +181,27 @@ class CCViewController: UIViewController {
                         }
                         
                     } else {
-                        
+                        if trialover {
+                            
+                            let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertControllerStyle.alert)
+                            
+                            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                                (result : UIAlertAction) -> Void in
+                                print("OK")
+                                let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                                let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                            }
+                            
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                            completion(false,error!.getMessage()!)
+                            
+                        } else {
+                            completion(false,error!.getMessage()!)
+                            self.showError(message: error!.getMessage()!)
+                        }
                     }
                 }
             }
@@ -223,7 +286,7 @@ class CCViewController: UIViewController {
                             print("WROTE AUDIO \(audiourl)")
                             
                             
-                            BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
+                            BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:true) { (success:Bool, error:ServerError?, trialover:Bool ) in
                                 print("POST SUCCESS \(success) error \(error)")
                                 if (success) {
                                     
@@ -369,7 +432,29 @@ class CCViewController: UIViewController {
                                     })
                                     
                                 } else {
-                                    
+                                    if trialover {
+                                        
+                                        let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertControllerStyle.alert)
+                                        
+                                        let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                                            (result : UIAlertAction) -> Void in
+                                            print("OK")
+                                            let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                                            let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                            appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                                        }
+                                        
+                                        alertController.addAction(okAction)
+                                        self.present(alertController, animated: true, completion: nil)
+                                        completion(false,error!.getMessage()!)
+
+                                        
+                                    } else {
+                                        self.showError(message: error!.getMessage()!)
+                                        completion(false,error!.getMessage()!)
+                                    }
+
                                 }
                             }
  

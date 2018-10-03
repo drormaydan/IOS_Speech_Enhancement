@@ -75,14 +75,55 @@ class BabbleLabsApi: NSObject {
         }
     }
     
-    
-    func convertAudio(filepath: String, email: String, destination: URL, completion:@escaping ((Bool, ServerError?) -> Void)) {
+    func login(userId: String, password: String, completionHandler: @escaping (ServerError?, LoginResponse?) -> Void) {
+        if let reachability = reachability, reachability.isReachable {
+            
+            let parameters: Parameters = [
+                "userId" : userId,
+                "password" : password
+            ]
+            print ("BEFORE LOGIN")
+            alamoFireManager!.request("\(API_URL)accounts/api/auth/login", method: .post, parameters: parameters,
+                                      encoding: JSONEncoding.default, headers: nil).validate().responseJSON(completionHandler: {
+                                        response in
+                                        switch response.result {
+                                        case .success:
+                                            print ("SUCCCESS")
+                                            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                                                print("login json --> \(utf8Text)")
+                                                let serverResponse:LoginResponse = LoginResponse(JSONString: utf8Text)!
+                                                if serverResponse.auth_token != nil {
+                                                    completionHandler(nil, serverResponse)
+                                                } else {
+                                                    let serverError = ServerError.init(WithMessage: "Sorry, there was an error.")
+                                                    completionHandler(serverError, nil)
+                                                }
+                                            } else {
+                                                completionHandler(ServerError.defaultError, nil)
+                                            }
+                                        case .failure:
+                                            print ("FAIL")
+                                            completionHandler(ServerError.defaultError, nil)
+                                        }
+                                      })
+            
+        } else {
+            completionHandler(ServerError.noInternet, nil)
+        }
+    }
+
+    func convertAudio(filepath: String, email: String, destination: URL, video:Bool, completion:@escaping ((Bool, ServerError?, Bool) -> Void)) {
         if let reachability = reachability, reachability.isReachable {
             
             var urlComponents = URLComponents()
             urlComponents.scheme = "https"
             urlComponents.host = "api.babblelabs.com"
             urlComponents.path = "/audioEnhancer/api/audio/stream/\(email)"
+            if video {
+                urlComponents.queryItems = [URLQueryItem(name: "product", value: "video")]
+            }
+            
+
             guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
             
             // Specify this request as being a POST method
@@ -108,7 +149,7 @@ class BabbleLabsApi: NSObject {
                 file?.closeFile()
                 
             } else {
-                completion(false, ServerError.readingFile)
+                completion(false, ServerError.readingFile, false)
             }
             // ... and set our request's HTTP body
             
@@ -117,48 +158,55 @@ class BabbleLabsApi: NSObject {
             let session = URLSession(configuration: config)
             let task = session.dataTask(with: request) { (responseData, response, responseError) in
                 guard responseError == nil else {
-                    completion(false,ServerError(WithMessage: (responseError?.localizedDescription)!) )
+                    completion(false,ServerError(WithMessage: (responseError?.localizedDescription)!),false )
                     return
                 }
                 
                 let httpresponse = response as! HTTPURLResponse
                 print("response \(httpresponse.statusCode)")
                 print("response headers \(httpresponse.allHeaderFields)")
-                print("response data \(responseData)")
-                print("destination \(destination)")
                 
-                // APIs usually respond with the data you just sent in your POST request
-                if let data = responseData {
+                if ((httpresponse.statusCode >= 200) && (httpresponse.statusCode < 300)) {
                     
-                    do {
-                        try data.write(to: destination)
-                    } catch {
-                        // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
-                        print("Ooops! Something went wrong!")
-                        completion(false, ServerError.writingFile)
-                        return
+                    print("response data \(responseData)")
+                    print("destination \(destination)")
+                    
+                    // APIs usually respond with the data you just sent in your POST request
+                    if let data = responseData {
+                        
+                        do {
+                            try data.write(to: destination)
+                        } catch {
+                            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+                            print("Ooops! Something went wrong!")
+                            completion(false, ServerError.writingFile, false)
+                            return
+                        }
+                        completion(true,nil,false)
+                    } else {
+                        print("no readable data received in response")
                     }
-                    /*
-                     let file: FileHandle? = FileHandle(forWritingAtPath: destinationpath)
-                     if file != nil {
-                     
-                     // Write it to the file
-                     file?.write(data)
-                     
-                     // Close the file
-                     file?.closeFile()
-                     } else {
-                     print("Ooops! Something went wrong!")
-                     completion?(false,"error writing file")
-                     }*/
-                    completion(true,nil)
+                    
+                } else if httpresponse.statusCode == 403 {
+                    let reason:String = httpresponse.allHeaderFields["X-BabbleLabs-Message"] as! String
+                    if reason.contains("You have exceeded your") {
+                        let defaults: UserDefaults = UserDefaults.standard
+                        defaults.set(true, forKey: "did_trial")
+                        defaults.set(false, forKey: "trial")
+                        defaults.synchronize()
+                        LoginManager.shared.logout()
+                        completion(false, ServerError.init(WithMessage: reason), true)
+                        return
+                    } else {
+                        completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)
+                    }
                 } else {
-                    print("no readable data received in response")
+                    completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)
                 }
             }
             task.resume()
         } else {
-            completion(false, ServerError.noInternet)
+            completion(false, ServerError.noInternet,false)
         }
         
     }

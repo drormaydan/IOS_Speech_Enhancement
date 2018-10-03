@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D10894C21651640004597F1 /* NavCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10894A21651640004597F1 /* NavCell.swift */; };
+		0D10894D21651640004597F1 /* NavCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D10894B21651640004597F1 /* NavCell.xib */; };
+		0D10895021651662004597F1 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10894E21651662004597F1 /* AboutVC.swift */; };
+		0D10895121651662004597F1 /* AboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D10894F21651662004597F1 /* AboutVC.xib */; };
+		0D10895421651672004597F1 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895221651672004597F1 /* LoginVC.swift */; };
+		0D10895521651672004597F1 /* LoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D10895321651672004597F1 /* LoginVC.xib */; };
+		0D10895721654B09004597F1 /* OktaApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895621654B09004597F1 /* OktaApi.swift */; };
+		0D10895921654C25004597F1 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895821654C25004597F1 /* UserResponse.swift */; };
+		0D10895B21654C6D004597F1 /* OktaUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895A21654C6D004597F1 /* OktaUserProfile.swift */; };
 		0D937B562151990A00A240A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B552151990A00A240A1 /* AppDelegate.swift */; };
 		0D937B582151990A00A240A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B572151990A00A240A1 /* ViewController.swift */; };
 		0D937B5B2151990A00A240A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D937B592151990A00A240A1 /* Main.storyboard */; };
@@ -62,6 +71,15 @@
 
 /* Begin PBXFileReference section */
 		0D10881E2162E5EC004597F1 /* ClearCloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearCloud-Bridging-Header.h"; sourceTree = "<group>"; };
+		0D10894A21651640004597F1 /* NavCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavCell.swift; sourceTree = "<group>"; };
+		0D10894B21651640004597F1 /* NavCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavCell.xib; sourceTree = "<group>"; };
+		0D10894E21651662004597F1 /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
+		0D10894F21651662004597F1 /* AboutVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutVC.xib; sourceTree = "<group>"; };
+		0D10895221651672004597F1 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		0D10895321651672004597F1 /* LoginVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginVC.xib; sourceTree = "<group>"; };
+		0D10895621654B09004597F1 /* OktaApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaApi.swift; sourceTree = "<group>"; };
+		0D10895821654C25004597F1 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
+		0D10895A21654C6D004597F1 /* OktaUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaUserProfile.swift; sourceTree = "<group>"; };
 		0D937B522151990A00A240A1 /* ClearCloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearCloud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D937B552151990A00A240A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D937B572151990A00A240A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +153,8 @@
 		0D1089472164437A004597F1 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				0D10895221651672004597F1 /* LoginVC.swift */,
+				0D10895321651672004597F1 /* LoginVC.xib */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -226,6 +246,7 @@
 				0DB57B692154839200EFBDD6 /* ServerError.swift */,
 				0DB57B6B2154846F00EFBDD6 /* LoginManager.swift */,
 				0DB57B6D2154848E00EFBDD6 /* Keychain.swift */,
+				0D10895621654B09004597F1 /* OktaApi.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -244,6 +265,10 @@
 			children = (
 				0D937B932151A18100A240A1 /* LeftNavVC.swift */,
 				0D937B942151A18100A240A1 /* LeftNavVC.xib */,
+				0D10894A21651640004597F1 /* NavCell.swift */,
+				0D10894B21651640004597F1 /* NavCell.xib */,
+				0D10894E21651662004597F1 /* AboutVC.swift */,
+				0D10894F21651662004597F1 /* AboutVC.xib */,
 			);
 			path = Nav;
 			sourceTree = "<group>";
@@ -301,6 +326,8 @@
 			isa = PBXGroup;
 			children = (
 				0DB57B672154832C00EFBDD6 /* LoginResponse.swift */,
+				0D10895821654C25004597F1 /* UserResponse.swift */,
+				0D10895A21654C6D004597F1 /* OktaUserProfile.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -440,12 +467,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D10895521651672004597F1 /* LoginVC.xib in Resources */,
 				0D937BA12151D24A00A240A1 /* AlbumDetailVC.xib in Resources */,
 				0DB57B5D2151DC0600EFBDD6 /* AudioCaptureVC.xib in Resources */,
 				0D937B602151990C00A240A1 /* LaunchScreen.storyboard in Resources */,
 				0DB57B77215579D300EFBDD6 /* AudioVideoCell.xib in Resources */,
 				0D937B9A2151C91B00A240A1 /* AlbumCell.xib in Resources */,
+				0D10894D21651640004597F1 /* NavCell.xib in Resources */,
 				0D937B5D2151990C00A240A1 /* Assets.xcassets in Resources */,
+				0D10895121651662004597F1 /* AboutVC.xib in Resources */,
 				0D937B922151A17100A240A1 /* AlbumsVC.xib in Resources */,
 				0DB57B732155790F00EFBDD6 /* ItemDetailVC.xib in Resources */,
 				0D937B5B2151990A00A240A1 /* Main.storyboard in Resources */,
@@ -549,11 +579,15 @@
 				0DB57B64215482A900EFBDD6 /* BabbleLabsApi.swift in Sources */,
 				0DB57B552151D45400EFBDD6 /* AssetCell.swift in Sources */,
 				0D937B582151990A00A240A1 /* ViewController.swift in Sources */,
+				0D10895B21654C6D004597F1 /* OktaUserProfile.swift in Sources */,
 				0DB57B582151D4D400EFBDD6 /* CCAsset.swift in Sources */,
+				0D10894C21651640004597F1 /* NavCell.swift in Sources */,
 				0DB57B76215579D300EFBDD6 /* AudioVideoCell.swift in Sources */,
 				0D937B8D21519E7800A240A1 /* CCViewController.swift in Sources */,
 				0DB57B6E2154848E00EFBDD6 /* Keychain.swift in Sources */,
 				0DB57B6C2154846F00EFBDD6 /* LoginManager.swift in Sources */,
+				0D10895721654B09004597F1 /* OktaApi.swift in Sources */,
+				0D10895921654C25004597F1 /* UserResponse.swift in Sources */,
 				0D937B912151A17100A240A1 /* AlbumsVC.swift in Sources */,
 				0DB57B622151E5D400EFBDD6 /* CCEnhancedVideo.swift in Sources */,
 				0D937BA02151D24A00A240A1 /* AlbumDetailVC.swift in Sources */,
@@ -565,7 +599,9 @@
 				0DB57B6A2154839200EFBDD6 /* ServerError.swift in Sources */,
 				0D937B992151C91B00A240A1 /* AlbumCell.swift in Sources */,
 				0DB57B682154832C00EFBDD6 /* LoginResponse.swift in Sources */,
+				0D10895021651662004597F1 /* AboutVC.swift in Sources */,
 				0DB57B722155790F00EFBDD6 /* ItemDetailVC.swift in Sources */,
+				0D10895421651672004597F1 /* LoginVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

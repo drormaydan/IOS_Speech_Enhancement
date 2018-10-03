@@ -29,32 +29,53 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
 
         
         let defaults: UserDefaults = UserDefaults.standard
-        if defaults.object(forKey: "trial") == nil {
-            defaults.set(true, forKey: "trial")
-            defaults.synchronize()
-            let uuid = UUID().uuidString
-            let username = "\(uuid)@iphone.babblelabs.com"
-            let base64 = uuid.base64Encoded()
-            let hash = base64!.data(using: .utf8)?.sha256()
-            let password = hash!.hexEncodedString()
-            LoginManager.shared.storeUsername(username: username)
-            LoginManager.shared.storePassword(password: password)
+        let did_trial = defaults.bool(forKey: "did_trial")
+        if !did_trial {
+            if defaults.object(forKey: "trial") == nil {
+                defaults.set(true, forKey: "trial")
+                defaults.synchronize()
+                let uuid = UUID().uuidString
+                let username = "\(uuid)@iphone.babblelabs.com"
+                let base64 = uuid.base64Encoded()
+                let hash = base64!.data(using: .utf8)?.sha256()
+                let password = hash!.hexEncodedString()
+                LoginManager.shared.storeUsername(username: username)
+                LoginManager.shared.storePassword(password: password)
+            }
         }
-
         
         LoginManager.shared.checkRegistration { (status:LoginManager.LoginStatus, error:String?) in
             switch status {
             case .success:
-                print("HERE 1zz")
+                NotificationCenter.default.post(name:Notification.Name(rawValue:"LoginNotification"),
+                                                object: nil,
+                                                userInfo: nil)
+                break
             case .error:
+                defaults.set(false, forKey: "trial")
+                defaults.synchronize()
+
+                let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+
                 break
             case .notLoggedIn:
+                if !self.showed_login {
+                    self.showed_login = true
+                    let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                    let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                }
                 break
             }
         }
 
     }
 
+    var showed_login = false
 
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,13 +84,17 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         if photos == .notDetermined {
             PHPhotoLibrary.requestAuthorization({status in
                 if status == .authorized{
-                    self.loadAlbums()
+                    DispatchQueue.main.async {
+                        self.loadAlbums()
+                    }
                 } else {
                     print("NOT AUTH")
                 }
             })
         } else if (photos == .authorized) {
-            self.loadAlbums()
+            DispatchQueue.main.async {
+                self.loadAlbums()
+            }
         }
     }
 

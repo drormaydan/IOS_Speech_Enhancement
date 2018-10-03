@@ -33,6 +33,8 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
 
         // Do any additional setup after loading the view.
         setLogoImage()
+        self.navigationController?.navigationBar.isTranslucent = false
+        recordButton.makeRounded()
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,13 +45,17 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        reset()
+    }
+    
+    func reset() {
         
         self.deleteButton.isHidden = true
         self.okButton.isHidden = true
-
-        recordingSession = AVAudioSession.sharedInstance()
+        
+        self.recordingSession = AVAudioSession.sharedInstance()
         self.timeLabel.isHidden = true
-
+        self.timeLabel.text = "00:00:00"
         do {
             try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
             try recordingSession.setActive(true)
@@ -65,7 +71,6 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         } catch {
             // failed to record!
         }
-        
     }
 
     func cleanup() {
@@ -93,7 +98,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         let docsDir = dirPaths.first!
         let newDir = docsDir.appendingPathComponent(audio.unique_id!)
         let audiourl = newDir.appendingPathComponent("audio.m4a")
-        let testaudiourl = newDir.appendingPathComponent("caf")
+       // let testaudiourl = newDir.appendingPathComponent("caf")
 
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
         
@@ -109,6 +114,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             audio.local_audio_path = audiourl.path.replacingOccurrences(of: docsDir.path, with: "")
             print("FINAL AUDIO PATH \(audio.local_audio_path!)")
             
+            /*
             // test
             var options = AKConverter.Options()
             options.format = "caf"
@@ -123,7 +129,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 } else {
                     AKLog("Conversion Complete! \(testaudiourl)")
                 }
-            })
+            })*/
 
             
             do {
@@ -150,50 +156,6 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             
             
             
-            
-            //var options = AKConverter.Options()
-            // any options left nil will assume the value of the input file
-           // options.format = "mp3"
-            //options.sampleRate == 48000
-            //options.bitDepth = 24
-            
-            
-            /*
-            let audiourl2 = newDir.appendingPathComponent("audio.mp3")
-
-            
-            BabbleLabsApi.shared.convertAudio(filepath: audioFilename.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
-                print("POST SUCCESS \(success) error \(error)")
-                if (success) {
-
-                }
-            }*/
-            
-           // convertAudio(audioFilename, outputURL: audiourl2)
-            
-            
-            
-            /*
-            print("audiourl2 \(audiourl2)")
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: audiourl2)
-            }) { saved, error in
-                if (error != nil) {
-                    print("2 error \(error!.localizedDescription)")
-                }
-                if saved {
-                    let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
-                    let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alertController.addAction(defaultAction)
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }*/
-/*
-            let converter = AKConverter(inputURL: audioFilename, outputURL: audiourl2, options: options)
-            converter.start(completionHandler: { error in
-                print("1 error \(error)")
-
-            })*/
 
             // delete old file
             if FileManager.default.fileExists(atPath: audioFilename.path) {
@@ -204,6 +166,8 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                     print("Could not remove file at url: \(audioFilename)")
                 }
             }
+            
+            self.navigationController!.popViewController(animated: true)
             
         } catch let error as NSError {
             let alertController = UIAlertController(title:NSLocalizedString("Error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
@@ -332,7 +296,9 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 print("Could not remove file at url: \(audioFilename)")
             }
         }
-
+        
+        // reset
+        reset()
     }
     
     @IBAction func clickRecordButton(_ recordButton: UIButton?) {

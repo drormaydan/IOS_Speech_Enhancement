@@ -51,10 +51,14 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                 }
             } else {
                 print("UNIQ ID \(self.asset.asset!.localIdentifier)")
-                if self.enhancedVideo!.enhanced_video_id == nil {
-                    self.enhanceButton.isHidden = false
+                if let enhancedVideo = self.enhancedVideo {
+                    if enhancedVideo.enhanced_video_id == nil {
+                        self.enhanceButton.isHidden = false
+                    } else {
+                        self.enhanceButton.isHidden = true
+                    }
                 } else {
-                    self.enhanceButton.isHidden = true
+                    self.enhanceButton.isHidden = false
                 }
             }
             
@@ -86,10 +90,12 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             self.refresh()
         }
     }
+    
+
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 217
+        return 311
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -131,10 +137,14 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             var path:String? = nil
             if indexPath.row == 0 {
                 path = asset.audio!.local_audio_path
+                cell.typeLabel.text = "Original"
             } else {
                 path = asset.audio!.enhanced_audio_path
+                cell.typeLabel.text = "Enhanced"
             }
-            cell.url = docsDir.appendingPathComponent(path!)
+            if path != nil {
+                cell.url = docsDir.appendingPathComponent(path!)
+            }
         } else {
             cell.type = .video
 

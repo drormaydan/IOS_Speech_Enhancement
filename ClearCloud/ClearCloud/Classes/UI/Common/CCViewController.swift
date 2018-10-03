@@ -21,9 +21,6 @@ class CCViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        print("OUTPUT FORMATS \(AKConverter.outputFormats)")
-        print("INPUT FORMATS \(AKConverter.inputFormats)")
-        print("RATES \(kAudioFormatProperty_AvailableEncodeSampleRates)")
     }
     
     func setLogoImage() {
@@ -120,7 +117,10 @@ class CCViewController: UIViewController {
                 let docsDir = dirPaths.first!
                 let newDir = docsDir.appendingPathComponent(audio.unique_id!)
                 
-                let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
+                let uuid = UUID().uuidString
+                let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_enhanced.m4a")
+
+                //let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
                 
                 let path = asset.audio!.local_audio_path
                 let url = docsDir.appendingPathComponent(path!)
@@ -223,7 +223,6 @@ class CCViewController: UIViewController {
                             print("WROTE AUDIO \(audiourl)")
                             
                             
-                            /* NO CONVERSION
                             BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
                                 print("POST SUCCESS \(success) error \(error)")
                                 if (success) {
@@ -247,6 +246,65 @@ class CCViewController: UIViewController {
                                             print("ADD ALBUM \(album.asset!)")
                                             
                                             
+                                            self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
+                                                if suc {
+                                                    DispatchQueue.main.async {
+                                                        let fetchOptions = PHFetchOptions()
+                                                        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                                                        
+                                                        // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                                                        
+                                                        let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                        let realm = try! Realm()
+                                                        try! realm.write {
+                                                            enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                            print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                        }
+                                                        completion(true,nil)
+                                                    }
+                                                    
+                                                    
+                                                } else {
+                                                    // fallback to ClearCloud album
+                                                    
+                                                    self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
+                                                        
+                                                        print("CC ALBUM \(clearcloudalbum)")
+                                                        self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
+                                                            
+                                                            if suc {
+                                                                DispatchQueue.main.async {
+                                                                    let fetchOptions = PHFetchOptions()
+                                                                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                                                                    
+                                                                    // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                                                                    
+                                                                    let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                                    let realm = try! Realm()
+                                                                    try! realm.write {
+                                                                        enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                                        print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                    }
+                                                                    completion(true,nil)
+                                                                }
+                                                                
+                                                            } else {
+                                                                completion(false,err)
+                                                                
+                                                            }
+                                                        })
+                                                        
+                                                        
+                                                    })
+                                                    
+                                                    
+                                                }
+                                            })
+
+                                            
+                                            
+                                            
+                                            /*
                                             PHPhotoLibrary.requestAuthorization { (status) in
                                                 PHPhotoLibrary.shared().performChanges({
                                                     let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videourl);
@@ -291,6 +349,21 @@ class CCViewController: UIViewController {
                                                 })
                                                 
                                             }
+                                            */
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
                                         }
                                         
                                     })
@@ -299,13 +372,12 @@ class CCViewController: UIViewController {
                                     
                                 }
                             }
-                            */
-                            
+ 
                             
                             
                             
                             // convert to AIF
-                            
+                            /*
                             var options = AKConverter.Options()
                             options.format = "aif"
                             options.sampleRate = 22500
@@ -336,57 +408,63 @@ class CCViewController: UIViewController {
                                                 DispatchQueue.main.async {
                                                     print("ADD ALBUM \(album.asset!)")
 
-
-                                                    self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
-                                                        
-                                                        print("CC ALBUM \(clearcloudalbum)")
-
-                                                        
-                                                        PHPhotoLibrary.requestAuthorization { (status) in
-                                                            PHPhotoLibrary.shared().performChanges({
-                                                                let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videourl);
+                                                    
+                                                    self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
+                                                        if suc {
+                                                            DispatchQueue.main.async {
+                                                                let fetchOptions = PHFetchOptions()
+                                                                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
                                                                 
+                                                                // After uploading we fetch the PHAsset for most recent video and then get its current location url
                                                                 
-                                                                if let asset = assetRequest?.placeholderForCreatedAsset {
-                                                                    let request = PHAssetCollectionChangeRequest(for: clearcloudalbum!)
-                                                                    request?.addAssets([asset] as NSArray)
+                                                                let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                                let realm = try! Realm()
+                                                                try! realm.write {
+                                                                    enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                                    print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                                                                 }
+                                                                completion(true,nil)
+                                                            }
+
+                                                            
+                                                        } else {
+                                                            // fallback to ClearCloud album
+                                                            
+                                                            self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
                                                                 
-                                                                
-                                                                //let assetPlaceholder = assetRequest!.placeholderForCreatedAsset
-                                                                //let albumChangeRequest = PHAssetCollectionChangeRequest(for: album.asset!)
-                                                                //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
-                                                                
-                                                            }, completionHandler: { success, error in
-                                                                print("added enhanced video to album")
-                                                                print("success = \(success) error=\(error)")
-                                                                if success {
-                                                                    DispatchQueue.main.async {
-                                                                        let fetchOptions = PHFetchOptions()
-                                                                        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-                                                                        
-                                                                        // After uploading we fetch the PHAsset for most recent video and then get its current location url
-                                                                        
-                                                                        let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
-                                                                        try! realm.write {
-                                                                            enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                            print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                print("CC ALBUM \(clearcloudalbum)")
+                                                                self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
+                                                                    
+                                                                    if suc {
+                                                                        DispatchQueue.main.async {
+                                                                            let fetchOptions = PHFetchOptions()
+                                                                            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                                                                            
+                                                                            // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                                                                            
+                                                                            let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                                            let realm = try! Realm()
+                                                                            try! realm.write {
+                                                                                enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                                                print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                            }
+                                                                            completion(true,nil)
                                                                         }
-                                                                        completion(true,nil)
+
+                                                                    } else {
+                                                                        completion(false,err)
+
                                                                     }
-                                                                    
-                                                                } else {
-                                                                    print("success = \(success) error=\(error!.localizedDescription)")
-                                                                    
-                                                                    
-                                                                    
-                                                                    completion(false,error?.localizedDescription)
-                                                                }
+                                                                })
+                                                                
                                                                 
                                                             })
                                                             
+                                                            
                                                         }
                                                     })
+
+
                                                     
 
                                                 }
@@ -403,7 +481,7 @@ class CCViewController: UIViewController {
                                 }
                             })
                             
-                            
+                            */
                             
                     
 
@@ -424,6 +502,42 @@ class CCViewController: UIViewController {
         }
         
         
+    }
+    
+    func addToAlbum(videourl:URL, album:PHAssetCollection!, completion:@escaping ((Bool, String?) -> Void)) {
+        PHPhotoLibrary.requestAuthorization { (status) in
+            PHPhotoLibrary.shared().performChanges({
+                let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videourl);
+                
+                
+                if let asset = assetRequest?.placeholderForCreatedAsset {
+                    let request = PHAssetCollectionChangeRequest(for: album)
+                    request?.addAssets([asset] as NSArray)
+                }
+                
+                
+                //let assetPlaceholder = assetRequest!.placeholderForCreatedAsset
+                //let albumChangeRequest = PHAssetCollectionChangeRequest(for: album.asset!)
+                //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
+                
+            }, completionHandler: { success, error in
+                print("added enhanced video to album")
+                print("success = \(success) error=\(error)")
+                if success {
+                    completion(true,nil)
+
+                    
+                } else {
+                    print("success = \(success) error=\(error!.localizedDescription)")
+                    
+                    
+                    
+                    completion(false,error?.localizedDescription)
+                }
+                
+            })
+            
+        }
     }
     
     func orientation(forTrack asset: AVAsset?) -> UIInterfaceOrientation {
@@ -672,5 +786,14 @@ extension UIColor {
             green: CGFloat((rgb &   0xFF00) >>  8)/255.0,
             blue:  CGFloat((rgb &     0xFF)      )/255.0,
             alpha: alpha)
+    }
+}
+extension UIView {
+    func makeRounded() {
+        self.layer.borderWidth = 1
+        self.layer.masksToBounds = false
+        self.layer.borderColor = UIColor.white.cgColor
+        self.layer.cornerRadius = self.frame.height/2
+        self.clipsToBounds = true
     }
 }

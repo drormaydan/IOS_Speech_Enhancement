@@ -70,6 +70,7 @@ class AssetCell: UICollectionViewCell {
                 
                 
             } else {
+                self.enhancedLabel.isHidden = true
                 self.durationLabel.isHidden = false
                 let seconds = self.asset.audio!.duration
                 let hours =  seconds / 3600;

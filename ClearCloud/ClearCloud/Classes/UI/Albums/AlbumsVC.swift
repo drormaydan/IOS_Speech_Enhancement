@@ -45,7 +45,7 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         LoginManager.shared.checkRegistration { (status:LoginManager.LoginStatus, error:String?) in
             switch status {
             case .success:
-                print("HERE 1")
+                print("HERE 1zz")
             case .error:
                 break
             case .notLoggedIn:

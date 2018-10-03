@@ -132,6 +132,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D1089472164437A004597F1 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		0D937B492151990A00A240A1 = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +206,7 @@
 		0D937B8421519E1D00A240A1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				0D1089472164437A004597F1 /* Login */,
 				0DB57B6F215578E700EFBDD6 /* ItemDetail */,
 				0DB57B592151DB1100EFBDD6 /* AudioCapture */,
 				0D937B9D2151D22E00A240A1 /* AlbumDetail */,
@@ -733,7 +741,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MR9FEBC46L;
+				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/include/**",
 					"$(PROJECT_DIR)/FFmpegWrapper/FFmpegWrapper/**",
@@ -749,7 +757,7 @@
 					"$(PROJECT_DIR)/ClearCloud/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/lib",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.cts;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -765,7 +773,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MR9FEBC46L;
+				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/include/**",
 					"$(PROJECT_DIR)/FFmpegWrapper/FFmpegWrapper/**",
@@ -781,7 +789,7 @@
 					"$(PROJECT_DIR)/ClearCloud/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/lib",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.cts;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;

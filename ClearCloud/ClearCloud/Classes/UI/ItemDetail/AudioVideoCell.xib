@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AUDIO_VIDEO_CELL" rowHeight="217" id="KGk-i7-Jjw" customClass="AudioVideoCell" customModule="ClearCloud" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="395" height="250"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AUDIO_VIDEO_CELL" rowHeight="311" id="KGk-i7-Jjw" customClass="AudioVideoCell" customModule="ClearCloud" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="395" height="281"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="395" height="249.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="395" height="280.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Original" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5d-FG-kPR">
-                        <rect key="frame" x="20" y="221" width="59" height="21"/>
+                        <rect key="frame" x="20" y="238.5" width="59" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="qgT-1u-e2W"/>
                         </constraints>
@@ -32,25 +32,59 @@
                         <rect key="frame" x="20" y="11" width="355" height="204"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="204" id="nyL-2r-btQ"/>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" priority="750" constant="204" id="nyL-2r-btQ"/>
                         </constraints>
                     </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="75g-vh-GX6">
+                        <rect key="frame" x="327" y="225" width="48" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="48" id="AoI-Zm-q6R"/>
+                            <constraint firstAttribute="height" constant="48" id="b0t-RD-Cr0"/>
+                        </constraints>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <state key="normal" image="baseline_share_black_24pt"/>
+                        <connections>
+                            <action selector="clickShare:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="X7d-AY-Baj"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fQL-6y-BVu">
+                        <rect key="frame" x="271" y="225" width="48" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="48" id="a49-sv-nLd"/>
+                            <constraint firstAttribute="height" constant="48" id="wry-wO-Dae"/>
+                        </constraints>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <state key="normal" image="baseline_delete_black_24pt"/>
+                        <connections>
+                            <action selector="clickDelete:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="VGS-Xp-Nkd"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="75g-vh-GX6" firstAttribute="top" secondItem="ssg-ji-lkB" secondAttribute="bottom" constant="10" id="4d0-Ie-abq"/>
                     <constraint firstItem="ssg-ji-lkB" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="6Eo-Ff-6rD"/>
                     <constraint firstItem="ssg-ji-lkB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="7jW-Ee-Rae"/>
+                    <constraint firstAttribute="bottom" secondItem="75g-vh-GX6" secondAttribute="bottom" constant="7.5" id="C8a-er-shd"/>
                     <constraint firstItem="U5d-FG-kPR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="KbW-Ev-CdK"/>
-                    <constraint firstAttribute="bottom" secondItem="U5d-FG-kPR" secondAttribute="bottom" constant="7.5" id="NZK-Sl-DHc"/>
-                    <constraint firstItem="U5d-FG-kPR" firstAttribute="top" secondItem="ssg-ji-lkB" secondAttribute="bottom" constant="6" id="kUO-Rh-vc3"/>
+                    <constraint firstItem="fQL-6y-BVu" firstAttribute="top" secondItem="ssg-ji-lkB" secondAttribute="bottom" constant="10" id="Q2p-rA-50H"/>
+                    <constraint firstAttribute="trailing" secondItem="75g-vh-GX6" secondAttribute="trailing" constant="20" id="Zbn-tr-LGW"/>
+                    <constraint firstItem="75g-vh-GX6" firstAttribute="leading" secondItem="fQL-6y-BVu" secondAttribute="trailing" constant="8" id="anx-Ea-eBV"/>
+                    <constraint firstItem="fQL-6y-BVu" firstAttribute="centerY" secondItem="U5d-FG-kPR" secondAttribute="centerY" id="fQI-Lh-Xyl"/>
                     <constraint firstItem="ssg-ji-lkB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="mTQ-hc-zxA"/>
+                    <constraint firstAttribute="bottom" secondItem="fQL-6y-BVu" secondAttribute="bottom" constant="7.5" id="yBs-gf-6bs"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="shareButton" destination="75g-vh-GX6" id="ySG-di-Ecx"/>
                 <outlet property="typeLabel" destination="U5d-FG-kPR" id="oMU-PH-gYC"/>
                 <outlet property="videoView" destination="ssg-ji-lkB" id="DZp-30-eTz"/>
             </connections>
-            <point key="canvasLocation" x="71.5" y="140.5"/>
+            <point key="canvasLocation" x="71.200000000000003" y="153.37331334332833"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="baseline_delete_black_24pt" width="48" height="48"/>
+        <image name="baseline_share_black_24pt" width="48" height="48"/>
+    </resources>
 </document>

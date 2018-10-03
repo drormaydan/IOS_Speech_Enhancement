@@ -9,8 +9,9 @@
 import UIKit
 import Photos
 import RealmSwift
+import MobileCoreServices
 
-class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     var album:Album!
@@ -46,6 +47,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                 asset.selected = false
             }
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(clickSelect))
+            enhanceButtonView.isHidden = true
         }
         self.collectionView.reloadData()
     }
@@ -53,7 +55,11 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.reload()
+    }
 
+    func reload() {
+        
         self.assets.removeAll()
         
         let ccasset = CCAsset()
@@ -87,7 +93,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
             self.collectionView.reloadData()
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -111,6 +117,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     func enhanceNext() {
         if self.assets_to_enhance.count == 0 {
             self.hideHud()
+            self.clickSelect(sender: nil)
         } else {
             let asset = self.assets_to_enhance.remove(at: 0)
             
@@ -157,6 +164,25 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
 
             if self.album.type == .video {
                 
+                
+                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+                    print("captureVideoPressed and camera available.")
+                    
+                    var imagePicker = UIImagePickerController()
+                    
+                    imagePicker.delegate = self
+                    imagePicker.sourceType = .camera
+                    imagePicker.mediaTypes = [kUTTypeMovie] as [String]
+                    imagePicker.allowsEditing = false
+                    
+                    imagePicker.showsCameraControls = true
+                    
+                    self.present(imagePicker, animated: true, completion: nil)
+                } else {
+                    print("Camera not available.")
+                }
+
+                
             } else if self.album.type == .audio {
                 let detailVC:AudioCaptureVC = AudioCaptureVC(nibName: "AudioCaptureVC", bundle: nil)
                 detailVC.album = self.album
@@ -165,7 +191,19 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         } else {
             
             if select_mode {
+                if self.album.type == .video {
+                    let realm = try! Realm()
+                    let enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", assets[indexPath.row].asset!.localIdentifier, assets[indexPath.row].asset!.localIdentifier).first
+                    if let enhancedVideo = enhancedVideo {
+                        if let enhanced_video_id = enhancedVideo.enhanced_video_id {
+                            if enhanced_video_id == assets[indexPath.row].asset!.localIdentifier {
+                                return;
+                            }
+                        }
+                    }
+                }
                 assets[indexPath.row].selected = !assets[indexPath.row].selected
+
                 if assets[indexPath.row].selected {
                     self.total_selected += 1
                 } else {
@@ -199,6 +237,43 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         return CGSize(width: width, height: width)
     }
 
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let videoUrl = info[UIImagePickerControllerMediaURL] as! URL
+        let pathString = videoUrl.relativePath
+        print("GOT URL \(videoUrl)")
+        self.dismiss(animated: true, completion: {
+            
+            
+            self.addToAlbum(videourl: videoUrl, album: self.album!.asset!, completion: { (success:Bool, error:String?) in
+                DispatchQueue.main.async {
+                    self.reload()
+                }
+            })
+            
+            /*
+            PHPhotoLibrary.requestAuthorization { (status) in
+                PHPhotoLibrary.shared().performChanges({
+                    let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl);
+                    
+                    
+                    if let asset = assetRequest?.placeholderForCreatedAsset {
+                        let request = PHAssetCollectionChangeRequest(for: self.album!.asset!)
+                        request?.addAssets([asset] as NSArray)
+                    }
+                    
+                    
+                    //let assetPlaceholder = assetRequest!.placeholderForCreatedAsset
+                    //let albumChangeRequest = PHAssetCollectionChangeRequest(for: album.asset!)
+                    //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
+                    
+                }, completionHandler: { success, error in
+                    print("added new video to album")
+                    print("success = \(success) error=\(error)")
+                    self.reload()
+                })
+             }*/
 
+        })
+    }
 
 }

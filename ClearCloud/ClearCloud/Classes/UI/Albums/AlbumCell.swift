@@ -30,16 +30,20 @@ class AlbumCell: UICollectionViewCell {
             let fetchOptions = PHFetchOptions()
             fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
             let result:PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: self.album.asset!, options: fetchOptions)
-            let first:PHAsset = result[0]
-            
-            let manager = PHImageManager.default()
-            let option = PHImageRequestOptions()
-            var thumb = UIImage()
-            option.isSynchronous = true
-            manager.requestImage(for: first, targetSize: CGSize(width: self.thumbnail.frame.width, height: self.thumbnail.frame.height), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
-                thumb = result!
-            })
-            self.thumbnail.image = thumb
+            if result.count > 0 {
+                let first:PHAsset = result[0]
+                
+                let manager = PHImageManager.default()
+                let option = PHImageRequestOptions()
+                var thumb = UIImage()
+                option.isSynchronous = true
+                manager.requestImage(for: first, targetSize: CGSize(width: self.thumbnail.frame.width, height: self.thumbnail.frame.height), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
+                    thumb = result!
+                })
+                self.thumbnail.image = thumb
+            } else {
+                self.thumbnail.image = nil
+            }
         } else {
             self.thumbnail.image = #imageLiteral(resourceName: "audio_image")
             let realm = try! Realm()
@@ -47,7 +51,7 @@ class AlbumCell: UICollectionViewCell {
             numItems.text = "\(tmp.count)"
         }
     }
-
+    
 }
 extension PHAssetCollection {
     var videosCount: Int {

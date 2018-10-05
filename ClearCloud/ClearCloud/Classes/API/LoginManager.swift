@@ -109,6 +109,13 @@ class LoginManager: NSObject {
                         BabbleLabsApi.shared.sessionToken = auth_token
                         self.storeUsername(username: username)
                         self.storePassword(password: password)
+                        
+                        // clear trial
+                        let defaults: UserDefaults = UserDefaults.standard
+                        defaults.set(false, forKey: "trial")
+                        defaults.set(true, forKey: "did_trial")
+                        defaults.synchronize()
+
                         NotificationCenter.default.post(name:Notification.Name(rawValue:"LoginNotification"),
                                                         object: nil,
                                                         userInfo: nil)

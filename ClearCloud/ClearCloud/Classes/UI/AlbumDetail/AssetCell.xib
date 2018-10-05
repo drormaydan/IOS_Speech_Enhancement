@@ -31,6 +31,15 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U1S-BZ-tjd">
+                        <rect key="frame" x="96.5" y="73" width="28.5" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="bUJ-Pi-gx1"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white_check_green_circle_100px" translatesAutoresizingMaskIntoConstraints="NO" id="Y76-1A-M2u">
                         <rect key="frame" x="10" y="90" width="30" height="30"/>
                         <constraints>
@@ -52,9 +61,11 @@
                 <constraint firstItem="6AI-gJ-088" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="6" id="Bxd-Ve-b2N"/>
                 <constraint firstAttribute="trailing" secondItem="6AI-gJ-088" secondAttribute="trailing" constant="6" id="EsZ-rM-M9U"/>
                 <constraint firstAttribute="trailing" secondItem="zbK-eV-47D" secondAttribute="trailing" constant="6" id="JLf-UW-QSa"/>
+                <constraint firstItem="MxJ-Xz-T69" firstAttribute="top" secondItem="U1S-BZ-tjd" secondAttribute="bottom" constant="4" id="Lnb-8Z-Iqc"/>
                 <constraint firstItem="Y76-1A-M2u" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Lxl-0L-4qa"/>
                 <constraint firstAttribute="bottom" secondItem="Y76-1A-M2u" secondAttribute="bottom" constant="10" id="ch4-4Z-axH"/>
                 <constraint firstItem="zbK-eV-47D" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="6" id="frZ-7c-PJt"/>
+                <constraint firstAttribute="trailing" secondItem="U1S-BZ-tjd" secondAttribute="trailing" constant="16" id="g6e-gc-v4n"/>
                 <constraint firstAttribute="bottom" secondItem="MxJ-Xz-T69" secondAttribute="bottom" constant="17" id="tIi-8K-beM"/>
                 <constraint firstItem="6AI-gJ-088" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="x8A-QI-g69"/>
                 <constraint firstAttribute="trailing" secondItem="MxJ-Xz-T69" secondAttribute="trailing" constant="16" id="zRs-Be-z38"/>
@@ -66,6 +77,7 @@
                 <outlet property="durationLabel" destination="MxJ-Xz-T69" id="3ba-x8-COz"/>
                 <outlet property="enhancedLabel" destination="6AI-gJ-088" id="M15-Lg-4bI"/>
                 <outlet property="thumbnail" destination="zbK-eV-47D" id="EZr-Ok-PTm"/>
+                <outlet property="timeLabel" destination="U1S-BZ-tjd" id="aNN-Ce-1Xf"/>
             </connections>
             <point key="canvasLocation" x="79.200000000000003" y="93.553223388305852"/>
         </collectionViewCell>

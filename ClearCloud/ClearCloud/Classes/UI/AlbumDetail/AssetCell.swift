@@ -16,6 +16,7 @@ class AssetCell: UICollectionViewCell {
     var asset:CCAsset!
     var owner:AlbumDetailVC!
     @IBOutlet weak var durationLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
     
     @IBOutlet weak var enhancedLabel: UIImageView!
     @IBOutlet weak var checkmark: UIImageView!
@@ -23,11 +24,13 @@ class AssetCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
         self.durationLabel.backgroundColor = UIColor.init(hex: "#000000", alpha: 0.3)
+        self.timeLabel.backgroundColor = UIColor.init(hex: "#000000", alpha: 0.3)
     }
     
     func populate() {
         
         if (self.asset.type == .add) {
+            self.timeLabel.isHidden = true
             self.thumbnail.image = #imageLiteral(resourceName: "blue_plus")
             self.durationLabel.isHidden = true
             self.checkmark.isHidden = true
@@ -39,7 +42,7 @@ class AssetCell: UICollectionViewCell {
             }
             
             if (self.asset.type == .video) {
-                
+                self.timeLabel.isHidden = true
                 self.durationLabel.isHidden = false
                 let manager = PHImageManager.default()
                 let option = PHImageRequestOptions()
@@ -70,8 +73,14 @@ class AssetCell: UICollectionViewCell {
                 
                 
             } else {
+                self.timeLabel.isHidden = false
                 self.enhancedLabel.isHidden = true
                 self.durationLabel.isHidden = false
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MM-dd-yyyy hh:mm a"
+                self.timeLabel.text = dateFormatter.string(from: self.asset.audio!.local_time_start!)
+                
                 let seconds = self.asset.audio!.duration
                 let hours =  seconds / 3600;
                 var remainder = seconds - hours * 3600;
@@ -81,6 +90,9 @@ class AssetCell: UICollectionViewCell {
 
                 self.thumbnail.image = #imageLiteral(resourceName: "audio_image")
 
+                if self.asset.audio!.enhanced_audio_path != nil {
+                    self.enhancedLabel.isHidden = false
+                }
             }
         }
     }

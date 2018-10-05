@@ -606,12 +606,10 @@ class CCViewController: UIViewController {
                 //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
                 
             }, completionHandler: { success, error in
-                print("added enhanced video to album")
-                print("success = \(success) error=\(error)")
+                print("try added video to album \(album) success = \(success) error=\(error)")
                 if success {
                     completion(true,nil)
-
-                    
+                
                 } else {
                     print("success = \(success) error=\(error!.localizedDescription)")
                     
@@ -840,6 +838,72 @@ class CCViewController: UIViewController {
         
     }
     
+    
+    func rewriteAudioFile(audioUrl:URL, outputUrl:URL, completion:@escaping ((Bool, String?) -> Void)) {
+        let mixComposition : AVMutableComposition = AVMutableComposition()
+        var mutableCompositionAudioTrack : [AVMutableCompositionTrack] = []
+        let totalVideoCompositionInstruction : AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
+        
+        //start merge
+        
+        //let aVideoAsset : AVAsset = AVAsset(url: videoUrl)
+        let aAudioAsset : AVAsset = AVURLAsset(url: audioUrl)
+        
+        print("aAudioAsset.tracks \(aAudioAsset.tracks)")
+        
+        mutableCompositionAudioTrack.append(mixComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)!)
+        
+        let aAudioAssetTrack : AVAssetTrack = aAudioAsset.tracks(withMediaType: AVMediaType.audio)[0]
+        
+        
+        do{
+            
+            //In my case my audio file is longer then video file so i took videoAsset duration
+            //instead of audioAsset duration
+            
+            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aAudioAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: kCMTimeZero)
+            
+            //Use this instead above line if your audiofile and video file's playing durations are same
+            
+            //            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAssetTrack.timeRange.duration), ofTrack: aAudioAssetTrack, atTime: kCMTimeZero)
+            
+        }catch{
+            print("zzError info: \(error)")
+            
+        }
+        
+        
+        let assetExport: AVAssetExportSession = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetAppleM4A)!
+        assetExport.outputFileType = AVFileType.m4a
+        assetExport.outputURL = outputUrl
+        assetExport.shouldOptimizeForNetworkUse = true
+        
+        print("HERE 11")
+        
+        assetExport.exportAsynchronously { () -> Void in
+            switch assetExport.status {
+                
+            case AVAssetExportSessionStatus.completed:
+                
+                //Uncomment this if u want to store your video in asset
+                
+                //let assetsLib = ALAssetsLibrary()
+                //assetsLib.writeVideoAtPathToSavedPhotosAlbum(savePathUrl, completionBlock: nil)
+                
+                print("success")
+                completion(true,nil)
+            case  AVAssetExportSessionStatus.failed:
+                print("failed \(assetExport.error)")
+                completion(false,assetExport.error?.localizedDescription)
+            case AVAssetExportSessionStatus.cancelled:
+                print("cancelled \(assetExport.error)")
+                completion(false,assetExport.error?.localizedDescription)
+            default:
+                print("complete")
+                completion(true,nil)
+            }
+        }
+    }
     func deg2rad(_ number: Double) -> Double {
         return number * .pi / 180
     }

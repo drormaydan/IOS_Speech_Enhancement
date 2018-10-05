@@ -12,13 +12,13 @@ import RealmSwift
 import MobileCoreServices
 
 class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     @IBOutlet weak var collectionView: UICollectionView!
     var album:Album!
     var assets:[CCAsset] = []
     var select_mode = false
     var total_selected = 0
-
+    
     @IBOutlet weak var enhanceButtonView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         self.title = album.name
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(clickSelect))
-
+        
         enhanceButtonView.isHidden = true
     }
     
@@ -57,14 +57,11 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         super.viewWillAppear(animated)
         self.reload()
     }
-
+    
     func reload() {
         
         self.assets.removeAll()
         
-        let ccasset = CCAsset()
-        ccasset.type = .add
-        self.assets.append(ccasset)
         
         if album.type == .video {
             
@@ -79,19 +76,32 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                 self.assets.append(ccasset)
             })
             
-            self.collectionView.reloadData()
+            let ccasset = CCAsset()
+            ccasset.type = .add
+            self.assets.append(ccasset)
+
+            self.assets = self.assets.reversed() // sort newest first
+            
             
         } else {
+            let ccasset = CCAsset()
+            ccasset.type = .add
+            self.assets.append(ccasset)
+
             let realm = try! Realm()
+            realm.refresh()
             let audios = realm.objects(CCAudio.self).sorted(byKeyPath: "local_time_start", ascending: false)
+            print("TOTAL AUDIOS \(audios.count)")
             for audio:CCAudio in audios {
                 let ccasset = CCAsset()
                 ccasset.type = .audio
                 ccasset.audio = audio
                 self.assets.append(ccasset)
             }
-            self.collectionView.reloadData()
         }
+        
+        self.collectionView.reloadData()
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -161,7 +171,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         if assets[indexPath.row].type == .add {
             
-
+            
             if self.album.type == .video {
                 
                 
@@ -181,7 +191,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                 } else {
                     print("Camera not available.")
                 }
-
+                
                 
             } else if self.album.type == .audio {
                 let detailVC:AudioCaptureVC = AudioCaptureVC(nibName: "AudioCaptureVC", bundle: nil)
@@ -203,7 +213,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                     }
                 }
                 assets[indexPath.row].selected = !assets[indexPath.row].selected
-
+                
                 if assets[indexPath.row].selected {
                     self.total_selected += 1
                 } else {
@@ -214,7 +224,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                 } else {
                     enhanceButtonView.isHidden = true
                 }
-                    
+                
                 self.collectionView.reloadData()
             } else {
                 let detailVC:ItemDetailVC = ItemDetailVC(nibName: "ItemDetailVC", bundle: nil)
@@ -224,7 +234,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
             }
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -236,7 +246,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         
         return CGSize(width: width, height: width)
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let videoUrl = info[UIImagePickerControllerMediaURL] as! URL
         let pathString = videoUrl.relativePath
@@ -245,35 +255,57 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
             
             
             self.addToAlbum(videourl: videoUrl, album: self.album!.asset!, completion: { (success:Bool, error:String?) in
-                DispatchQueue.main.async {
-                    self.reload()
-                }
-            })
-            
-            /*
-            PHPhotoLibrary.requestAuthorization { (status) in
-                PHPhotoLibrary.shared().performChanges({
-                    let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl);
-                    
-                    
-                    if let asset = assetRequest?.placeholderForCreatedAsset {
-                        let request = PHAssetCollectionChangeRequest(for: self.album!.asset!)
-                        request?.addAssets([asset] as NSArray)
+                if success {
+                    DispatchQueue.main.async {
+                        self.reload()
                     }
                     
                     
-                    //let assetPlaceholder = assetRequest!.placeholderForCreatedAsset
-                    //let albumChangeRequest = PHAssetCollectionChangeRequest(for: album.asset!)
-                    //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
+                } else {
+                    // fallback to ClearCloud album
                     
-                }, completionHandler: { success, error in
-                    print("added new video to album")
-                    print("success = \(success) error=\(error)")
-                    self.reload()
-                })
-             }*/
+                    self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
+                        
+                        print("CC ALBUM \(clearcloudalbum)")
+                        self.addToAlbum(videourl: videoUrl, album: clearcloudalbum, completion: { (success:Bool, error:String?) in
 
+                            DispatchQueue.main.async {
+                                self.reload()
+                            }
+                        })
+                        
+                        
+                    })
+                    
+                    
+                }
+                
+            })
+            
+            /*
+             PHPhotoLibrary.requestAuthorization { (status) in
+             PHPhotoLibrary.shared().performChanges({
+             let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoUrl);
+             
+             
+             if let asset = assetRequest?.placeholderForCreatedAsset {
+             let request = PHAssetCollectionChangeRequest(for: self.album!.asset!)
+             request?.addAssets([asset] as NSArray)
+             }
+             
+             
+             //let assetPlaceholder = assetRequest!.placeholderForCreatedAsset
+             //let albumChangeRequest = PHAssetCollectionChangeRequest(for: album.asset!)
+             //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
+             
+             }, completionHandler: { success, error in
+             print("added new video to album")
+             print("success = \(success) error=\(error)")
+             self.reload()
+             })
+             }*/
+            
         })
     }
-
+    
 }

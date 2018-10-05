@@ -20,9 +20,18 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Original" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5d-FG-kPR">
-                        <rect key="frame" x="20" y="238.5" width="59" height="21"/>
+                        <rect key="frame" x="20" y="252" width="59" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="qgT-1u-e2W"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Original" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5a-ra-YVY">
+                        <rect key="frame" x="20" y="225" width="59" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="8X4-fP-aHp"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
@@ -59,32 +68,52 @@
                             <action selector="clickDelete:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="VGS-Xp-Nkd"/>
                         </connections>
                     </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NOn-m0-sQd">
+                        <rect key="frame" x="215" y="225" width="48" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="48" id="6Rx-r3-qdR"/>
+                            <constraint firstAttribute="height" constant="48" id="spm-po-1ZO"/>
+                        </constraints>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <state key="normal" image="baseline_edit_black_24pt"/>
+                        <connections>
+                            <action selector="clickEdit:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="gYR-Yg-fit"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="l5a-ra-YVY" firstAttribute="top" secondItem="ssg-ji-lkB" secondAttribute="bottom" constant="10" id="3Rt-H5-4YU"/>
                     <constraint firstItem="75g-vh-GX6" firstAttribute="top" secondItem="ssg-ji-lkB" secondAttribute="bottom" constant="10" id="4d0-Ie-abq"/>
                     <constraint firstItem="ssg-ji-lkB" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="6Eo-Ff-6rD"/>
                     <constraint firstItem="ssg-ji-lkB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="7jW-Ee-Rae"/>
+                    <constraint firstAttribute="bottom" secondItem="NOn-m0-sQd" secondAttribute="bottom" constant="7.5" id="Agd-vB-vAc"/>
+                    <constraint firstItem="fQL-6y-BVu" firstAttribute="bottom" secondItem="U5d-FG-kPR" secondAttribute="bottom" id="Bkh-vJ-6Pz"/>
                     <constraint firstAttribute="bottom" secondItem="75g-vh-GX6" secondAttribute="bottom" constant="7.5" id="C8a-er-shd"/>
                     <constraint firstItem="U5d-FG-kPR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="KbW-Ev-CdK"/>
                     <constraint firstItem="fQL-6y-BVu" firstAttribute="top" secondItem="ssg-ji-lkB" secondAttribute="bottom" constant="10" id="Q2p-rA-50H"/>
                     <constraint firstAttribute="trailing" secondItem="75g-vh-GX6" secondAttribute="trailing" constant="20" id="Zbn-tr-LGW"/>
                     <constraint firstItem="75g-vh-GX6" firstAttribute="leading" secondItem="fQL-6y-BVu" secondAttribute="trailing" constant="8" id="anx-Ea-eBV"/>
-                    <constraint firstItem="fQL-6y-BVu" firstAttribute="centerY" secondItem="U5d-FG-kPR" secondAttribute="centerY" id="fQI-Lh-Xyl"/>
+                    <constraint firstItem="U5d-FG-kPR" firstAttribute="leading" secondItem="l5a-ra-YVY" secondAttribute="leading" id="hbk-iE-Won"/>
                     <constraint firstItem="ssg-ji-lkB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="mTQ-hc-zxA"/>
+                    <constraint firstItem="U5d-FG-kPR" firstAttribute="top" secondItem="l5a-ra-YVY" secondAttribute="bottom" constant="6" id="mWK-bi-L0l"/>
+                    <constraint firstItem="fQL-6y-BVu" firstAttribute="leading" secondItem="NOn-m0-sQd" secondAttribute="trailing" constant="8" id="qPl-2n-xxf"/>
                     <constraint firstAttribute="bottom" secondItem="fQL-6y-BVu" secondAttribute="bottom" constant="7.5" id="yBs-gf-6bs"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="editButton" destination="NOn-m0-sQd" id="Dix-p7-BiL"/>
+                <outlet property="nameLabel" destination="l5a-ra-YVY" id="WBR-lm-gnk"/>
                 <outlet property="shareButton" destination="75g-vh-GX6" id="ySG-di-Ecx"/>
                 <outlet property="typeLabel" destination="U5d-FG-kPR" id="oMU-PH-gYC"/>
                 <outlet property="videoView" destination="ssg-ji-lkB" id="DZp-30-eTz"/>
             </connections>
-            <point key="canvasLocation" x="71.200000000000003" y="153.37331334332833"/>
+            <point key="canvasLocation" x="71.200000000000003" y="152.47376311844079"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="baseline_delete_black_24pt" width="48" height="48"/>
+        <image name="baseline_edit_black_24pt" width="48" height="48"/>
         <image name="baseline_share_black_24pt" width="48" height="48"/>
     </resources>
 </document>

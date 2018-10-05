@@ -9,17 +9,17 @@
 import UIKit
 
 class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     let menus = ["Support", "About Us", "Logout"]
     let icons = [UIImage.init(named: "support"), UIImage.init(named: "about"),UIImage.init(named: "logout")]
-
+    
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var username: UILabel!
     @IBOutlet var tableheader: UIView!
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         tableView.tableFooterView = UIView()
         tableView.tableHeaderView = self.tableheader
@@ -27,16 +27,16 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
         self.tableView.register(UINib(nibName: "NavCell", bundle: nil), forCellReuseIdentifier: "NAV_CELL")
         self.tableView.backgroundColor = UIColor.clear
         self.tableView.backgroundView = nil
-
+        
         self.username.isHidden = true
         self.email.isHidden = true
         
         NotificationCenter.default.addObserver(forName:Notification.Name(rawValue:"LoginNotification"),
                                                object:nil, queue:nil,
                                                using:catchNotification)
-
+        
     }
-
+    
     func catchNotification(notification: Notification) -> Void {
         print("GOT NOTIFICATION \(LoginManager.shared.logged_in)")
         DispatchQueue.main.async {
@@ -66,16 +66,18 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                 self.username.isHidden = true
                 self.email.isHidden = true
             }
+            
+            self.tableView.reloadData()
         }
     }
-
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -90,16 +92,24 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
         
         return self.menus.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:NavCell = self.tableView.dequeueReusableCell(withIdentifier: "NAV_CELL", for: indexPath) as! NavCell
-       
+        
         cell.navimage.image = self.icons[indexPath.row]
         cell.navlabel.text = self.menus[indexPath.row]
-
+        
+        if self.menus[indexPath.row] == "Logout" {
+            let defaults: UserDefaults = UserDefaults.standard
+            let trial = defaults.bool(forKey: "trial")
+            if trial {
+                cell.navlabel.text = "Login"
+            }
+        }
+        
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
@@ -116,18 +126,24 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
         case 2:
-            LoginManager.shared.logout()
-            NotificationCenter.default.post(name:Notification.Name(rawValue:"LoginNotification"),
-                                            object: nil,
-                                            userInfo: nil)
-            /*
-            let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
-            let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.sideMenuController.present(nav, animated: true, completion: nil)*/
+            let defaults: UserDefaults = UserDefaults.standard
+            let trial = defaults.bool(forKey: "trial")
+            if trial {
+                
+                let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+            } else {
+                
+                LoginManager.shared.logout()
+                NotificationCenter.default.post(name:Notification.Name(rawValue:"LoginNotification"),
+                                                object: nil,
+                                                userInfo: nil)
+            }
         default:
             break
         }
-    
+        
     }
 }

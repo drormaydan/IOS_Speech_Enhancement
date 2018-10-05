@@ -117,7 +117,9 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         let fetchOptions = PHFetchOptions()
         
         let smartAlbums:PHFetchResult<PHCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumVideos, options: fetchOptions) as! PHFetchResult<PHCollection>
-        
+        let smartAlbums2:PHFetchResult<PHCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOptions) as! PHFetchResult<PHCollection>
+        let smartAlbums3:PHFetchResult<PHCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumFavorites, options: fetchOptions) as! PHFetchResult<PHCollection>
+
         let topLevelfetchOptions = PHFetchOptions()
         
         
@@ -129,8 +131,8 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         
         
         
-        let allAlbums = [topLevelUserCollections, smartAlbums]
-        print("allAlbums \(allAlbums)")
+        let allAlbums = [topLevelUserCollections, smartAlbums, smartAlbums2, smartAlbums3]
+        //print("allAlbums \(allAlbums)")
 
         for i in 0 ..< allAlbums.count {
             let result = allAlbums[i]
@@ -143,15 +145,22 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
                         opts.fetchLimit = 1
                     }
                     
-                    let ass = PHAsset.fetchAssets(in: a, options: opts)
-                    if let _ = ass.firstObject {
+                    let fetchOptions = PHFetchOptions()
+                    fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+                    let result:PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: a, options: fetchOptions)
+                    if result.count > 0 {
                         
-                        print("GOT ASSET \(a.localizedTitle)")
-                        let album = Album()
-                        album.asset = a
-                        album.name = a.localizedTitle
-                        album.type = .video
-                        self.albums.append(album)
+                        
+                        let ass = PHAsset.fetchAssets(in: a, options: opts)
+                        if let _ = ass.firstObject {
+                            
+                            print("GOT ASSET \(a.localizedTitle)")
+                            let album = Album()
+                            album.asset = a
+                            album.name = a.localizedTitle
+                            album.type = .video
+                            self.albums.append(album)
+                        }
                     }
                 }
                 

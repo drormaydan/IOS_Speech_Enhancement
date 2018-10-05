@@ -35,6 +35,30 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             let realm = try! Realm()
             self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
             print("self.enhancedVideo \(self.enhancedVideo)")
+        } else {
+            // tmp fix audio
+            /*
+            let filemgr = FileManager.default
+            let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+            let docsDir = dirPaths.first!
+            let origurl = docsDir.appendingPathComponent(asset.audio!.local_audio_path!)
+
+            let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(self.asset.audio!.unique_id!)_fixed.m4a")
+            
+            
+            self.rewriteAudioFile(audioUrl: origurl, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
+                if success {
+                    do {
+                        try filemgr.removeItem(at: origurl)
+                        try filemgr.copyItem(at: audiourl2, to: origurl)
+                        print("COPIED AUDIO TO \(origurl)")
+                    } catch {
+                        print("audio Error: \(error)")
+                    }
+                    
+                }
+                
+            })*/
         }
         
         refresh()
@@ -106,7 +130,8 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 311
+        //return 311
+        return UIScreen.main.bounds.height * 0.4
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

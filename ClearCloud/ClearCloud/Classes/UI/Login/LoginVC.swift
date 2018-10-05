@@ -43,8 +43,9 @@ class LoginVC: CCViewController {
             return
         }
 
+        self.showHud()
         LoginManager.shared.doLogin(username: username.text!, password: password.text!, trial: false) { (status:LoginManager.LoginStatus, error:String?) in
-            
+            self.hideHud()
             switch status {
             case .success:
                 self.dismiss(animated: true, completion: nil)

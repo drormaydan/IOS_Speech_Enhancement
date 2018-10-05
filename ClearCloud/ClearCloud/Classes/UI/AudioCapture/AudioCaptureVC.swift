@@ -13,7 +13,7 @@ import RealmSwift
 import AudioKit
 
 class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
-
+    
     @IBOutlet weak var okButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
@@ -23,29 +23,82 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     var isRecording:Bool = false
     var album:Album!
     var endTime:Date? = nil
-
+    
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
     @IBOutlet private weak var recordButton: UIButton!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setLogoImage()
         self.navigationController?.navigationBar.isTranslucent = false
         recordButton.makeRounded()
+        makeBackButton2()
+        
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        if FileManager.default.fileExists(atPath: audioFilename.path) {
+            do {
+                try FileManager.default.removeItem(atPath: audioFilename.path)
+            }
+            catch {
+                print("Could not remove file at url: \(audioFilename)")
+            }
+        }
+        
+
+    }
+    
+    func makeBackButton2() {
+        let buttonBack: UIButton = UIButton(type: UIButtonType.custom) as UIButton
+        buttonBack.frame = CGRect(x: 0, y: 0, width: 40, height: 40) // CGFloat, Double, Int
+        buttonBack.setImage(#imageLiteral(resourceName: "baseline_arrow_back_ios_black_24pt"), for: UIControlState.normal)
+        buttonBack.addTarget(self, action: #selector(clickBack2(sender:)), for: UIControlEvents.touchUpInside)
+        
+        let rightBarButtonItem: UIBarButtonItem = UIBarButtonItem(customView: buttonBack)
+        // self.navigationItem.setLeftBarButton(rightBarButtonItem, animated: false)
+        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        negativeSpacer.width = -13
+        navigationItem.leftBarButtonItems = [negativeSpacer,rightBarButtonItem]
+        
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.isIdleTimerDisabled = false
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        UIApplication.shared.isIdleTimerDisabled = true
         reset()
+    }
+    
+    
+    @objc func clickBack2(sender:UIButton?) {
+        print("CLICKBACK")
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        
+        do {
+        let attr = try FileManager.default.attributesOfItem(atPath: audioFilename.path)
+        let fileSize = attr[FileAttributeKey.size] as! UInt64
+        print("CLICKBACK fileSize \(fileSize)")
+        } catch {
+        print("Could not remove file at url: \(audioFilename)")
+        }
+        
+        if FileManager.default.fileExists(atPath: audioFilename.path) {
+            self.showError(message: "Please either save or delete the audio.")
+        } else {
+            self.navigationController!.popViewController(animated: true)
+        }
     }
     
     func reset() {
@@ -72,7 +125,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             // failed to record!
         }
     }
-
+    
     func cleanup() {
         print("CLEANUP AUDIO")
         if self.timer != nil {
@@ -84,22 +137,22 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     
     
     @IBAction func clickSave(_ sender: Any) {
-
+        
         let audio = CCAudio()
         audio.unique_id = NSUUID().uuidString
         audio.local_time_start = startRecordingTime
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM-dd-HH:mm:ss"
-        audio.name = "Untitled"
-
+        //audio.name = "Untitled"
+        
         
         let filemgr = FileManager.default
         let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
         let docsDir = dirPaths.first!
         let newDir = docsDir.appendingPathComponent(audio.unique_id!)
         let audiourl = newDir.appendingPathComponent("audio.m4a")
-       // let testaudiourl = newDir.appendingPathComponent("caf")
-
+        // let testaudiourl = newDir.appendingPathComponent("caf")
+        
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         
@@ -115,22 +168,22 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             print("FINAL AUDIO PATH \(audio.local_audio_path!)")
             
             /*
-            // test
-            var options = AKConverter.Options()
-            options.format = "caf"
-            options.sampleRate = 22500
-            options.channels = UInt32(1)
-            let br = UInt32(16)
-            options.bitRate = br * 1_000
-            let converter = AKConverter(inputURL: audiourl, outputURL: testaudiourl, options: options)
-            converter.start(completionHandler: { error in
-                if let error = error {
-                    AKLog("Error during convertion: \(error)")
-                } else {
-                    AKLog("Conversion Complete! \(testaudiourl)")
-                }
-            })*/
-
+             // test
+             var options = AKConverter.Options()
+             options.format = "caf"
+             options.sampleRate = 22500
+             options.channels = UInt32(1)
+             let br = UInt32(16)
+             options.bitRate = br * 1_000
+             let converter = AKConverter(inputURL: audiourl, outputURL: testaudiourl, options: options)
+             converter.start(completionHandler: { error in
+             if let error = error {
+             AKLog("Error during convertion: \(error)")
+             } else {
+             AKLog("Conversion Complete! \(testaudiourl)")
+             }
+             })*/
+            
             
             do {
                 let attr = try filemgr.attributesOfItem(atPath: audiourl.path)
@@ -147,16 +200,11 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             }
             
             
-            DispatchQueue.main.async {
-                let realm = try! Realm()
-                try! realm.write {
-                    realm.add(audio)
-                }
+            let realm = try! Realm()
+            try! realm.write {
+                realm.add(audio)
             }
             
-            
-            
-
             // delete old file
             if FileManager.default.fileExists(atPath: audioFilename.path) {
                 do {
@@ -176,24 +224,24 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             self.present(alertController, animated: true, completion: nil)
         }
         
-
-
-
-/*
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: audioFilename)
-        }) { saved, error in
-            if (error != nil) {
-                print("error \(error!.localizedDescription)")
-            }
-            if saved {
-                let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
-                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alertController.addAction(defaultAction)
-                self.present(alertController, animated: true, completion: nil)
-            }
-        }
-*/
+        
+        
+        
+        /*
+         PHPhotoLibrary.shared().performChanges({
+         PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: audioFilename)
+         }) { saved, error in
+         if (error != nil) {
+         print("error \(error!.localizedDescription)")
+         }
+         if saved {
+         let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
+         let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+         alertController.addAction(defaultAction)
+         self.present(alertController, animated: true, completion: nil)
+         }
+         }
+         */
     }
     
     func convertAudio(_ url: URL, outputURL: URL) {
@@ -281,12 +329,12 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         error = ExtAudioFileDispose(sourceFile!)
         print("Error 7 in convertAudio: \(error.description)")
     }
-
+    
     
     @IBAction func clickDelete(_ sender: Any) {
         
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
-
+        
         // delete old file
         if FileManager.default.fileExists(atPath: audioFilename.path) {
             do {
@@ -322,7 +370,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 audioRecorder.record()
                 
                 self.timeLabel.isHidden = false
-
+                
                 
                 timerCount = 0
                 startRecordingTime = Date.init()
@@ -359,30 +407,30 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         self.isRecording = false
         self.recordButton.isEnabled = true
         self.timeLabel.isHidden = true
-
+        
         if self.timer != nil {
             self.timer!.invalidate()
             self.timer = nil
         }
-
+        
         if (flag) {
             
             self.deleteButton.isHidden = false
             self.okButton.isHidden = false
-
+            
             /*
-            let filemgr = FileManager.default
-            let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
-            do {
-                let attr = try filemgr.attributesOfItem(atPath: audioFilename.path)
-                let fileSize = attr[FileAttributeKey.size] as! UInt64
-                print("audio \(audioFilename) fileSize \(fileSize)")
-            } catch {
-                print("audio Error: \(error)")
-            }*/
-
-
-          
+             let filemgr = FileManager.default
+             let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+             do {
+             let attr = try filemgr.attributesOfItem(atPath: audioFilename.path)
+             let fileSize = attr[FileAttributeKey.size] as! UInt64
+             print("audio \(audioFilename) fileSize \(fileSize)")
+             } catch {
+             print("audio Error: \(error)")
+             }*/
+            
+            
+            
         } else {
             // TODO
         }
@@ -406,5 +454,6 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-
+    
+    
 }

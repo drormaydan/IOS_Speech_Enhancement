@@ -23,6 +23,8 @@ class AudioVideoCell: UITableViewCell {
     var url:URL? = nil
     var asset:PHAsset? = nil
     
+    @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var videoView: UIView!
@@ -57,9 +59,57 @@ class AudioVideoCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    @IBAction func clickEdit(_ sender: Any) {
+    
+        let alertController = UIAlertController(title: "Set Name", message: "", preferredStyle: .alert)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default, handler: {
+            alert -> Void in
+            
+            let firstTextField = alertController.textFields![0] as UITextField
+            
+            
+            let realm = try! Realm()
+            print("realm \(realm)")
+            try! realm.write {
+                if self.typeLabel.text == "Original" {
+                    self.owner.asset.audio!.name = firstTextField.text!
+                } else {
+                    self.owner.asset.audio!.enhanced_name = firstTextField.text!
+                }
+            }
+            print("done realm")
+            self.setNames()
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: {
+            (action : UIAlertAction!) -> Void in
+            
+        })
+        
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Audio Name"
+            if self.typeLabel.text == "Original" {
+                if let name = self.owner.asset.audio!.name {
+                    textField.text = name
+                }
+            } else {
+                if let name = self.owner.asset.audio!.enhanced_name {
+                    textField.text = name
+                }
+            }
+        }
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        
+        self.owner.present(alertController, animated: true, completion: nil)
+
+    }
+ 
+    
     @IBAction func clickDelete(_ sender: Any) {
         if (type == .audio) {
-            
             
             let alertController = UIAlertController(title: NSLocalizedString("Are you sure you would like to delete this audio?", comment: ""), message: nil, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title:NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { action in
@@ -115,6 +165,7 @@ class AudioVideoCell: UITableViewCell {
             self.owner.present(alertController, animated: true, completion: nil)
 
         } else {
+
             let arrayToDelete = NSArray(object: self.asset!)
             
             
@@ -182,11 +233,32 @@ class AudioVideoCell: UITableViewCell {
             
         }
     }
+    func setNames() {
+        if (type == .audio) {
+            editButton.isHidden = false
+            nameLabel.isHidden = true
+            if self.typeLabel.text == "Original" {
+                if let name = self.owner.asset.audio!.name {
+                    nameLabel.isHidden = false
+                    nameLabel.text = name
+                }
+            } else {
+                if let name = self.owner.asset.audio!.enhanced_name {
+                    nameLabel.isHidden = false
+                    nameLabel.text = name
+                }
+            }
+        } else {
+            nameLabel.isHidden = true
+            editButton.isHidden = true
+        }
+    }
     
     func populate() {
         if loaded {
             return
         }
+        self.setNames()
         loaded = true
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         try? AVAudioSession.sharedInstance().setActive(true)

@@ -154,8 +154,12 @@ class BabbleLabsApi: NSObject {
             // ... and set our request's HTTP body
             
             // Create and run a URLSession data task with our JSON encoded POST request
-            let config = URLSessionConfiguration.default
-            let session = URLSession(configuration: config)
+            //let config = URLSessionConfiguration.default
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 900.0
+            sessionConfig.timeoutIntervalForResource = 900.0
+
+            let session = URLSession(configuration: sessionConfig)
             let task = session.dataTask(with: request) { (responseData, response, responseError) in
                 guard responseError == nil else {
                     completion(false,ServerError(WithMessage: (responseError?.localizedDescription)!),false )

@@ -123,6 +123,7 @@ class BabbleLabsApi: NSObject {
                 urlComponents.queryItems = [URLQueryItem(name: "product", value: "video")]
             }
             
+            print("0 SERVICE")
 
             guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
             
@@ -138,7 +139,8 @@ class BabbleLabsApi: NSObject {
             
             // Now let's encode out Post struct into JSON data...
             let file: FileHandle? = FileHandle(forReadingAtPath: filepath)
-            
+            print("1 SERVICE")
+
             if file != nil {
                 // Read all the data
                 let data = file?.readDataToEndOfFile()
@@ -155,12 +157,15 @@ class BabbleLabsApi: NSObject {
             
             // Create and run a URLSession data task with our JSON encoded POST request
             //let config = URLSessionConfiguration.default
+            print("2 SERVICE")
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = 900.0
             sessionConfig.timeoutIntervalForResource = 900.0
 
             let session = URLSession(configuration: sessionConfig)
+            print("3 SERVICE")
             let task = session.dataTask(with: request) { (responseData, response, responseError) in
+                print("4 SERVICE")
                 guard responseError == nil else {
                     completion(false,ServerError(WithMessage: (responseError?.localizedDescription)!),false )
                     return
@@ -208,6 +213,7 @@ class BabbleLabsApi: NSObject {
                     completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)
                 }
             }
+            print("5 SERVICE task=\(task)")
             task.resume()
         } else {
             completion(false, ServerError.noInternet,false)

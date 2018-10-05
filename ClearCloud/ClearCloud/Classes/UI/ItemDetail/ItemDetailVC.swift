@@ -43,15 +43,19 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             let docsDir = dirPaths.first!
             let origurl = docsDir.appendingPathComponent(asset.audio!.local_audio_path!)
 
-            let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(self.asset.audio!.unique_id!)_fixed.m4a")
+            let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(self.asset.audio!.unique_id!)_fixed2.m4a")
+            let audiourl3 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(self.asset.audio!.unique_id!)_backup.m4a")
+
             
-            
+            print("ORIGINAL AUDIO \(audiourl2)")
             self.rewriteAudioFile(audioUrl: origurl, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
                 if success {
                     do {
+                        try filemgr.copyItem(at: origurl, to: audiourl3)
+                        print("SAVED AUDIO TO \(audiourl3)")
                         try filemgr.removeItem(at: origurl)
                         try filemgr.copyItem(at: audiourl2, to: origurl)
-                        print("COPIED AUDIO TO \(origurl)")
+                        print("REWROTE AUDIO TO \(origurl)")
                     } catch {
                         print("audio Error: \(error)")
                     }
@@ -122,6 +126,8 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                 }
                 
                 self.refresh()
+            } else {
+                print("ENHANCE ERROR \(error)")
             }
         }
     }

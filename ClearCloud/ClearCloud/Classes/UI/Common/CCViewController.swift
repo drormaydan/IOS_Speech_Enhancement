@@ -168,7 +168,7 @@ class CCViewController: UIViewController {
                 let path = asset.audio!.local_audio_path
                 let url = docsDir.appendingPathComponent(path!)
                 
-                
+                print("BEFORE WEB SERVICE")
                 BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false) { (success:Bool, error:ServerError?, trialover:Bool ) in
                     print("POST SUCCESS \(success) error \(error)")
                     if (success) {
@@ -200,7 +200,7 @@ class CCViewController: UIViewController {
                             
                         } else {
                             completion(false,error!.getMessage()!)
-                            self.showError(message: error!.getMessage()!)
+                           // self.showError(message: error!.getMessage()!)
                         }
                     }
                 }
@@ -366,67 +366,6 @@ class CCViewController: UIViewController {
 
                                             
                                             
-                                            
-                                            /*
-                                            PHPhotoLibrary.requestAuthorization { (status) in
-                                                PHPhotoLibrary.shared().performChanges({
-                                                    let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videourl);
-                                                    
-                                                    
-                                                    if let asset = assetRequest?.placeholderForCreatedAsset {
-                                                        let request = PHAssetCollectionChangeRequest(for: album.asset!)
-                                                        request?.addAssets([asset] as NSArray)
-                                                    }
-                                                    
-                                                    
-                                                    //let assetPlaceholder = assetRequest!.placeholderForCreatedAsset
-                                                    //let albumChangeRequest = PHAssetCollectionChangeRequest(for: album.asset!)
-                                                    //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
-                                                    
-                                                }, completionHandler: { success, error in
-                                                    print("added enhanced video to album")
-                                                    print("success = \(success) error=\(error)")
-                                                    if success {
-                                                        DispatchQueue.main.async {
-                                                            let fetchOptions = PHFetchOptions()
-                                                            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-                                                            
-                                                            // After uploading we fetch the PHAsset for most recent video and then get its current location url
-                                                            
-                                                            let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
-                                                            try! realm.write {
-                                                                enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
-                                                            }
-                                                            completion(true,nil)
-                                                        }
-                                                        
-                                                    } else {
-                                                        print("success = \(success) error=\(error!.localizedDescription)")
-                                                        
-                                                        
-                                                        
-                                                        completion(false,error?.localizedDescription)
-                                                    }
-                                                    
-                                                })
-                                                
-                                            }
-                                            */
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
                                         }
                                         
                                     })
@@ -570,6 +509,398 @@ class CCViewController: UIViewController {
                             
                     
 
+                            
+                        }) { (error) in
+                            print(error.localizedDescription)
+                        }
+                        
+                    }
+                })
+                
+                
+                
+            } else {
+                
+                completion(false,"error")
+            }
+        }
+        
+        
+    }
+    
+    
+    func doEnhanceImplTest(_ asset:CCAsset, album:Album, completion:@escaping ((Bool, String?) -> Void)) {
+        if asset.type == .audio {
+            if let audio = asset.audio {
+                let filemgr = FileManager.default
+                let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+                let docsDir = dirPaths.first!
+                let newDir = docsDir.appendingPathComponent(audio.unique_id!)
+                
+                let uuid = UUID().uuidString
+                let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_enhanced.m4a")
+                
+                //let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
+                
+                let path = asset.audio!.local_audio_path
+                let url = docsDir.appendingPathComponent(path!)
+                
+                
+                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false) { (success:Bool, error:ServerError?, trialover:Bool ) in
+                    print("POST SUCCESS \(success) error \(error)")
+                    if (success) {
+                        DispatchQueue.main.async {
+                            let realm = try! Realm()
+                            try! realm.write {
+                                audio.enhanced_audio_path = audiourl2.path.replacingOccurrences(of: docsDir.path, with: "")
+                            }
+                            completion(true,nil)
+                        }
+                        
+                    } else {
+                        if trialover {
+                            
+                            let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertControllerStyle.alert)
+                            
+                            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                                (result : UIAlertAction) -> Void in
+                                print("OK")
+                                let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                                let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                            }
+                            
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                            completion(false,error!.getMessage()!)
+                            
+                        } else {
+                            completion(false,error!.getMessage()!)
+                            self.showError(message: error!.getMessage()!)
+                        }
+                    }
+                }
+            }
+        } else {
+            
+            if let phasset = asset.asset {
+                
+                
+                guard (phasset.mediaType == PHAssetMediaType.video)
+                    
+                    else {
+                        print("Not a valid video media type")
+                        return
+                }
+                
+                // get persistent object
+                let realm = try! Realm()
+                var enhancedVideo:CCEnhancedVideo? = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", phasset.localIdentifier, phasset.localIdentifier).first
+                if (enhancedVideo == nil) {
+                    enhancedVideo = CCEnhancedVideo()
+                    enhancedVideo?.original_video_id = phasset.localIdentifier
+                    try! realm.write {
+                        realm.add(enhancedVideo!)
+                    }
+                }
+                
+                let uuid = UUID().uuidString
+                
+                print("BEFORE REQUEST ASSET")
+                PHCachingImageManager().requestAVAsset(forVideo: phasset, options: nil, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
+                    if let avAsset = asset {
+                        
+                        let filemgr = FileManager.default
+                        let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+                        let docsDir = dirPaths.first!
+                        let newDir = docsDir.appendingPathComponent(uuid)
+                        // let audiourl = newDir.appendingPathComponent("audio.m4a")
+                        // print("audiourl \(audiourl)")
+                        
+                        //let testurl = URL(fileURLWithPath: audiourl.path)
+                        //print("testurl \(testurl)")
+                        
+                        let audiourl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).m4a")
+                        print("audiourl \(audiourl)")
+                        
+                        //let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
+                        //let videourl = newDir.appendingPathComponent("final.mp4")
+                        
+                        let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_enhanced.m4a")
+                        let audiourlwav : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_enhanced.aif")
+                        let videourl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).mov")
+                        let testurl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).mov")
+                        let wavurl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).aif")
+                        
+                        /*
+                         if let avassetURL = avAsset as? AVURLAsset {
+                         
+                         guard let video = try? Data(contentsOf: avassetURL.url) else {
+                         return
+                         }
+                         
+                         //  asds
+                         
+                         do {
+                         try video.write(to: testurl)
+                         } catch {
+                         print("ZZZZZ \(error)")
+                         }
+                         
+                         
+                         }*/
+                        
+                        
+                        
+                        
+                        print("BEFORE WRITE AUDIO")
+                        
+                        
+                        
+                        
+                        avAsset.writeAudioTrack(to: audiourl, success: {
+                            print("WROTE AUDIO \(audiourl)")
+                            
+                            
+                            
+                            
+                            self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourl, outputUrl: videourl, completion: { (success:Bool, error:String?) in
+                                
+                                print("DONE MERGE \(videourl)")
+                                
+                                DispatchQueue.main.async {
+                                    print("ADD ALBUM \(album.asset!)")
+                                    
+                                    
+                                    self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
+                                        if suc {
+                                            DispatchQueue.main.async {
+                                                let fetchOptions = PHFetchOptions()
+                                                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                                                
+                                                // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                                                
+                                                let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                let realm = try! Realm()
+                                                try! realm.write {
+                                                    enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                    print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                }
+                                                completion(true,nil)
+                                            }
+                                            
+                                            
+                                        } else {
+                                            // fallback to ClearCloud album
+                                            
+                                            self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
+                                                
+                                                print("CC ALBUM \(clearcloudalbum)")
+                                                self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
+                                                    
+                                                    if suc {
+                                                        DispatchQueue.main.async {
+                                                            let fetchOptions = PHFetchOptions()
+                                                            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                                                            
+                                                            // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                                                            
+                                                            let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                            let realm = try! Realm()
+                                                            try! realm.write {
+                                                                enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                                print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                            }
+                                                            completion(true,nil)
+                                                        }
+                                                        
+                                                    } else {
+                                                        completion(false,err)
+                                                        
+                                                    }
+                                                })
+                                                
+                                                
+                                            })
+                                            
+                                            
+                                        }
+                                    })
+                                    
+                                    
+                                    
+                                }
+                                
+                            })
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            /*
+                            
+                            BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:true) { (success:Bool, error:ServerError?, trialover:Bool ) in
+                                print("POST SUCCESS \(success) error \(error)")
+                                if (success) {
+                                    
+                                    print("ENHANCED AUDIO \(audiourl2)")
+                                    
+                                    
+                                    do {
+                                        let resources = try audiourl2.resourceValues(forKeys:[.fileSizeKey])
+                                        let fileSize = resources.fileSize!
+                                        print ("ENHANCED AUDIO SIZE \(fileSize)")
+                                    } catch {
+                                        print("Error: \(error)")
+                                    }
+                                    
+
+                                    
+                                } else {
+                                    if trialover {
+                                        
+                                        let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertControllerStyle.alert)
+                                        
+                                        let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                                            (result : UIAlertAction) -> Void in
+                                            print("OK")
+                                            let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                                            let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                            appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                                        }
+                                        
+                                        alertController.addAction(okAction)
+                                        self.present(alertController, animated: true, completion: nil)
+                                        completion(false,error!.getMessage()!)
+                                        
+                                        
+                                    } else {
+                                        self.showError(message: error!.getMessage()!)
+                                        completion(false,error!.getMessage()!)
+                                    }
+                                    
+                                }
+                            }*/
+                            
+                            
+                            
+                            
+                            // convert to AIF
+                            /*
+                             var options = AKConverter.Options()
+                             options.format = "aif"
+                             options.sampleRate = 22500
+                             options.channels = UInt32(1)
+                             let br = UInt32(16)
+                             options.bitRate = br * 1_000
+                             
+                             let converter = AKConverter(inputURL: audiourl, outputURL: wavurl, options: options)
+                             converter.start(completionHandler: { (error:Error?) in
+                             if let error = error {
+                             AKLog("Error during convertion: \(error)")
+                             } else {
+                             AKLog("Conversion 1 Complete!")
+                             
+                             // BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
+                             
+                             BabbleLabsApi.shared.convertAudio(filepath: wavurl.path, email: LoginManager.shared.getUsername()!, destination: audiourlwav) { (success:Bool, error:ServerError? ) in
+                             print("POST SUCCESS \(success) error \(error)")
+                             if (success) {
+                             
+                             
+                             
+                             
+                             self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourlwav, outputUrl: videourl, completion: { (success:Bool, error:String?) in
+                             
+                             print("DONE MERGE \(videourl)")
+                             
+                             DispatchQueue.main.async {
+                             print("ADD ALBUM \(album.asset!)")
+                             
+                             
+                             self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
+                             if suc {
+                             DispatchQueue.main.async {
+                             let fetchOptions = PHFetchOptions()
+                             fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                             
+                             // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                             
+                             let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                             let realm = try! Realm()
+                             try! realm.write {
+                             enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                             print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                             }
+                             completion(true,nil)
+                             }
+                             
+                             
+                             } else {
+                             // fallback to ClearCloud album
+                             
+                             self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
+                             
+                             print("CC ALBUM \(clearcloudalbum)")
+                             self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
+                             
+                             if suc {
+                             DispatchQueue.main.async {
+                             let fetchOptions = PHFetchOptions()
+                             fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                             
+                             // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                             
+                             let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                             let realm = try! Realm()
+                             try! realm.write {
+                             enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                             print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                             }
+                             completion(true,nil)
+                             }
+                             
+                             } else {
+                             completion(false,err)
+                             
+                             }
+                             })
+                             
+                             
+                             })
+                             
+                             
+                             }
+                             })
+                             
+                             
+                             
+                             
+                             }
+                             
+                             })
+                             
+                             } else {
+                             
+                             }
+                             }
+                             
+                             
+                             
+                             }
+                             })
+                             
+                             */
+                            
+                            
+                            
                             
                         }) { (error) in
                             print(error.localizedDescription)

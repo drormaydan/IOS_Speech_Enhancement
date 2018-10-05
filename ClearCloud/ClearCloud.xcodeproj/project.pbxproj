@@ -432,6 +432,11 @@
 					0D937B512151990A00A240A1 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					0D937B652151990C00A240A1 = {
 						CreatedOnToolsVersion = 9.4.1;

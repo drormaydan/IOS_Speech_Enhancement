@@ -359,7 +359,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             
             let settings = [
                 AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                AVSampleRateKey: 12000,
+                AVSampleRateKey: 16000,
                 AVNumberOfChannelsKey: 1,
                 AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
             ]
@@ -446,6 +446,38 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             recordButton.setTitle("Tap to Record", for: .normal)
             // recording failed :(
         }
+        
+        self.showHud()
+        // rewrite file
+        // tmp fix audio
+        
+        let filemgr = FileManager.default
+        
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+
+        let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/rewrite.m4a")
+        
+        do {
+            try filemgr.removeItem(at: audiourl2)
+            print("REMOVED \(audiourl2)")
+        } catch {
+            print("audio Error: \(error)")
+        }
+
+        print("ORIGINAL AUDIO \(audioFilename)")
+        self.rewriteAudioFile(audioUrl: audioFilename, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
+            self.hideHud()
+            if success {
+                do {
+                    try filemgr.removeItem(at: audioFilename)
+                    try filemgr.copyItem(at: audiourl2, to: audioFilename)
+                    print("REWROTE AUDIO TO \(audioFilename)")
+                } catch {
+                    print("audio Error: \(error)")
+                }
+            }
+        })
+        
     }
     
     

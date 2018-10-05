@@ -178,8 +178,8 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                 if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                     print("captureVideoPressed and camera available.")
                     
-                    var imagePicker = UIImagePickerController()
-                    
+                    let imagePicker = UIImagePickerController()
+                    imagePicker.videoMaximumDuration = 60000
                     imagePicker.delegate = self
                     imagePicker.sourceType = .camera
                     imagePicker.mediaTypes = [kUTTypeMovie] as [String]

@@ -128,6 +128,9 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         if self.assets_to_enhance.count == 0 {
             self.hideHud()
             self.clickSelect(sender: nil)
+            
+            self.reload()
+
         } else {
             let asset = self.assets_to_enhance.remove(at: 0)
             
@@ -171,32 +174,34 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         if assets[indexPath.row].type == .add {
             
-            
-            if self.album.type == .video {
+            if (!select_mode) {
                 
-                
-                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-                    print("captureVideoPressed and camera available.")
+                if self.album.type == .video {
                     
-                    let imagePicker = UIImagePickerController()
-                    imagePicker.videoMaximumDuration = 60000
-                    imagePicker.delegate = self
-                    imagePicker.sourceType = .camera
-                    imagePicker.mediaTypes = [kUTTypeMovie] as [String]
-                    imagePicker.allowsEditing = false
                     
-                    imagePicker.showsCameraControls = true
+                    if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+                        print("captureVideoPressed and camera available.")
+                        
+                        let imagePicker = UIImagePickerController()
+                        imagePicker.videoMaximumDuration = 60000
+                        imagePicker.delegate = self
+                        imagePicker.sourceType = .camera
+                        imagePicker.mediaTypes = [kUTTypeMovie] as [String]
+                        imagePicker.allowsEditing = false
+                        
+                        imagePicker.showsCameraControls = true
+                        
+                        self.present(imagePicker, animated: true, completion: nil)
+                    } else {
+                        print("Camera not available.")
+                    }
                     
-                    self.present(imagePicker, animated: true, completion: nil)
-                } else {
-                    print("Camera not available.")
+                    
+                } else if self.album.type == .audio {
+                    let detailVC:AudioCaptureVC = AudioCaptureVC(nibName: "AudioCaptureVC", bundle: nil)
+                    detailVC.album = self.album
+                    self.navigationController!.pushViewController(detailVC, animated: true)
                 }
-                
-                
-            } else if self.album.type == .audio {
-                let detailVC:AudioCaptureVC = AudioCaptureVC(nibName: "AudioCaptureVC", bundle: nil)
-                detailVC.album = self.album
-                self.navigationController!.pushViewController(detailVC, animated: true)
             }
         } else {
             

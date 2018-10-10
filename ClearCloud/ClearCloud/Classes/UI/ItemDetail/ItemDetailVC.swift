@@ -113,6 +113,10 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     
     // MARK: - Actions
     @IBAction func clickEnhance(_ sender: Any) {
+        NotificationCenter.default.post(name:Notification.Name(rawValue:"StopPlayers"),
+                                        object: nil,
+                                        userInfo: nil)
+
         self.showHud(message: "Enhancing...")
         self.doEnhance(self.asset, album: self.album) { (success:Bool, error:String?) in
             self.hideHud()
@@ -137,7 +141,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //return 311
-        return UIScreen.main.bounds.height * 0.4
+        return UIScreen.main.bounds.height * 0.35
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

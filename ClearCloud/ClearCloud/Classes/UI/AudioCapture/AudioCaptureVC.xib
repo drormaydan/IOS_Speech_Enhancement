@@ -79,7 +79,7 @@
                     </constraints>
                     <state key="normal" image="check"/>
                     <connections>
-                        <action selector="clickSave:" destination="-1" eventType="touchUpInside" id="crO-JB-BiO"/>
+                        <action selector="clickSave:" destination="-1" eventType="touchDown" id="mCe-xL-lTC"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2018 BabbleLabs" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E8H-u3-w07">

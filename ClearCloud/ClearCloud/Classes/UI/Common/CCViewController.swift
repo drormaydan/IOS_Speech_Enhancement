@@ -1173,7 +1173,7 @@ class CCViewController: UIViewController {
     func rewriteAudioFile(audioUrl:URL, outputUrl:URL, completion:@escaping ((Bool, String?) -> Void)) {
         let mixComposition : AVMutableComposition = AVMutableComposition()
         var mutableCompositionAudioTrack : [AVMutableCompositionTrack] = []
-        let totalVideoCompositionInstruction : AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
+        //let totalVideoCompositionInstruction : AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
         
         //start merge
         
@@ -1199,10 +1199,10 @@ class CCViewController: UIViewController {
             //            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAssetTrack.timeRange.duration), ofTrack: aAudioAssetTrack, atTime: kCMTimeZero)
             
         }catch{
-            print("zzError info: \(error)")
-            
+            print("zzasdadsError info: \(error)")
+            completion(false,error.localizedDescription)
+            return
         }
-        
         
         let assetExport: AVAssetExportSession = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetAppleM4A)!
         assetExport.outputFileType = AVFileType.m4a

@@ -27,6 +27,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
     @IBOutlet private weak var recordButton: UIButton!
+    var did_click = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,9 +136,107 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         audioRecorder?.stop()
     }
     
+    class func processAudio(audioFilename:URL) {
+        let audio = CCAudio()
+        audio.unique_id = NSUUID().uuidString
+        audio.local_time_start = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM-dd-HH:mm:ss"
+        //audio.name = "Untitled"
+        
+        
+        let filemgr = FileManager.default
+        let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+        let docsDir = dirPaths.first!
+        let newDir = docsDir.appendingPathComponent(audio.unique_id!)
+        let audiourl = newDir.appendingPathComponent("audio.m4a")
+        // let testaudiourl = newDir.appendingPathComponent("caf")
+        
+       // let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        
+        
+        do {
+            try filemgr.createDirectory(atPath: newDir.path,
+                                        withIntermediateDirectories: true, attributes: nil)
+            print("CREATED DIR \(newDir)")
+            
+            try filemgr.copyItem(at: audioFilename, to: audiourl)
+            print("COPIED AUDIO TO \(audiourl)")
+            
+            audio.local_audio_path = audiourl.path.replacingOccurrences(of: docsDir.path, with: "")
+            print("FINAL AUDIO PATH \(audio.local_audio_path!)")
+            
+            /*
+             // test
+             var options = AKConverter.Options()
+             options.format = "caf"
+             options.sampleRate = 22500
+             options.channels = UInt32(1)
+             let br = UInt32(16)
+             options.bitRate = br * 1_000
+             let converter = AKConverter(inputURL: audiourl, outputURL: testaudiourl, options: options)
+             converter.start(completionHandler: { error in
+             if let error = error {
+             AKLog("Error during convertion: \(error)")
+             } else {
+             AKLog("Conversion Complete! \(testaudiourl)")
+             }
+             })*/
+            
+            
+            do {
+                let attr = try filemgr.attributesOfItem(atPath: audiourl.path)
+                let fileSize = attr[FileAttributeKey.size] as! UInt64
+                print("audio \(audio.local_audio_path!) fileSize \(fileSize)")
+                audio.audio_size = Double(fileSize)
+                
+                let aAudioAsset : AVAsset = AVURLAsset(url: audiourl)
+
+                
+               // let userCalendar = Calendar.current
+               // let requestedComponent: Set<Calendar.Component> = [.hour,.minute,.second]
+               // let timeDifference = userCalendar.dateComponents(requestedComponent, from: audio.local_time_start!, to: endTime!)
+                audio.duration = Int(CMTimeGetSeconds(aAudioAsset.duration))
+            } catch {
+                print("audio Error: \(error)")
+            }
+            
+            
+            let realm = try! Realm()
+            try! realm.write {
+                realm.add(audio)
+            }
+            
+            // delete old file
+            if FileManager.default.fileExists(atPath: audioFilename.path) {
+                do {
+                    try FileManager.default.removeItem(atPath: audioFilename.path)
+                }
+                catch {
+                    print("Could not remove file at url: \(audioFilename)")
+                }
+            }
+            
+            
+        } catch let error as NSError {
+            print("ERROR \(error)")
+            /*
+            let alertController = UIAlertController(title:NSLocalizedString("Error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: .default, handler: nil)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            */
+        }
+        
+    
+    }
+    
     
     @IBAction func clickSave(_ sender: Any) {
-        
+        if did_click {
+            return
+        }
+        did_click = true
         let audio = CCAudio()
         audio.unique_id = NSUUID().uuidString
         audio.local_time_start = startRecordingTime
@@ -226,7 +325,8 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         
         
         
-        
+        did_click = false
+
         /*
          PHPhotoLibrary.shared().performChanges({
          PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: audioFilename)
@@ -332,7 +432,11 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     
     
     @IBAction func clickDelete(_ sender: Any) {
-        
+        if did_click {
+            return
+        }
+        did_click = true
+
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         // delete old file
@@ -347,13 +451,16 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         
         // reset
         reset()
+        did_click = false
     }
     
     @IBAction func clickRecordButton(_ recordButton: UIButton?) {
+        if did_click {
+            return
+        }
+        did_click = true
         if (isRecording) {
             finishRecording(success: true)
-            
-            
         } else {
             let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
             
@@ -385,7 +492,8 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 }
                 
                 self.isRecording = true
-                
+                did_click = false
+
             } catch {
                 finishRecording(success: false)
             }
@@ -403,7 +511,25 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         
     }
     
+    func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder,
+                                          error: Error?) {
+        self.isRecording = false
+        self.recordButton.isEnabled = true
+        self.timeLabel.isHidden = true
+        
+        if self.timer != nil {
+            self.timer!.invalidate()
+            self.timer = nil
+        }
+
+        print("AUDIO ERROR")
+        self.reset()
+        self.showError(message: error!.localizedDescription)
+    }
+
+
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        print("DID FINISH \(flag)")
         self.isRecording = false
         self.recordButton.isEnabled = true
         self.timeLabel.isHidden = true
@@ -437,7 +563,9 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     }
     
     func finishRecording(success: Bool) {
+        print("BEFORE STOP")
         audioRecorder.stop()
+        print("AFTER STOP")
         audioRecorder = nil
         endTime = Date()
         if success {
@@ -457,27 +585,59 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
 
         let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/rewrite.m4a")
         
-        do {
-            try filemgr.removeItem(at: audiourl2)
-            print("REMOVED \(audiourl2)")
-        } catch {
-            print("audio Error: \(error)")
+        if FileManager.default.fileExists(atPath: audiourl2.path) {
+            do {
+                try FileManager.default.removeItem(atPath: audiourl2.path)
+            }
+            catch {
+                print("Could not remove file at url: \(audiourl2)")
+            }
         }
 
         print("ORIGINAL AUDIO \(audioFilename)")
-        self.rewriteAudioFile(audioUrl: audioFilename, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
-            self.hideHud()
-            if success {
-                do {
-                    try filemgr.removeItem(at: audioFilename)
-                    try filemgr.copyItem(at: audiourl2, to: audioFilename)
-                    print("REWROTE AUDIO TO \(audioFilename)")
-                } catch {
-                    print("audio Error: \(error)")
-                }
-            }
-        })
         
+        var fileSize:UInt64 = 0
+        do {
+            //return [FileAttributeKey : Any]
+            let attr = try FileManager.default.attributesOfItem(atPath: audioFilename.path)
+            fileSize = attr[FileAttributeKey.size] as! UInt64
+            
+            //if you convert to NSDictionary, you can get file size old way as well.
+            let dict = attr as NSDictionary
+            fileSize = dict.fileSize()
+        } catch {
+            print("Error: \(error)")
+        }
+        print("fileSize \(fileSize)")
+
+        if (fileSize > 0) {
+            self.rewriteAudioFile(audioUrl: audioFilename, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
+                self.hideHud()
+                if success {
+                    do {
+                        try filemgr.removeItem(at: audioFilename)
+                        try filemgr.copyItem(at: audiourl2, to: audioFilename)
+                        print("REWROTE AUDIO TO \(audioFilename)")
+                    } catch {
+                        print("audio Error: \(error)")
+                    }
+                } else {
+                    self.isRecording = false
+                    self.recordButton.isEnabled = true
+                    self.timeLabel.isHidden = true
+                    
+                    if self.timer != nil {
+                        self.timer!.invalidate()
+                        self.timer = nil
+                    }
+                    
+                    print("AUDIO ERROR")
+                    self.reset()
+                    self.showError(message: error!)
+                }
+                self.did_click = false
+            })
+        }
     }
     
     

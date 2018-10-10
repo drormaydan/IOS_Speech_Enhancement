@@ -56,6 +56,57 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    // MARK: - Handle File Sharing
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        // 1
+        print("IMPORT URL \(url)")
+        guard url.pathExtension == "m4a" else { return false }
+        
+        
+        
+        let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/rewrite.m4a")
+        
+        if FileManager.default.fileExists(atPath: audiourl2.path) {
+            do {
+                try FileManager.default.removeItem(atPath: audiourl2.path)
+            }
+            catch {
+                print("Could not remove file at url: \(audiourl2)")
+            }
+        }
+        
+        print("ORIGINAL AUDIO \(url)")
+        
+        let vc = CCViewController()
+        
+        vc.rewriteAudioFile(audioUrl: url, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
+            if success {
+                do {
+                    print("REWROTE AUDIO TO \(audiourl2)")
+                    AudioCaptureVC.processAudio(audioFilename: audiourl2)
+                } catch {
+                    print("audio Error: \(error)")
+                }
+            }
+        })
+
+        
+        
+        /*
+        // 2
+        Beer.importData(from: url)
+        
+        // 3
+        guard let navigationController = window?.rootViewController as? UINavigationController,
+            let beerTableViewController = navigationController.viewControllers.first as? BeersTableViewController else {
+                return true
+        }
+        
+        // 4
+        beerTableViewController.tableView.reloadData()*/
+        return true
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

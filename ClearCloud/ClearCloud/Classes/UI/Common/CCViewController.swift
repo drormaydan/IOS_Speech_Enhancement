@@ -13,6 +13,7 @@ import AVFoundation
 import Photos
 import AudioKit
 import AudioToolbox
+import JGProgressHUD
 //import FFmpegWrapper
 
 class CCViewController: UIViewController {
@@ -90,27 +91,46 @@ class CCViewController: UIViewController {
         appDelegate.sideMenuController.toggleLeftMenu()
     }
     
+    var hud:JGProgressHUD? = nil
     
     func showHud() {
         DispatchQueue.main.async {
+            
+            self.navigationController?.navigationBar.isUserInteractionEnabled = false
+
+            self.hud = JGProgressHUD(style: .dark)
+            self.hud!.textLabel.text = "Loading"
+            self.hud!.show(in: self.view)
+
+            /*
             let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
             loadingNotification.mode = MBProgressHUDMode.indeterminate
-            loadingNotification.label.text = NSLocalizedString("Loading", comment: "")
+            loadingNotification.label.text = NSLocalizedString("Loading", comment: "")*/
         }
     }
     
     func showHud(message:String) {
         DispatchQueue.main.async {
+            self.navigationController?.navigationBar.isUserInteractionEnabled = false
+
+            self.hud = JGProgressHUD(style: .dark)
+            self.hud!.textLabel.text = message
+            self.hud!.show(in: self.view)
+/*
             let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
             loadingNotification.mode = MBProgressHUDMode.indeterminate
-            loadingNotification.label.text = message
+            loadingNotification.label.text = message*/
         }
     }
     
     
     func hideHud() {
         DispatchQueue.main.async {
-            MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
+            //MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
+            if let hud = self.hud {
+                hud.dismiss()
+            }
+            self.navigationController?.navigationBar.isUserInteractionEnabled = true
         }
     }
     

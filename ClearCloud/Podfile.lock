@@ -18,6 +18,7 @@ PODS:
   - DateTimePicker (2.1.2)
   - Fabric (1.7.12)
   - IQKeyboardManagerSwift (6.0.5)
+  - JGProgressHUD (2.0.3)
   - Kingfisher (4.10.0)
   - MBAutoGrowingTextView (0.1.0)
   - MBProgressHUD (1.1.0)
@@ -43,6 +44,7 @@ DEPENDENCIES:
   - DateTimePicker
   - Fabric
   - IQKeyboardManagerSwift (~> 6.0.0)
+  - JGProgressHUD
   - Kingfisher (~> 4.0)
   - MBAutoGrowingTextView (~> 0.1.0)
   - MBProgressHUD
@@ -64,6 +66,7 @@ SPEC REPOS:
     - DateTimePicker
     - Fabric
     - IQKeyboardManagerSwift
+    - JGProgressHUD
     - Kingfisher
     - MBAutoGrowingTextView
     - MBProgressHUD
@@ -86,6 +89,7 @@ SPEC CHECKSUMS:
   DateTimePicker: 111a1ca10b390ac315fdf3e85a5941fd4f72dfb7
   Fabric: d7387db9a31aadff63b147a4b91d982c53afaa4f
   IQKeyboardManagerSwift: c14eca30f6001457d6ddf25e313f23fb6578c41c
+  JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
   Kingfisher: 43c4b802d8b5256cf1f4379e9cd10b329be6d3e2
   MBAutoGrowingTextView: 3955d4513be3d184fe2cb7739999c1f994dcd4d5
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
@@ -97,6 +101,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   "UITextView+Placeholder": 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
 
-PODFILE CHECKSUM: 9dd3a2601307e07abb37d3a59abac6e110a28872
+PODFILE CHECKSUM: e50cef8eea1fa0b2215b378132dea0872109a462
 
 COCOAPODS: 1.5.3

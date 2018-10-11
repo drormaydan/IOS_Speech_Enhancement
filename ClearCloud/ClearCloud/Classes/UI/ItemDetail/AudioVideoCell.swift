@@ -296,15 +296,17 @@ class AudioVideoCell: UITableViewCell {
                         return
                 }
                 print("@@@BEFORE GET PHASSET -->\(self.asset)")
-
-                imageManager.requestAVAsset(forVideo: phasset, options: nil, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
+                let options = PHVideoRequestOptions()
+                options.isNetworkAccessAllowed = true
+                self.owner.showHud()
+                imageManager.requestAVAsset(forVideo: phasset, options: options, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
+                    self.owner.hideHud()
                     if let avAsset = asset {
                         DispatchQueue.main.async {
                             print("GOT ASSET \(avAsset)")
 
                             let avPlayerItem = AVPlayerItem(asset: avAsset)
                             let player = AVPlayer.init(playerItem: avPlayerItem)
-                            
                             
                             self.av.player = player
                             self.av.view.frame = self.videoView.frame
@@ -314,8 +316,9 @@ class AudioVideoCell: UITableViewCell {
                             self.av.didMove(toParentViewController: self.owner)
                             self.av.videoGravity = AVLayerVideoGravity.resizeAspectFill.rawValue
                             self.av.view.boundInside(superView: self.videoView)
-                            
                         }
+                    } else {
+                        self.owner.showError(message: "Could not read video from album.")
                     }
                 })
 

@@ -287,6 +287,7 @@ class AudioVideoCell: UITableViewCell {
             
             //player.play()
         } else {
+            print("@@@VIDEO ASSET -->\(self.asset)")
             if let phasset = self.asset {
                 guard (phasset.mediaType == PHAssetMediaType.video)
                     
@@ -294,7 +295,8 @@ class AudioVideoCell: UITableViewCell {
                         print("Not a valid video media type")
                         return
                 }
-                
+                print("@@@BEFORE GET PHASSET -->\(self.asset)")
+
                 imageManager.requestAVAsset(forVideo: phasset, options: nil, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
                     if let avAsset = asset {
                         DispatchQueue.main.async {
@@ -317,6 +319,8 @@ class AudioVideoCell: UITableViewCell {
                     }
                 })
 
+            } else {
+                self.owner.showError(message: "Could not read video from album.")
             }
             
         }

@@ -67,8 +67,14 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         
         refresh()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UIApplication.shared.isIdleTimerDisabled = true
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
+        UIApplication.shared.isIdleTimerDisabled = false
         NotificationCenter.default.post(name:Notification.Name(rawValue:"StopPlayers"),
                                         object: nil,
                                         userInfo: nil)
@@ -196,6 +202,8 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
 
             if indexPath.row == 0 {
                 if self.enhancedVideo == nil {
+                    print("@@@self.asset \(self.asset) \(self.asset.asset)")
+
                     cell.asset = self.asset.asset!
                 } else {
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [self.enhancedVideo!.original_video_id!], options: .none)

@@ -97,15 +97,15 @@ class CCViewController: UIViewController {
         DispatchQueue.main.async {
             
             self.navigationController?.navigationBar.isUserInteractionEnabled = false
-
+/*
             self.hud = JGProgressHUD(style: .dark)
             self.hud!.textLabel.text = "Loading"
             self.hud!.show(in: self.view)
-
-            /*
+*/
+            
             let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
             loadingNotification.mode = MBProgressHUDMode.indeterminate
-            loadingNotification.label.text = NSLocalizedString("Loading", comment: "")*/
+            loadingNotification.label.text = NSLocalizedString("Loading", comment: "")
         }
     }
     
@@ -113,23 +113,26 @@ class CCViewController: UIViewController {
         DispatchQueue.main.async {
             self.navigationController?.navigationBar.isUserInteractionEnabled = false
 
+            /*
             self.hud = JGProgressHUD(style: .dark)
             self.hud!.textLabel.text = message
             self.hud!.show(in: self.view)
-/*
+ */
             let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
             loadingNotification.mode = MBProgressHUDMode.indeterminate
-            loadingNotification.label.text = message*/
+            loadingNotification.label.text = message
         }
     }
     
     
     func hideHud() {
         DispatchQueue.main.async {
-            //MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
-            if let hud = self.hud {
+            MBProgressHUD.hideAllHUDs(for: self.view, animated: true)
+            
+            
+            /*if let hud = self.hud {
                 hud.dismiss()
-            }
+            }*/
             self.navigationController?.navigationBar.isUserInteractionEnabled = true
         }
     }
@@ -1160,7 +1163,7 @@ class CCViewController: UIViewController {
         assetExport.outputURL = outputUrl
         assetExport.shouldOptimizeForNetworkUse = true
         
-        print("HERE 11")
+        print("aHERE 11")
 
         assetExport.exportAsynchronously { () -> Void in
             switch assetExport.status {
@@ -1229,7 +1232,7 @@ class CCViewController: UIViewController {
         assetExport.outputURL = outputUrl
         assetExport.shouldOptimizeForNetworkUse = true
         
-        print("HERE 11")
+        print("bHERE 11")
         
         assetExport.exportAsynchronously { () -> Void in
             switch assetExport.status {

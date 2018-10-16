@@ -80,6 +80,10 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        reload()
+    }
+    
+    func reload() {
         let photos = PHPhotoLibrary.authorizationStatus()
         if photos == .notDetermined {
             PHPhotoLibrary.requestAuthorization({status in

@@ -213,9 +213,36 @@ class AudioVideoCell: UITableViewCell {
         
         if (type == .audio) {
             
-            let activityViewController = UIActivityViewController(activityItems: [url!], applicationActivities: nil)
-            activityViewController.popoverPresentationController?.sourceView = self.shareButton // so that iPads won't crash
-            self.owner.present(activityViewController, animated: true, completion: nil)
+            var filename:String? = nil
+            if self.typeLabel.text == "Original" {
+                if let name = self.owner.asset.audio!.name {
+                    filename = name
+                }
+            } else {
+                if let name = self.owner.asset.audio!.enhanced_name {
+                    filename = name
+                }
+            }
+            if let filename = filename {
+                let audiourl2 : URL = URL(fileURLWithPath: NSTemporaryDirectory() + "/\(filename).m4a")
+                let filemgr = FileManager.default
+                do {
+                    try filemgr.copyItem(at: url!, to: audiourl2)
+                    print("REWROTE AUDIO TO \(audiourl2)")
+                    let activityViewController = UIActivityViewController(activityItems: [audiourl2], applicationActivities: nil)
+                    activityViewController.popoverPresentationController?.sourceView = self.shareButton // so that iPads won't crash
+                    self.owner.present(activityViewController, animated: true, completion: nil)
+
+                } catch {
+                    print("audio Error: \(error)")
+                }
+
+                
+            } else {
+                let activityViewController = UIActivityViewController(activityItems: [url!], applicationActivities: nil)
+                activityViewController.popoverPresentationController?.sourceView = self.shareButton // so that iPads won't crash
+                self.owner.present(activityViewController, animated: true, completion: nil)
+            }
 
         } else {
             let options = PHVideoRequestOptions()

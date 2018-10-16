@@ -51,7 +51,7 @@
                             <constraint firstAttribute="height" constant="48" id="b0t-RD-Cr0"/>
                         </constraints>
                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <state key="normal" image="baseline_share_black_24pt"/>
+                        <state key="normal" image="share"/>
                         <connections>
                             <action selector="clickShare:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="X7d-AY-Baj"/>
                         </connections>
@@ -114,6 +114,6 @@
     <resources>
         <image name="baseline_delete_black_24pt" width="48" height="48"/>
         <image name="baseline_edit_black_24pt" width="48" height="48"/>
-        <image name="baseline_share_black_24pt" width="48" height="48"/>
+        <image name="share" width="24" height="24"/>
     </resources>
 </document>

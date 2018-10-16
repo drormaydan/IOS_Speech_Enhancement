@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var sideMenuController: PGSideMenu!
+    let albumsVC:AlbumsVC = AlbumsVC(nibName: "AlbumsVC", bundle: nil)
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -35,7 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIColor.black
         
         
-        let albumsVC:AlbumsVC = AlbumsVC(nibName: "AlbumsVC", bundle: nil)
         let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
         
         let leftMenuVC:LeftNavVC = LeftNavVC(nibName: "LeftNavVC", bundle: nil)
@@ -81,12 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         vc.rewriteAudioFile(audioUrl: url, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
             if success {
-                do {
-                    print("REWROTE AUDIO TO \(audiourl2)")
-                    AudioCaptureVC.processAudio(audioFilename: audiourl2)
-                } catch {
-                    print("audio Error: \(error)")
-                }
+                print("REWROTE AUDIO TO \(audiourl2)")
+                AudioCaptureVC.processAudio(audioFilename: audiourl2)
+                self.albumsVC.reload()
             }
         })
 

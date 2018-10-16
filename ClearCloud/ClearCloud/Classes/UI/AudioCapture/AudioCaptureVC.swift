@@ -37,7 +37,10 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         self.navigationController?.navigationBar.isTranslucent = false
         recordButton.makeRounded()
         makeBackButton2()
-        
+        self.deleteButton.isExclusiveTouch = true
+        self.okButton.isExclusiveTouch = true
+        self.recordButton.isExclusiveTouch = true
+
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
         if FileManager.default.fileExists(atPath: audioFilename.path) {
             do {
@@ -108,7 +111,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         self.okButton.isHidden = true
         
         self.recordingSession = AVAudioSession.sharedInstance()
-        self.timeLabel.isHidden = true
+        self.timeLabel.isHidden = false
         self.timeLabel.text = "00:00:00"
         do {
             try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
@@ -515,7 +518,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                                           error: Error?) {
         self.isRecording = false
         self.recordButton.isEnabled = true
-        self.timeLabel.isHidden = true
+        self.timeLabel.isHidden = false
         
         if self.timer != nil {
             self.timer!.invalidate()
@@ -532,7 +535,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         print("DID FINISH \(flag)")
         self.isRecording = false
         self.recordButton.isEnabled = true
-        self.timeLabel.isHidden = true
+        self.timeLabel.isHidden = false
         
         if self.timer != nil {
             self.timer!.invalidate()
@@ -563,9 +566,10 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     }
     
     func finishRecording(success: Bool) {
-        print("BEFORE STOP")
+        if self.audioRecorder == nil {
+            return
+        }
         audioRecorder.stop()
-        print("AFTER STOP")
         audioRecorder = nil
         endTime = Date()
         if success {
@@ -575,6 +579,13 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             // recording failed :(
         }
         
+        if self.timer != nil {
+            self.timer!.invalidate()
+            self.timer = nil
+        }
+        self.deleteButton.isHidden = false
+        self.okButton.isHidden = false
+
         self.showHud()
         // rewrite file
         // tmp fix audio
@@ -613,29 +624,31 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         if (fileSize > 0) {
             self.rewriteAudioFile(audioUrl: audioFilename, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
                 self.hideHud()
-                if success {
-                    do {
-                        try filemgr.removeItem(at: audioFilename)
-                        try filemgr.copyItem(at: audiourl2, to: audioFilename)
-                        print("REWROTE AUDIO TO \(audioFilename)")
-                    } catch {
-                        print("audio Error: \(error)")
+                DispatchQueue.main.async {
+                    if success {
+                        do {
+                            try filemgr.removeItem(at: audioFilename)
+                            try filemgr.copyItem(at: audiourl2, to: audioFilename)
+                            print("REWROTE AUDIO TO \(audioFilename)")
+                        } catch {
+                            print("audio Error: \(error)")
+                        }
+                    } else {
+                        self.isRecording = false
+                        self.recordButton.isEnabled = true
+                        self.timeLabel.isHidden = false
+                        
+                        if self.timer != nil {
+                            self.timer!.invalidate()
+                            self.timer = nil
+                        }
+                        
+                        print("AUDIO ERROR")
+                        self.reset()
+                        self.showError(message: error!)
                     }
-                } else {
-                    self.isRecording = false
-                    self.recordButton.isEnabled = true
-                    self.timeLabel.isHidden = true
-                    
-                    if self.timer != nil {
-                        self.timer!.invalidate()
-                        self.timer = nil
-                    }
-                    
-                    print("AUDIO ERROR")
-                    self.reset()
-                    self.showError(message: error!)
+                    self.did_click = false
                 }
-                self.did_click = false
             })
         }
     }

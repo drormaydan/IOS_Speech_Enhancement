@@ -203,7 +203,7 @@ class BabbleLabsApi: NSObject {
                         defaults.set(true, forKey: "did_trial")
                         defaults.set(false, forKey: "trial")
                         defaults.synchronize()
-                        LoginManager.shared.logout()
+                       // LoginManager.shared.logout()
                         completion(false, ServerError.init(WithMessage: reason), true)
                         return
                     } else {

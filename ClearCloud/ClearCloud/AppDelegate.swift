@@ -60,35 +60,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         // 1
         print("IMPORT URL \(url)")
-        guard url.pathExtension == "m4a" else { return false }
         
+        if url.absoluteString.lowercased() == "clearcloud://" {
         
-        
-        let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/rewrite.m4a")
-        
-        if FileManager.default.fileExists(atPath: audiourl2.path) {
-            do {
-                try FileManager.default.removeItem(atPath: audiourl2.path)
+        } else if url.absoluteString.lowercased() == "clearcloudlogin://" {
+            self.albumsVC.openLogin()
+        } else {
+            
+            guard url.pathExtension == "m4a" else { return false }
+            
+            
+            
+            let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/rewrite.m4a")
+            
+            if FileManager.default.fileExists(atPath: audiourl2.path) {
+                do {
+                    try FileManager.default.removeItem(atPath: audiourl2.path)
+                }
+                catch {
+                    print("Could not remove file at url: \(audiourl2)")
+                }
             }
-            catch {
-                print("Could not remove file at url: \(audiourl2)")
-            }
+            
+            print("ORIGINAL AUDIO \(url)")
+            
+            let vc = CCViewController()
+            
+            vc.rewriteAudioFile(audioUrl: url, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
+                if success {
+                    print("REWROTE AUDIO TO \(audiourl2)")
+                    AudioCaptureVC.processAudio(audioFilename: audiourl2)
+                    self.albumsVC.reload()
+                }
+            })
+            
+            
         }
-        
-        print("ORIGINAL AUDIO \(url)")
-        
-        let vc = CCViewController()
-        
-        vc.rewriteAudioFile(audioUrl: url, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
-            if success {
-                print("REWROTE AUDIO TO \(audiourl2)")
-                AudioCaptureVC.processAudio(audioFilename: audiourl2)
-                self.albumsVC.reload()
-            }
-        })
 
-        
-        
         /*
         // 2
         Beer.importData(from: url)

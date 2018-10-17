@@ -29,8 +29,27 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.babblelabs.clearcloud</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>clearcloudlogin</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.babblelabs.clearcloud</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ClearCloud</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>8</string>
+	<string>10</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>

@@ -213,10 +213,11 @@ class CCViewController: UIViewController {
                             let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
                                 (result : UIAlertAction) -> Void in
                                 print("OK")
+                                /*
                                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
                                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)*/
                             }
                             
                             alertController.addAction(okAction)

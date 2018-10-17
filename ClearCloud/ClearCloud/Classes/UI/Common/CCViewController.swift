@@ -138,16 +138,18 @@ class CCViewController: UIViewController {
     }
     
     func showError(message:String) {
-        let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
-        
-        // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
-        let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
-            (result : UIAlertAction) -> Void in
-            print("OK")
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
+            
+            // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
+            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                (result : UIAlertAction) -> Void in
+                print("OK")
+            }
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
         }
-        
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
     }
     
         
@@ -257,6 +259,14 @@ class CCViewController: UIViewController {
                 PHCachingImageManager().requestAVAsset(forVideo: phasset, options: nil, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
                     if let avAsset = asset {
                         
+                        // get sample rate
+                        
+                        let aAudioAssetTrack : AVAssetTrack = avAsset.tracks(withMediaType: AVMediaType.audio)[0]
+                        let desc = aAudioAssetTrack.formatDescriptions[0] as! CMAudioFormatDescription
+                        let basic = CMAudioFormatDescriptionGetStreamBasicDescription(desc)
+                        let sample_rate = basic!.pointee.mSampleRate
+                        print("SAMPLE RATE \(sample_rate)")
+
                         let filemgr = FileManager.default
                         let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
                         let docsDir = dirPaths.first!
@@ -274,6 +284,8 @@ class CCViewController: UIViewController {
                         //let videourl = newDir.appendingPathComponent("final.mp4")
 
                         let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_enhanced.m4a")
+                        let audiourl3 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_sample_enhanced.m4a")
+                        let audiourl4 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_mooved_enhanced.m4a")
                         let audiourlwav : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid)_enhanced.aif")
                         let videourl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).mov")
                         let testurl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).mov")
@@ -323,75 +335,101 @@ class CCViewController: UIViewController {
                                     } catch {
                                         print("Error: \(error)")
                                     }
-
-                                    self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourl2, outputUrl: videourl, completion: { (success:Bool, error:String?) in
+                                    
+                                    
+                                    
+                                    self.convertAudioSamplerate(audiourl2, outputURL: audiourl3, sample_rate: sample_rate, completion: { (success:Bool, error:String?) in
                                         
-                                        print("DONE MERGE \(videourl)")
-                                        
-                                        DispatchQueue.main.async {
-                                            print("ADD ALBUM \(album.asset!)")
+                                        if success {
                                             
-                                            
-                                            self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
-                                                if suc {
-                                                    DispatchQueue.main.async {
-                                                        let fetchOptions = PHFetchOptions()
-                                                        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-                                                        
-                                                        // After uploading we fetch the PHAsset for most recent video and then get its current location url
-                                                        
-                                                        let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
-                                                        let realm = try! Realm()
-                                                        try! realm.write {
-                                                            enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                            print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
-                                                        }
-                                                        completion(true,nil)
-                                                    }
+                                            // move the atom
+                                            self.rewriteAudioFile(audioUrl: audiourl3, outputUrl: audiourl4, completion: { (success:Bool, error:String?) in
+                                                if success {
                                                     
                                                     
-                                                } else {
-                                                    // fallback to ClearCloud album
-                                                    
-                                                    self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
+                                                    self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourl4, outputUrl: videourl, sampleRate: sample_rate, completion: { (success:Bool, error:String?) in
                                                         
-                                                        print("CC ALBUM \(clearcloudalbum)")
-                                                        self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
+                                                        print("DONE MERGE \(videourl)")
+                                                        
+                                                        DispatchQueue.main.async {
+                                                            print("ADD ALBUM \(album.asset!)")
                                                             
-                                                            if suc {
-                                                                DispatchQueue.main.async {
-                                                                    let fetchOptions = PHFetchOptions()
-                                                                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-                                                                    
-                                                                    // After uploading we fetch the PHAsset for most recent video and then get its current location url
-                                                                    
-                                                                    let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
-                                                                    let realm = try! Realm()
-                                                                    try! realm.write {
-                                                                        enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                        print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                            
+                                                            self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
+                                                                if suc {
+                                                                    DispatchQueue.main.async {
+                                                                        let fetchOptions = PHFetchOptions()
+                                                                        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                                                                        
+                                                                        // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                                                                        
+                                                                        let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                                        let realm = try! Realm()
+                                                                        try! realm.write {
+                                                                            enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                                            print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                        }
+                                                                        completion(true,nil)
                                                                     }
-                                                                    completion(true,nil)
+                                                                    
+                                                                    
+                                                                } else {
+                                                                    // fallback to ClearCloud album
+                                                                    
+                                                                    self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
+                                                                        
+                                                                        print("CC ALBUM \(clearcloudalbum)")
+                                                                        self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
+                                                                            
+                                                                            if suc {
+                                                                                DispatchQueue.main.async {
+                                                                                    let fetchOptions = PHFetchOptions()
+                                                                                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                                                                                    
+                                                                                    // After uploading we fetch the PHAsset for most recent video and then get its current location url
+                                                                                    
+                                                                                    let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions).lastObject
+                                                                                    let realm = try! Realm()
+                                                                                    try! realm.write {
+                                                                                        enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
+                                                                                        print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                                    }
+                                                                                    completion(true,nil)
+                                                                                }
+                                                                                
+                                                                            } else {
+                                                                                completion(false,err)
+                                                                                
+                                                                            }
+                                                                        })
+                                                                        
+                                                                        
+                                                                    })
+                                                                    
+                                                                    
                                                                 }
-                                                                
-                                                            } else {
-                                                                completion(false,err)
-                                                                
-                                                            }
-                                                        })
-                                                        
+                                                            })
+                                                            
+                                                            
+                                                            
+                                                        }
                                                         
                                                     })
                                                     
-                                                    
+                                                    ////
+                                                } else {
+                                                    completion(false,error)
                                                 }
+                                                
                                             })
-
                                             
-                                            
+                                        } else {
+                                            completion(false,error)
                                         }
-                                        
                                     })
+
+                                    
+                                    
                                     
                                 } else {
                                     if trialover {
@@ -688,7 +726,7 @@ class CCViewController: UIViewController {
                             
                             
                             
-                            self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourl, outputUrl: videourl, completion: { (success:Bool, error:String?) in
+                            self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourl, outputUrl: videourl, sampleRate:0, completion: { (success:Bool, error:String?) in
                                 
                                 print("DONE MERGE \(videourl)")
                                 
@@ -1097,10 +1135,115 @@ class CCViewController: UIViewController {
         
         return instruction
     }
-  
     
     
-    func mergeFilesWithUrl(aVideoAsset:AVAsset, audioUrl:URL, outputUrl:URL, completion:@escaping ((Bool, String?) -> Void)) {
+    func convertAudioSamplerate(_ audiourl: URL, outputURL: URL, sample_rate:Double, completion:@escaping ((Bool, String?) -> Void)) {
+        var options = AKConverter.Options()
+        options.format = "m4a"
+        options.sampleRate = sample_rate
+        options.channels = UInt32(1)
+        let br = UInt32(16)
+        options.bitRate = br * 1_000
+        let converter = AKConverter(inputURL: audiourl, outputURL: outputURL, options: options)
+        converter.start(completionHandler: { error in
+            if let error = error {
+                AKLog("Error during convertion: \(error)")
+                completion(false,error.localizedDescription)
+            } else {
+                AKLog("Conversion Complete! \(outputURL)")
+                completion(true,nil)
+            }
+        })
+    }
+    
+    func convertAudioSamplerate2(_ url: URL, outputURL: URL, sample_rate:Double) {
+        var error : OSStatus = noErr
+        var destinationFile: ExtAudioFileRef? = nil
+        var sourceFile : ExtAudioFileRef? = nil
+        
+        var srcFormat : AudioStreamBasicDescription = AudioStreamBasicDescription()
+        var dstFormat : AudioStreamBasicDescription = AudioStreamBasicDescription()
+        
+        ExtAudioFileOpenURL(url as CFURL, &sourceFile)
+        
+        var thePropertySize: UInt32 = UInt32(MemoryLayout.stride(ofValue: srcFormat))
+        
+        ExtAudioFileGetProperty(sourceFile!,
+                                kExtAudioFileProperty_FileDataFormat,
+                                &thePropertySize, &srcFormat)
+        
+        dstFormat.mSampleRate = sample_rate  //Set sample rate
+        dstFormat.mFormatID = kAudioFormatLinearPCM
+        dstFormat.mChannelsPerFrame = 1
+        dstFormat.mBitsPerChannel = 16
+        dstFormat.mBytesPerPacket = 2 * dstFormat.mChannelsPerFrame
+        dstFormat.mBytesPerFrame = 2 * dstFormat.mChannelsPerFrame
+        dstFormat.mFramesPerPacket = 1
+        dstFormat.mFormatFlags = kLinearPCMFormatFlagIsPacked |
+        kAudioFormatFlagIsSignedInteger
+        
+        // Create destination file
+        error = ExtAudioFileCreateWithURL(
+            outputURL as CFURL,
+            kAudioFileWAVEType,
+            &dstFormat,
+            nil,
+            AudioFileFlags.eraseFile.rawValue,
+            &destinationFile)
+        print("Error 1 in convertAudio: \(error.description)")
+        
+        error = ExtAudioFileSetProperty(sourceFile!,
+                                        kExtAudioFileProperty_ClientDataFormat,
+                                        thePropertySize,
+                                        &dstFormat)
+        print("Error 2 in convertAudio: \(error.description)")
+        
+        error = ExtAudioFileSetProperty(destinationFile!,
+                                        kExtAudioFileProperty_ClientDataFormat,
+                                        thePropertySize,
+                                        &dstFormat)
+        print("Error 3 in convertAudio: \(error.description)")
+        
+        let bufferByteSize : UInt32 = 32768
+        var srcBuffer = [UInt8](repeating: 0, count: 32768)
+        var sourceFrameOffset : ULONG = 0
+        
+        while(true){
+            var fillBufList = AudioBufferList(
+                mNumberBuffers: 1,
+                mBuffers: AudioBuffer(
+                    mNumberChannels: 2,
+                    mDataByteSize: UInt32(srcBuffer.count),
+                    mData: &srcBuffer
+                )
+            )
+            var numFrames : UInt32 = 0
+            
+            if(dstFormat.mBytesPerFrame > 0){
+                numFrames = bufferByteSize / dstFormat.mBytesPerFrame
+            }
+            
+            error = ExtAudioFileRead(sourceFile!, &numFrames, &fillBufList)
+            print("Error 4 in convertAudio: \(error.description)")
+            
+            if(numFrames == 0){
+                error = noErr;
+                break;
+            }
+            
+            sourceFrameOffset += numFrames
+            error = ExtAudioFileWrite(destinationFile!, numFrames, &fillBufList)
+            print("Error 5 in convertAudio: \(error.description)")
+        }
+        
+        error = ExtAudioFileDispose(destinationFile!)
+        print("Error 6 in convertAudio: \(error.description)")
+        error = ExtAudioFileDispose(sourceFile!)
+        print("Error 7 in convertAudio: \(error.description)")
+    }
+    
+    
+    func mergeFilesWithUrl(aVideoAsset:AVAsset, audioUrl:URL, outputUrl:URL, sampleRate:Double, completion:@escaping ((Bool, String?) -> Void)) {
         let mixComposition : AVMutableComposition = AVMutableComposition()
         var mutableCompositionVideoTrack : [AVMutableCompositionTrack] = []
         var mutableCompositionAudioTrack : [AVMutableCompositionTrack] = []

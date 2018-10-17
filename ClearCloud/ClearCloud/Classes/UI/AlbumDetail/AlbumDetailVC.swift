@@ -13,6 +13,7 @@ import MobileCoreServices
 
 class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBOutlet weak var enhanceButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     var album:Album!
     var assets:[CCAsset] = []
@@ -225,6 +226,11 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                     self.total_selected -= 1
                 }
                 if self.total_selected > 0 {
+                    if self.total_selected == 1 {
+                        self.enhanceButton.setTitle("Enhance Selected File", for: .normal)
+                    } else {
+                        self.enhanceButton.setTitle("Enhance Selected Files", for: .normal)
+                    }
                     enhanceButtonView.isHidden = false
                 } else {
                     enhanceButtonView.isHidden = true

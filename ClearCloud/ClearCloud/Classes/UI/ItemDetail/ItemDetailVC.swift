@@ -35,6 +35,50 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             let realm = try! Realm()
             self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
             print("self.enhancedVideo \(self.enhancedVideo)")
+            
+            
+            if self.enhancedVideo != nil {
+                
+                // make sure that either video exists
+                if let original_video_id = self.enhancedVideo!.original_video_id {
+                    let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [original_video_id], options: .none)
+                    if phassets.count == 0 {
+                        // original was deleted
+                        let realm = try! Realm()
+                        try! realm.write {
+                            self.enhancedVideo!.original_video_id = nil
+                        }
+                    }
+                    
+                }
+                if let enhanced_video_id = self.enhancedVideo!.enhanced_video_id {
+                    let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [enhanced_video_id], options: .none)
+                    if phassets.count == 0 {
+                        // enhanced was deleted
+                        let realm = try! Realm()
+                        try! realm.write {
+                            self.enhancedVideo!.enhanced_video_id = nil
+                        }
+                    }
+                }
+                
+                if self.enhancedVideo!.enhanced_video_id == nil && self.enhancedVideo!.original_video_id == nil {
+                    let realm = try! Realm()
+                    try! realm.write {
+                        realm.delete(self.enhancedVideo!);
+                        self.showError(message: "The enhanced and original videos have been deleted outside the app.")
+                        self.navigationController!.popViewController(animated: true)
+                    }
+                } else if self.enhancedVideo!.enhanced_video_id != nil {
+                    // make enhanced the original
+                    let realm = try! Realm()
+                    try! realm.write {
+                        self.enhancedVideo!.original_video_id = self.enhancedVideo!.enhanced_video_id
+                    }
+                }
+                
+            }
+            
         } else {
             // tmp fix audio
             /*
@@ -85,7 +129,8 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     
     func refresh() {
         DispatchQueue.main.async {
-            
+            print("REFRESH \(self.enhancedVideo)")
+
             if self.asset.type == .audio {
                 if self.asset.audio!.enhanced_audio_path == nil {
                     self.enhanceButton.isHidden = false
@@ -93,7 +138,6 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                     self.enhanceButton.isHidden = true
                 }
             } else {
-                print("UNIQ ID \(self.asset.asset!.localIdentifier)")
                 if let enhancedVideo = self.enhancedVideo {
                     if enhancedVideo.enhanced_video_id == nil {
                         self.enhanceButton.isHidden = false
@@ -131,6 +175,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                 if self.asset.type == .video {
                     print("REFRESH ASSET ID \(self.asset.asset!.localIdentifier)")
                     let realm = try! Realm()
+                    realm.refresh()
                     self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
                     print("NEW ENHANCED ID \(self.enhancedVideo!.enhanced_video_id)")
                 }
@@ -206,8 +251,13 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
 
                     cell.asset = self.asset.asset!
                 } else {
+                    print("TRY FETCH \(self.enhancedVideo!.original_video_id!)")
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [self.enhancedVideo!.original_video_id!], options: .none)
-                    cell.asset = phassets[0]
+                    if phassets.count > 0 {
+                        cell.asset = phassets[0]
+                    } else {
+                        cell.asset = self.asset.asset!
+                    }
                 }
                 cell.typeLabel.text = "Original"
             } else {

@@ -104,6 +104,8 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
             let trial = defaults.bool(forKey: "trial")
             if trial {
                 cell.navlabel.text = "Login"
+            } else if !LoginManager.shared.logged_in {
+                cell.navlabel.text = "Login"
             }
         }
         
@@ -128,7 +130,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
         case 2:
             let defaults: UserDefaults = UserDefaults.standard
             let trial = defaults.bool(forKey: "trial")
-            if trial {
+            if trial || !LoginManager.shared.logged_in {
                 
                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)

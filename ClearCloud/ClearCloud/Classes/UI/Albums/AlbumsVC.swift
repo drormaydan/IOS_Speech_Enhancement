@@ -39,6 +39,9 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
                 let base64 = uuid.base64Encoded()
                 let hash = base64!.data(using: .utf8)?.sha256()
                 let password = hash!.hexEncodedString()
+                let defaults: UserDefaults = UserDefaults.standard
+                defaults.set(username, forKey: "trial_username")
+                defaults.synchronize()
                 LoginManager.shared.storeUsername(username: username)
                 LoginManager.shared.storePassword(password: password)
             }

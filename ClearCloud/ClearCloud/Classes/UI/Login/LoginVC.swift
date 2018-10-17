@@ -28,7 +28,14 @@ class LoginVC: CCViewController {
     }
 
     @IBAction func clickSignup(_ sender: Any) {
-        if let url = URL(string: "https://babblelabs.com/account/app/register/") {
+        var url_str = "https://babblelabs.com/account/app/register/"
+        
+        let defaults: UserDefaults = UserDefaults.standard
+        if let trial_username = defaults.string(forKey: "trial_username")  {
+            url_str = "https://babblelabs.com/account/app/register/?temp_id=\(trial_username)"
+        }
+        
+        if let url = URL(string: url_str) {
             UIApplication.shared.open(url, options: [:])
         }
     }
@@ -48,7 +55,9 @@ class LoginVC: CCViewController {
             self.hideHud()
             switch status {
             case .success:
-                self.dismiss(animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
             case .error:
                 self.showError(message: error!)
             case .notLoggedIn:

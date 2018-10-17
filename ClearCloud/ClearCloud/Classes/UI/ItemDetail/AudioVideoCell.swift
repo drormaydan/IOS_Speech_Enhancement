@@ -174,32 +174,39 @@ class AudioVideoCell: UITableViewCell {
                                                     completionHandler: {
                                                         success, error in
                                                         print("Finished deleting asset. \(success)")
-                                                        DispatchQueue.main.async {
-                                                            
-                                                            let realm = try! Realm()
-                                                            let enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset!.localIdentifier, self.asset!.localIdentifier).first
-                                                            
-                                                            if (self.typeLabel.text! == "Enhanced")  {
-                                                                if let enhancedVideo = enhancedVideo {
-                                                                    try! realm.write {
-                                                                        enhancedVideo.enhanced_video_id = nil
-                                                                    }
-                                                                    self.owner.refresh()
-                                                                }
+                                                        
+                                                        
+                                                        if success {
+                                                            DispatchQueue.main.async {
                                                                 
+                                                                let realm = try! Realm()
+                                                                let enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset!.localIdentifier, self.asset!.localIdentifier).first
                                                                 
-                                                            } else {
-                                                                if let enhancedVideo = enhancedVideo {
-                                                                    try! realm.write {
-                                                                        realm.delete(enhancedVideo)
+                                                                if (self.typeLabel.text! == "Enhanced")  {
+                                                                    if let enhancedVideo = enhancedVideo {
+                                                                        try! realm.write {
+                                                                            realm.delete(enhancedVideo)
+                                                                            //enhancedVideo.enhanced_video_id = nil
+                                                                        }
+                                                                        print("BEFORE REFRESH \(enhancedVideo)")
+                                                                        self.owner.enhancedVideo = nil
+                                                                        self.owner.refresh()
                                                                     }
-                                                                    self.owner.navigationController!.popViewController(animated: true)
-                                                                } else {
                                                                     
-                                                                    self.owner.navigationController!.popViewController(animated: true)
+                                                                    
+                                                                } else {
+                                                                    if let enhancedVideo = enhancedVideo {
+                                                                        try! realm.write {
+                                                                            realm.delete(enhancedVideo)
+                                                                        }
+                                                                        self.owner.navigationController!.popViewController(animated: true)
+                                                                    } else {
+                                                                        
+                                                                        self.owner.navigationController!.popViewController(animated: true)
+                                                                    }
+                                                                    
+                                                                    
                                                                 }
-                                                                
-                                                                
                                                             }
                                                         }
             })

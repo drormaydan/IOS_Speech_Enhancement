@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AlbumDetailVC" customModule="ClearCloud" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="gWj-bl-uAZ" id="jNh-fE-Adu"/>
+                <outlet property="enhanceButton" destination="KeB-YI-1Zi" id="lpN-IC-dH0"/>
                 <outlet property="enhanceButtonView" destination="5bx-ny-Bht" id="9SC-hG-BoI"/>
                 <outlet property="view" destination="AZP-Tt-uEN" id="Ewb-h0-qaj"/>
             </connections>
@@ -39,11 +40,16 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bx-ny-Bht">
                     <rect key="frame" x="0.0" y="23" width="375" height="32"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="enhance_selected_file_green_bar1" translatesAutoresizingMaskIntoConstraints="NO" id="fkN-fO-GTf">
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="enhance_selected_file_green_bar1" translatesAutoresizingMaskIntoConstraints="NO" id="fkN-fO-GTf">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KeB-YI-1Zi">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KeB-YI-1Zi">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
+                            <color key="backgroundColor" red="0.71878838539123535" green="0.82883310317993164" blue="0.19781136512756348" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <state key="normal" title="Enhance Selected File">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
                             <connections>
                                 <action selector="clickEnhance:" destination="-1" eventType="touchUpInside" id="WOe-Jd-F5M"/>
                             </connections>

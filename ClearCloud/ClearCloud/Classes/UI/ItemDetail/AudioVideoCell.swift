@@ -2,9 +2,14 @@
 //  AudioVideoCell.swift
 //  ClearCloud
 //
-//  Created by Boris Katok on 9/21/18.
-//  Copyright © 2018 Boris Katok. All rights reserved.
-//
+/*
+ * Copyright (c) 2018 by BabbleLabs, Inc.  ALL RIGHTS RESERVED.
+ * These coded instructions, statements, and computer programs are the
+ * copyrighted works and confidential proprietary information of BabbleLabs, Inc.
+ * They may not be modified, copied, reproduced, distributed, or disclosed to
+ * third parties in any manner, medium, or form, in whole or in part, without
+ * the prior written consent of BabbleLabs, Inc.
+ */
 
 import UIKit
 import AVKit
@@ -321,7 +326,7 @@ class AudioVideoCell: UITableViewCell {
             
             //player.play()
         } else {
-            print("@@@VIDEO ASSET -->\(self.asset)")
+            //print("@@@VIDEO ASSET -->\(self.asset)")
             if let phasset = self.asset {
                 guard (phasset.mediaType == PHAssetMediaType.video)
                     
@@ -329,7 +334,7 @@ class AudioVideoCell: UITableViewCell {
                         print("Not a valid video media type")
                         return
                 }
-                print("@@@BEFORE GET PHASSET -->\(self.asset)")
+                //print("@@@BEFORE GET PHASSET -->\(self.asset)")
                 let options = PHVideoRequestOptions()
                 options.isNetworkAccessAllowed = true
                 self.owner.showHud()
@@ -337,7 +342,7 @@ class AudioVideoCell: UITableViewCell {
                     self.owner.hideHud()
                     if let avAsset = asset {
                         DispatchQueue.main.async {
-                            print("GOT ASSET \(avAsset)")
+                            //print("GOT ASSET \(avAsset)")
 
                             let avPlayerItem = AVPlayerItem(asset: avAsset)
                             let player = AVPlayer.init(playerItem: avPlayerItem)

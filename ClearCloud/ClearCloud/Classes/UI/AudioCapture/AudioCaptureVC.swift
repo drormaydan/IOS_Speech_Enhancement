@@ -2,9 +2,14 @@
 //  AudioCaptureVC.swift
 //  ClearCloud
 //
-//  Created by Boris Katok on 9/18/18.
-//  Copyright © 2018 Boris Katok. All rights reserved.
-//
+/*
+ * Copyright (c) 2018 by BabbleLabs, Inc.  ALL RIGHTS RESERVED.
+ * These coded instructions, statements, and computer programs are the
+ * copyrighted works and confidential proprietary information of BabbleLabs, Inc.
+ * They may not be modified, copied, reproduced, distributed, or disclosed to
+ * third parties in any manner, medium, or form, in whole or in part, without
+ * the prior written consent of BabbleLabs, Inc.
+ */
 
 import UIKit
 import AVFoundation
@@ -47,7 +52,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 try FileManager.default.removeItem(atPath: audioFilename.path)
             }
             catch {
-                print("Could not remove file at url: \(audioFilename)")
+                //print("Could not remove file at url: \(audioFilename)")
             }
         }
         
@@ -87,15 +92,15 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     
     
     @objc func clickBack2(sender:UIButton?) {
-        print("CLICKBACK")
+        //print("CLICKBACK")
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         do {
         let attr = try FileManager.default.attributesOfItem(atPath: audioFilename.path)
         let fileSize = attr[FileAttributeKey.size] as! UInt64
-        print("CLICKBACK fileSize \(fileSize)")
+        //print("CLICKBACK fileSize \(fileSize)")
         } catch {
-        print("Could not remove file at url: \(audioFilename)")
+        //print("Could not remove file at url: \(audioFilename)")
         }
         
         if FileManager.default.fileExists(atPath: audioFilename.path) {
@@ -131,7 +136,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     }
     
     func cleanup() {
-        print("CLEANUP AUDIO")
+        //print("CLEANUP AUDIO")
         if self.timer != nil {
             self.timer!.invalidate()
             self.timer = nil
@@ -161,13 +166,13 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         do {
             try filemgr.createDirectory(atPath: newDir.path,
                                         withIntermediateDirectories: true, attributes: nil)
-            print("CREATED DIR \(newDir)")
+            //print("CREATED DIR \(newDir)")
             
             try filemgr.copyItem(at: audioFilename, to: audiourl)
-            print("COPIED AUDIO TO \(audiourl)")
+            //print("COPIED AUDIO TO \(audiourl)")
             
             audio.local_audio_path = audiourl.path.replacingOccurrences(of: docsDir.path, with: "")
-            print("FINAL AUDIO PATH \(audio.local_audio_path!)")
+            //print("FINAL AUDIO PATH \(audio.local_audio_path!)")
             
             /*
              // test
@@ -190,7 +195,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             do {
                 let attr = try filemgr.attributesOfItem(atPath: audiourl.path)
                 let fileSize = attr[FileAttributeKey.size] as! UInt64
-                print("audio \(audio.local_audio_path!) fileSize \(fileSize)")
+                //print("audio \(audio.local_audio_path!) fileSize \(fileSize)")
                 audio.audio_size = Double(fileSize)
                 
                 let aAudioAsset : AVAsset = AVURLAsset(url: audiourl)
@@ -201,7 +206,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                // let timeDifference = userCalendar.dateComponents(requestedComponent, from: audio.local_time_start!, to: endTime!)
                 audio.duration = Int(CMTimeGetSeconds(aAudioAsset.duration))
             } catch {
-                print("audio Error: \(error)")
+                //print("audio Error: \(error)")
             }
             
             
@@ -216,13 +221,13 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                     try FileManager.default.removeItem(atPath: audioFilename.path)
                 }
                 catch {
-                    print("Could not remove file at url: \(audioFilename)")
+                    //print("Could not remove file at url: \(audioFilename)")
                 }
             }
             
             
         } catch let error as NSError {
-            print("ERROR \(error)")
+            //print("ERROR \(error)")
             /*
             let alertController = UIAlertController(title:NSLocalizedString("Error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
             let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: .default, handler: nil)
@@ -261,13 +266,13 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         do {
             try filemgr.createDirectory(atPath: newDir.path,
                                         withIntermediateDirectories: true, attributes: nil)
-            print("CREATED DIR \(newDir)")
+            //print("CREATED DIR \(newDir)")
             
             try filemgr.copyItem(at: audioFilename, to: audiourl)
-            print("COPIED AUDIO TO \(audiourl)")
+            //print("COPIED AUDIO TO \(audiourl)")
             
             audio.local_audio_path = audiourl.path.replacingOccurrences(of: docsDir.path, with: "")
-            print("FINAL AUDIO PATH \(audio.local_audio_path!)")
+            //print("FINAL AUDIO PATH \(audio.local_audio_path!)")
             
             /*
              // test
@@ -290,7 +295,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             do {
                 let attr = try filemgr.attributesOfItem(atPath: audiourl.path)
                 let fileSize = attr[FileAttributeKey.size] as! UInt64
-                print("audio \(audio.local_audio_path!) fileSize \(fileSize)")
+                //print("audio \(audio.local_audio_path!) fileSize \(fileSize)")
                 audio.audio_size = Double(fileSize)
                 
                 let userCalendar = Calendar.current
@@ -298,7 +303,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 let timeDifference = userCalendar.dateComponents(requestedComponent, from: startRecordingTime!, to: endTime!)
                 audio.duration = timeDifference.second! + (timeDifference.minute!*60) + (timeDifference.hour!*3600)
             } catch {
-                print("audio Error: \(error)")
+                //print("audio Error: \(error)")
             }
             
             
@@ -313,7 +318,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                     try FileManager.default.removeItem(atPath: audioFilename.path)
                 }
                 catch {
-                    print("Could not remove file at url: \(audioFilename)")
+                    //print("Could not remove file at url: \(audioFilename)")
                 }
             }
             
@@ -335,7 +340,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
          PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: audioFilename)
          }) { saved, error in
          if (error != nil) {
-         print("error \(error!.localizedDescription)")
+         //print("error \(error!.localizedDescription)")
          }
          if saved {
          let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
@@ -363,7 +368,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 try FileManager.default.removeItem(atPath: audioFilename.path)
             }
             catch {
-                print("Could not remove file at url: \(audioFilename)")
+                //print("Could not remove file at url: \(audioFilename)")
             }
         }
         
@@ -440,14 +445,14 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             self.timer = nil
         }
 
-        print("AUDIO ERROR")
+        //print("AUDIO ERROR")
         self.reset()
         self.showError(message: error!.localizedDescription)
     }
 
 
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        print("DID FINISH \(flag)")
+        //print("DID FINISH \(flag)")
         self.isRecording = false
         self.recordButton.isEnabled = true
         self.timeLabel.isHidden = false
@@ -468,9 +473,9 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
              do {
              let attr = try filemgr.attributesOfItem(atPath: audioFilename.path)
              let fileSize = attr[FileAttributeKey.size] as! UInt64
-             print("audio \(audioFilename) fileSize \(fileSize)")
+             //print("audio \(audioFilename) fileSize \(fileSize)")
              } catch {
-             print("audio Error: \(error)")
+             //print("audio Error: \(error)")
              }*/
             
             
@@ -516,11 +521,11 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                 try FileManager.default.removeItem(atPath: audiourl2.path)
             }
             catch {
-                print("Could not remove file at url: \(audiourl2)")
+                //print("Could not remove file at url: \(audiourl2)")
             }
         }
 
-        print("ORIGINAL AUDIO \(audioFilename)")
+        //print("ORIGINAL AUDIO \(audioFilename)")
         
         var fileSize:UInt64 = 0
         do {
@@ -532,9 +537,9 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             let dict = attr as NSDictionary
             fileSize = dict.fileSize()
         } catch {
-            print("Error: \(error)")
+            //print("Error: \(error)")
         }
-        print("fileSize \(fileSize)")
+        //print("fileSize \(fileSize)")
 
         if (fileSize > 0) {
             self.rewriteAudioFile(audioUrl: audioFilename, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
@@ -544,9 +549,9 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                         do {
                             try filemgr.removeItem(at: audioFilename)
                             try filemgr.copyItem(at: audiourl2, to: audioFilename)
-                            print("REWROTE AUDIO TO \(audioFilename)")
+                            //print("REWROTE AUDIO TO \(audioFilename)")
                         } catch {
-                            print("audio Error: \(error)")
+                            //print("audio Error: \(error)")
                         }
                     } else {
                         self.isRecording = false
@@ -558,7 +563,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
                             self.timer = nil
                         }
                         
-                        print("AUDIO ERROR")
+                        //print("AUDIO ERROR")
                         self.reset()
                         self.showError(message: error!)
                     }

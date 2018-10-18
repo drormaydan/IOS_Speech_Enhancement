@@ -2,9 +2,14 @@
 //  ItemDetailVC.swift
 //  ClearCloud
 //
-//  Created by Boris Katok on 9/21/18.
-//  Copyright © 2018 Boris Katok. All rights reserved.
-//
+/*
+ * Copyright (c) 2018 by BabbleLabs, Inc.  ALL RIGHTS RESERVED.
+ * These coded instructions, statements, and computer programs are the
+ * copyrighted works and confidential proprietary information of BabbleLabs, Inc.
+ * They may not be modified, copied, reproduced, distributed, or disclosed to
+ * third parties in any manner, medium, or form, in whole or in part, without
+ * the prior written consent of BabbleLabs, Inc.
+ */
 
 import UIKit
 import RealmSwift
@@ -31,10 +36,10 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         self.tableView.backgroundView = nil
         
         if asset.type == .video {
-            print("ASSET ID \(self.asset.asset!.localIdentifier)")
+            //print("ASSET ID \(self.asset.asset!.localIdentifier)")
             let realm = try! Realm()
             self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
-            print("self.enhancedVideo \(self.enhancedVideo)")
+            //print("self.enhancedVideo \(self.enhancedVideo)")
             
             
             if self.enhancedVideo != nil {
@@ -91,17 +96,17 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             let audiourl3 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(self.asset.audio!.unique_id!)_backup.m4a")
 
             
-            print("ORIGINAL AUDIO \(audiourl2)")
+            //print("ORIGINAL AUDIO \(audiourl2)")
             self.rewriteAudioFile(audioUrl: origurl, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
                 if success {
                     do {
                         try filemgr.copyItem(at: origurl, to: audiourl3)
-                        print("SAVED AUDIO TO \(audiourl3)")
+                        //print("SAVED AUDIO TO \(audiourl3)")
                         try filemgr.removeItem(at: origurl)
                         try filemgr.copyItem(at: audiourl2, to: origurl)
-                        print("REWROTE AUDIO TO \(origurl)")
+                        //print("REWROTE AUDIO TO \(origurl)")
                     } catch {
-                        print("audio Error: \(error)")
+                        //print("audio Error: \(error)")
                     }
                     
                 }
@@ -129,7 +134,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     
     func refresh() {
         DispatchQueue.main.async {
-            print("REFRESH \(self.enhancedVideo)")
+            //print("REFRESH \(self.enhancedVideo)")
 
             if self.asset.type == .audio {
                 if self.asset.audio!.enhanced_audio_path == nil {
@@ -170,19 +175,20 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         self.showHud(message: "Enhancing...")
         self.doEnhance(self.asset, album: self.album) { (success:Bool, error:String?) in
             self.hideHud()
-            print("DONE ENHANCE")
+            //print("DONE ENHANCE")
             if success {
                 if self.asset.type == .video {
-                    print("REFRESH ASSET ID \(self.asset.asset!.localIdentifier)")
+                    //print("REFRESH ASSET ID \(self.asset.asset!.localIdentifier)")
                     let realm = try! Realm()
                     realm.refresh()
                     self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
-                    print("NEW ENHANCED ID \(self.enhancedVideo!.enhanced_video_id)")
+                    //print("NEW ENHANCED ID \(self.enhancedVideo!.enhanced_video_id)")
                 }
                 
                 self.refresh()
             } else {
-                print("ENHANCE ERROR \(error)")
+                //print("ENHANCE ERROR \(error)")
+                self.showError(message: error!)
             }
         }
     }
@@ -219,7 +225,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("END SCROLL")
+        //print("END SCROLL")
         self.tableView.reloadData()
     }
     
@@ -247,11 +253,11 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
 
             if indexPath.row == 0 {
                 if self.enhancedVideo == nil {
-                    print("@@@self.asset \(self.asset) \(self.asset.asset)")
+                    //print("@@@self.asset \(self.asset) \(self.asset.asset)")
 
                     cell.asset = self.asset.asset!
                 } else {
-                    print("TRY FETCH \(self.enhancedVideo!.original_video_id!)")
+                    ////print("TRY FETCH \(self.enhancedVideo!.original_video_id!)")
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [self.enhancedVideo!.original_video_id!], options: .none)
                     if phassets.count > 0 {
                         cell.asset = phassets[0]
@@ -311,14 +317,14 @@ extension AVAsset {
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.outputFileType = AVFileType.m4a
         exportSession.outputURL = url
-        print("OUTPUT \(url)")
+        //print("OUTPUT \(url)")
         
         exportSession.exportAsynchronously {
             switch exportSession.status {
             case .completed:
                 success()
             case .unknown, .waiting, .exporting, .failed, .cancelled:
-                print("EXPORT STATUS \(exportSession.status.rawValue)")
+                //print("EXPORT STATUS \(exportSession.status.rawValue)")
                 let error = NSError(domain: "domain", code: 0, userInfo: nil)
                 failure(error)
             }
@@ -330,7 +336,7 @@ extension AVAsset {
         let audioTracks = tracks(withMediaType: AVMediaType.audio)
         
         for track in audioTracks {
-            print("track \(track)")
+            //print("track \(track)")
             let compositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
             do {
                 try compositionTrack?.insertTimeRange(track.timeRange, of: track, at: track.timeRange.start)
@@ -340,7 +346,7 @@ extension AVAsset {
             compositionTrack!.preferredTransform = track.preferredTransform
         }
         
-        print("composition \(composition)")
+        //print("composition \(composition)")
         return composition
     }
 }

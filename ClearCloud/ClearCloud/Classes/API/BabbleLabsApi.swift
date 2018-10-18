@@ -2,9 +2,14 @@
 //  BabbleLabsApi.swift
 //  ClearCloud
 //
-//  Created by Boris Katok on 9/20/18.
-//  Copyright © 2018 Boris Katok. All rights reserved.
-//
+/*
+ * Copyright (c) 2018 by BabbleLabs, Inc.  ALL RIGHTS RESERVED.
+ * These coded instructions, statements, and computer programs are the
+ * copyrighted works and confidential proprietary information of BabbleLabs, Inc.
+ * They may not be modified, copied, reproduced, distributed, or disclosed to
+ * third parties in any manner, medium, or form, in whole or in part, without
+ * the prior written consent of BabbleLabs, Inc.
+ */
 
 import Alamofire
 import AlamofireObjectMapper
@@ -45,15 +50,15 @@ class BabbleLabsApi: NSObject {
                 "userId" : userId,
                 "password" : password
             ]
-            print ("BEFORE LOGIN")
+            //print ("BEFORE LOGIN")
             alamoFireManager!.request("\(API_URL)accounts/api/auth/mobileLogin", method: .post, parameters: parameters,
                                       encoding: JSONEncoding.default, headers: nil).validate().responseJSON(completionHandler: {
                                         response in
                                         switch response.result {
                                         case .success:
-                                            print ("SUCCCESS")
+                                            //print ("SUCCCESS")
                                             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                                                print("json --> \(utf8Text)")
+                                                //print("json --> \(utf8Text)")
                                                 let serverResponse:LoginResponse = LoginResponse(JSONString: utf8Text)!
                                                 if serverResponse.auth_token != nil {
                                                     completionHandler(nil, serverResponse)
@@ -65,7 +70,7 @@ class BabbleLabsApi: NSObject {
                                                 completionHandler(ServerError.defaultError, nil)
                                             }
                                         case .failure:
-                                            print ("FAIL")
+                                            //print ("FAIL")
                                             completionHandler(ServerError.defaultError, nil)
                                         }
                                       })
@@ -82,15 +87,15 @@ class BabbleLabsApi: NSObject {
                 "userId" : userId,
                 "password" : password
             ]
-            print ("BEFORE LOGIN")
+            //print ("BEFORE LOGIN")
             alamoFireManager!.request("\(API_URL)accounts/api/auth/login", method: .post, parameters: parameters,
                                       encoding: JSONEncoding.default, headers: nil).validate().responseJSON(completionHandler: {
                                         response in
                                         switch response.result {
                                         case .success:
-                                            print ("SUCCCESS")
+                                            //print ("SUCCCESS")
                                             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                                                print("login json --> \(utf8Text)")
+                                                //print("login json --> \(utf8Text)")
                                                 let serverResponse:LoginResponse = LoginResponse(JSONString: utf8Text)!
                                                 if serverResponse.auth_token != nil {
                                                     completionHandler(nil, serverResponse)
@@ -112,18 +117,26 @@ class BabbleLabsApi: NSObject {
         }
     }
 
-    func convertAudio(filepath: String, email: String, destination: URL, video:Bool, completion:@escaping ((Bool, ServerError?, Bool) -> Void)) {
+    func convertAudio(filepath: String, email: String, destination: URL, video:Bool, sampleRate:Double?, completion:@escaping ((Bool, ServerError?, Bool) -> Void)) {
         if let reachability = reachability, reachability.isReachable {
             
             var urlComponents = URLComponents()
             urlComponents.scheme = "https"
             urlComponents.host = "api.babblelabs.com"
             urlComponents.path = "/audioEnhancer/api/audio/stream/\(email)"
+            
+            var queryItems:[URLQueryItem] = []
             if video {
-                urlComponents.queryItems = [URLQueryItem(name: "product", value: "video")]
+                queryItems.append(URLQueryItem(name: "product", value: "video"))
+            }
+            if let sampleRate = sampleRate {
+                queryItems.append(URLQueryItem(name: "sampleRate", value: "\(sampleRate)"))
             }
             
-            print("0 SERVICE")
+            if queryItems.count > 0 {
+                urlComponents.queryItems = queryItems
+            }
+            
 
             guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
             
@@ -139,7 +152,6 @@ class BabbleLabsApi: NSObject {
             
             // Now let's encode out Post struct into JSON data...
             let file: FileHandle? = FileHandle(forReadingAtPath: filepath)
-            print("1 SERVICE")
 
             if file != nil {
                 // Read all the data
@@ -157,15 +169,12 @@ class BabbleLabsApi: NSObject {
             
             // Create and run a URLSession data task with our JSON encoded POST request
             //let config = URLSessionConfiguration.default
-            print("2 SERVICE")
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = 900.0
             sessionConfig.timeoutIntervalForResource = 900.0
 
             let session = URLSession(configuration: sessionConfig)
-            print("3 SERVICE")
             let task = session.dataTask(with: request) { (responseData, response, responseError) in
-                print("4 SERVICE")
                 guard responseError == nil else {
                     completion(false,ServerError(WithMessage: (responseError?.localizedDescription)!),false )
                     return
@@ -177,8 +186,21 @@ class BabbleLabsApi: NSObject {
                 
                 if ((httpresponse.statusCode >= 200) && (httpresponse.statusCode < 300)) {
                     
+                    
                     print("response data \(responseData)")
                     print("destination \(destination)")
+                    
+                    
+/*
+                    // TMP
+                    let defaults: UserDefaults = UserDefaults.standard
+                    defaults.set(true, forKey: "did_trial")
+                    defaults.set(false, forKey: "trial")
+                    defaults.synchronize()
+                    // LoginManager.shared.logout()
+                    completion(false, ServerError.init(WithMessage: "You have exceeded your..."), true)
+                    return
+*/
                     
                     // APIs usually respond with the data you just sent in your POST request
                     if let data = responseData {
@@ -193,9 +215,8 @@ class BabbleLabsApi: NSObject {
                         }
                         completion(true,nil,false)
                     } else {
-                        print("no readable data received in response")
+                        completion(false, ServerError.init(WithMessage: ("no readable data received in response")), false)
                     }
-                    
                 } else if httpresponse.statusCode == 403 {
                     let reason:String = httpresponse.allHeaderFields["X-BabbleLabs-Message"] as! String
                     if reason.contains("You have exceeded your") {
@@ -213,7 +234,6 @@ class BabbleLabsApi: NSObject {
                     completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)
                 }
             }
-            print("5 SERVICE task=\(task)")
             task.resume()
         } else {
             completion(false, ServerError.noInternet,false)

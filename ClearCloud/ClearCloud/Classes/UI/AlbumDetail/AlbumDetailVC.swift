@@ -2,9 +2,14 @@
 //  AlbumDetailVC.swift
 //  ClearCloud
 //
-//  Created by Boris Katok on 9/18/18.
-//  Copyright © 2018 Boris Katok. All rights reserved.
-//
+/*
+ * Copyright (c) 2018 by BabbleLabs, Inc.  ALL RIGHTS RESERVED.
+ * These coded instructions, statements, and computer programs are the
+ * copyrighted works and confidential proprietary information of BabbleLabs, Inc.
+ * They may not be modified, copied, reproduced, distributed, or disclosed to
+ * third parties in any manner, medium, or form, in whole or in part, without
+ * the prior written consent of BabbleLabs, Inc.
+ */
 
 import UIKit
 import Photos
@@ -92,7 +97,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
             let realm = try! Realm()
             realm.refresh()
             let audios = realm.objects(CCAudio.self).sorted(byKeyPath: "local_time_start", ascending: false)
-            print("TOTAL AUDIOS \(audios.count)")
+            //print("TOTAL AUDIOS \(audios.count)")
             for audio:CCAudio in audios {
                 let ccasset = CCAsset()
                 ccasset.type = .audio
@@ -181,7 +186,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                     
                     
                     if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-                        print("captureVideoPressed and camera available.")
+                        //print("captureVideoPressed and camera available.")
                         
                         let imagePicker = UIImagePickerController()
                         imagePicker.videoMaximumDuration = 60000
@@ -194,7 +199,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                         
                         self.present(imagePicker, animated: true, completion: nil)
                     } else {
-                        print("Camera not available.")
+                        //print("Camera not available.")
                     }
                     
                     
@@ -253,7 +258,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         
         
         let width = ((screenSize.width-20)/2)-10
-        //print("width =\(width)")
+        ////print("width =\(width)")
         
         return CGSize(width: width, height: width)
     }
@@ -261,7 +266,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let videoUrl = info[UIImagePickerControllerMediaURL] as! URL
         let pathString = videoUrl.relativePath
-        print("GOT URL \(videoUrl)")
+        //print("GOT URL \(videoUrl)")
         self.dismiss(animated: true, completion: {
             
             
@@ -277,7 +282,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                     
                     self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
                         
-                        print("CC ALBUM \(clearcloudalbum)")
+                        //print("CC ALBUM \(clearcloudalbum)")
                         self.addToAlbum(videourl: videoUrl, album: clearcloudalbum, completion: { (success:Bool, error:String?) in
 
                             DispatchQueue.main.async {
@@ -310,8 +315,8 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
              //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
              
              }, completionHandler: { success, error in
-             print("added new video to album")
-             print("success = \(success) error=\(error)")
+             //print("added new video to album")
+             //print("success = \(success) error=\(error)")
              self.reload()
              })
              }*/

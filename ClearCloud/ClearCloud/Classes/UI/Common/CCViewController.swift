@@ -2,9 +2,14 @@
 //  CCViewController.swift
 //  ClearCloud
 //
-//  Created by Boris Katok on 9/18/18.
-//  Copyright © 2018 Boris Katok. All rights reserved.
-//
+/*
+ * Copyright (c) 2018 by BabbleLabs, Inc.  ALL RIGHTS RESERVED.
+ * These coded instructions, statements, and computer programs are the
+ * copyrighted works and confidential proprietary information of BabbleLabs, Inc.
+ * They may not be modified, copied, reproduced, distributed, or disclosed to
+ * third parties in any manner, medium, or form, in whole or in part, without
+ * the prior written consent of BabbleLabs, Inc.
+ */
 
 import UIKit
 import MBProgressHUD
@@ -27,7 +32,8 @@ class CCViewController: UIViewController {
     func setLogoImage() {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         imageView.contentMode = .scaleAspectFit
-        imageView.image = #imageLiteral(resourceName: "clear_cloud")
+//        imageView.image = #imageLiteral(resourceName: "clear_cloud")
+        imageView.image = #imageLiteral(resourceName: "widelogo")
         navigationItem.titleView = imageView
     }
     
@@ -144,7 +150,7 @@ class CCViewController: UIViewController {
             // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
             let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
                 (result : UIAlertAction) -> Void in
-                print("OK")
+                //print("OK")
             }
             
             alertController.addAction(okAction)
@@ -157,16 +163,16 @@ class CCViewController: UIViewController {
         LoginManager.shared.checkRegistration(force: true, completion: { (status:LoginManager.LoginStatus, error:String?) in
             switch status {
             case .success:
-                print("REG SUCCESS")
+                //print("REG SUCCESS")
                 self.doEnhanceImpl(asset, album: album, completion: completion)
                 break
             case .error:
-                print("REG ERROR")
+                //print("REG ERROR")
                 self.showError(message: error!)
                 completion(false,nil)
                 break
             case .notLoggedIn:
-                print("REG NOT LOGGED")
+                //print("REG NOT LOGGED")
                 completion(false,nil)
                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
@@ -193,9 +199,9 @@ class CCViewController: UIViewController {
                 let path = asset.audio!.local_audio_path
                 let url = docsDir.appendingPathComponent(path!)
                 
-                print("BEFORE WEB SERVICE")
-                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false) { (success:Bool, error:ServerError?, trialover:Bool ) in
-                    print("POST SUCCESS \(success) error \(error)")
+                //print("BEFORE WEB SERVICE")
+                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false, sampleRate: nil) { (success:Bool, error:ServerError?, trialover:Bool ) in
+                    //print("POST SUCCESS \(success) error \(error)")
                     if (success) {
                         DispatchQueue.main.async {
                             let realm = try! Realm()
@@ -212,7 +218,7 @@ class CCViewController: UIViewController {
                             
                             let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
                                 (result : UIAlertAction) -> Void in
-                                print("OK")
+                                //print("OK")
                                 /*
                                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
@@ -239,7 +245,7 @@ class CCViewController: UIViewController {
                 guard (phasset.mediaType == PHAssetMediaType.video)
                     
                     else {
-                        print("Not a valid video media type")
+                        //print("Not a valid video media type")
                         return
                 }
                 
@@ -256,7 +262,7 @@ class CCViewController: UIViewController {
                 
                 let uuid = UUID().uuidString
                 
-                print("BEFORE REQUEST ASSET")
+                //print("BEFORE REQUEST ASSET")
                 PHCachingImageManager().requestAVAsset(forVideo: phasset, options: nil, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
                     if let avAsset = asset {
                         
@@ -266,20 +272,20 @@ class CCViewController: UIViewController {
                         let desc = aAudioAssetTrack.formatDescriptions[0] as! CMAudioFormatDescription
                         let basic = CMAudioFormatDescriptionGetStreamBasicDescription(desc)
                         let sample_rate = basic!.pointee.mSampleRate
-                        print("SAMPLE RATE \(sample_rate)")
+                        //print("SAMPLE RATE \(sample_rate)")
 
                         let filemgr = FileManager.default
                         let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
                         let docsDir = dirPaths.first!
                         let newDir = docsDir.appendingPathComponent(uuid)
                        // let audiourl = newDir.appendingPathComponent("audio.m4a")
-                       // print("audiourl \(audiourl)")
+                       // //print("audiourl \(audiourl)")
 
                         //let testurl = URL(fileURLWithPath: audiourl.path)
-                        //print("testurl \(testurl)")
+                        ////print("testurl \(testurl)")
 
                         let audiourl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).m4a")
-                        print("audiourl \(audiourl)")
+                        //print("audiourl \(audiourl)")
 
                         //let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
                         //let videourl = newDir.appendingPathComponent("final.mp4")
@@ -304,7 +310,7 @@ class CCViewController: UIViewController {
                             do {
                                 try video.write(to: testurl)
                             } catch {
-                                print("ZZZZZ \(error)")
+                                //print("ZZZZZ \(error)")
                             }
 
                             
@@ -313,20 +319,20 @@ class CCViewController: UIViewController {
                         
 
                         
-                        print("BEFORE WRITE AUDIO")
+                        //print("BEFORE WRITE AUDIO")
 
             
                         
                         
                         avAsset.writeAudioTrack(to: audiourl, success: {
-                            print("WROTE AUDIO \(audiourl)")
+                            //print("WROTE AUDIO \(audiourl)")
                             
                             
-                            BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:true) { (success:Bool, error:ServerError?, trialover:Bool ) in
-                                print("POST SUCCESS \(success) error \(error)")
+                            BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:true, sampleRate:sample_rate) { (success:Bool, error:ServerError?, trialover:Bool ) in
+                                //print("POST SUCCESS \(success) error \(error)")
                                 if (success) {
                                     
-                                    print("ENHANCED AUDIO \(audiourl2)")
+                                    //print("ENHANCED AUDIO \(audiourl2)")
 
                                     
                                     do {
@@ -334,27 +340,42 @@ class CCViewController: UIViewController {
                                         let fileSize = resources.fileSize!
                                         print ("ENHANCED AUDIO SIZE \(fileSize)")
                                     } catch {
-                                        print("Error: \(error)")
+                                        //print("Error: \(error)")
                                     }
                                     
                                     
                                     
-                                    self.convertAudioSamplerate(audiourl2, outputURL: audiourl3, sample_rate: sample_rate, completion: { (success:Bool, error:String?) in
+                                    /*self.convertAudioSamplerate(audiourl2, outputURL: audiourl3, sample_rate: sample_rate, completion: { (success:Bool, error:String?) in
                                         
                                         if success {
                                             
+                                            let asset = AVAsset(url: audiourl3)
+                                            let aAudioAssetTrack : AVAssetTrack = asset.tracks(withMediaType: AVMediaType.audio)[0]
+                                            let desc = aAudioAssetTrack.formatDescriptions[0] as! CMAudioFormatDescription
+                                            let basic = CMAudioFormatDescriptionGetStreamBasicDescription(desc)
+                                            let sample_rate = basic!.pointee.mSampleRate
+                                            //print("SAMPLE RATE AFTER \(sample_rate)")
+*/
+                                            
                                             // move the atom
-                                            self.rewriteAudioFile(audioUrl: audiourl3, outputUrl: audiourl4, completion: { (success:Bool, error:String?) in
+                                            self.rewriteAudioFile(audioUrl: audiourl2, outputUrl: audiourl4, completion: { (success:Bool, error:String?) in
                                                 if success {
                                                     
                                                     
                                                     self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourl4, outputUrl: videourl, sampleRate: sample_rate, completion: { (success:Bool, error:String?) in
                                                         
-                                                        print("DONE MERGE \(videourl)")
+                                                        //print("DONE MERGE \(videourl)")
                                                         
                                                         DispatchQueue.main.async {
-                                                            print("ADD ALBUM \(album.asset!)")
+                                                            //print("ADD ALBUM \(album.asset!)")
                                                             
+                                                            let asset = AVAsset(url: videourl)
+                                                            let aAudioAssetTrack : AVAssetTrack = asset.tracks(withMediaType: AVMediaType.audio)[0]
+                                                            let desc = aAudioAssetTrack.formatDescriptions[0] as! CMAudioFormatDescription
+                                                            let basic = CMAudioFormatDescriptionGetStreamBasicDescription(desc)
+                                                            let sample_rate = basic!.pointee.mSampleRate
+                                                            //print("SAMPLE RATE VIDEO \(sample_rate)")
+
                                                             
                                                             self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
                                                                 if suc {
@@ -368,7 +389,7 @@ class CCViewController: UIViewController {
                                                                         let realm = try! Realm()
                                                                         try! realm.write {
                                                                             enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                            print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                            //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                                                                         }
                                                                         completion(true,nil)
                                                                     }
@@ -379,7 +400,7 @@ class CCViewController: UIViewController {
                                                                     
                                                                     self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
                                                                         
-                                                                        print("CC ALBUM \(clearcloudalbum)")
+                                                                        //print("CC ALBUM \(clearcloudalbum)")
                                                                         self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
                                                                             
                                                                             if suc {
@@ -393,7 +414,7 @@ class CCViewController: UIViewController {
                                                                                     let realm = try! Realm()
                                                                                     try! realm.write {
                                                                                         enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                                        print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                                        //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                                                                                     }
                                                                                     completion(true,nil)
                                                                                 }
@@ -423,11 +444,11 @@ class CCViewController: UIViewController {
                                                 }
                                                 
                                             })
-                                            
+                                       /*
                                         } else {
                                             completion(false,error)
                                         }
-                                    })
+                                    })*/
 
                                     
                                     
@@ -439,11 +460,13 @@ class CCViewController: UIViewController {
                                         
                                         let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
                                             (result : UIAlertAction) -> Void in
-                                            print("OK")
+                                            //print("OK")
+                                           
+                                            /*
                                             let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                                             let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
                                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                                            appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                                            appDelegate.sideMenuController.present(nav, animated: true, completion: nil)*/
                                         }
                                         
                                         alertController.addAction(okAction)
@@ -481,7 +504,7 @@ class CCViewController: UIViewController {
                                    // BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
 
                                     BabbleLabsApi.shared.convertAudio(filepath: wavurl.path, email: LoginManager.shared.getUsername()!, destination: audiourlwav) { (success:Bool, error:ServerError? ) in
-                                        print("POST SUCCESS \(success) error \(error)")
+                                        //print("POST SUCCESS \(success) error \(error)")
                                         if (success) {
                                             
                                             
@@ -489,10 +512,10 @@ class CCViewController: UIViewController {
                                             
                                             self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourlwav, outputUrl: videourl, completion: { (success:Bool, error:String?) in
                                              
-                                                print("DONE MERGE \(videourl)")
+                                                //print("DONE MERGE \(videourl)")
 
                                                 DispatchQueue.main.async {
-                                                    print("ADD ALBUM \(album.asset!)")
+                                                    //print("ADD ALBUM \(album.asset!)")
 
                                                     
                                                     self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
@@ -507,7 +530,7 @@ class CCViewController: UIViewController {
                                                                 let realm = try! Realm()
                                                                 try! realm.write {
                                                                     enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                    print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                    //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                                                                 }
                                                                 completion(true,nil)
                                                             }
@@ -518,7 +541,7 @@ class CCViewController: UIViewController {
                                                             
                                                             self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
                                                                 
-                                                                print("CC ALBUM \(clearcloudalbum)")
+                                                                //print("CC ALBUM \(clearcloudalbum)")
                                                                 self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
                                                                     
                                                                     if suc {
@@ -532,7 +555,7 @@ class CCViewController: UIViewController {
                                                                             let realm = try! Realm()
                                                                             try! realm.write {
                                                                                 enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                                print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                                //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                                                                             }
                                                                             completion(true,nil)
                                                                         }
@@ -608,8 +631,8 @@ class CCViewController: UIViewController {
                 let url = docsDir.appendingPathComponent(path!)
                 
                 
-                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false) { (success:Bool, error:ServerError?, trialover:Bool ) in
-                    print("POST SUCCESS \(success) error \(error)")
+                BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false, sampleRate:nil) { (success:Bool, error:ServerError?, trialover:Bool ) in
+                    //print("POST SUCCESS \(success) error \(error)")
                     if (success) {
                         DispatchQueue.main.async {
                             let realm = try! Realm()
@@ -626,7 +649,7 @@ class CCViewController: UIViewController {
                             
                             let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
                                 (result : UIAlertAction) -> Void in
-                                print("OK")
+                                //print("OK")
                                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
                                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -652,7 +675,7 @@ class CCViewController: UIViewController {
                 guard (phasset.mediaType == PHAssetMediaType.video)
                     
                     else {
-                        print("Not a valid video media type")
+                        //print("Not a valid video media type")
                         return
                 }
                 
@@ -669,7 +692,7 @@ class CCViewController: UIViewController {
                 
                 let uuid = UUID().uuidString
                 
-                print("BEFORE REQUEST ASSET")
+                //print("BEFORE REQUEST ASSET")
                 PHCachingImageManager().requestAVAsset(forVideo: phasset, options: nil, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
                     if let avAsset = asset {
                         
@@ -678,13 +701,13 @@ class CCViewController: UIViewController {
                         let docsDir = dirPaths.first!
                         let newDir = docsDir.appendingPathComponent(uuid)
                         // let audiourl = newDir.appendingPathComponent("audio.m4a")
-                        // print("audiourl \(audiourl)")
+                        // //print("audiourl \(audiourl)")
                         
                         //let testurl = URL(fileURLWithPath: audiourl.path)
-                        //print("testurl \(testurl)")
+                        ////print("testurl \(testurl)")
                         
                         let audiourl : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/\(uuid).m4a")
-                        print("audiourl \(audiourl)")
+                        //print("audiourl \(audiourl)")
                         
                         //let audiourl2 = newDir.appendingPathComponent("enhanced.mp3")
                         //let videourl = newDir.appendingPathComponent("final.mp4")
@@ -707,7 +730,7 @@ class CCViewController: UIViewController {
                          do {
                          try video.write(to: testurl)
                          } catch {
-                         print("ZZZZZ \(error)")
+                         //print("ZZZZZ \(error)")
                          }
                          
                          
@@ -716,23 +739,23 @@ class CCViewController: UIViewController {
                         
                         
                         
-                        print("BEFORE WRITE AUDIO")
+                        //print("BEFORE WRITE AUDIO")
                         
                         
                         
                         
                         avAsset.writeAudioTrack(to: audiourl, success: {
-                            print("WROTE AUDIO \(audiourl)")
+                            //print("WROTE AUDIO \(audiourl)")
                             
                             
                             
                             
                             self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourl, outputUrl: videourl, sampleRate:0, completion: { (success:Bool, error:String?) in
                                 
-                                print("DONE MERGE \(videourl)")
+                                //print("DONE MERGE \(videourl)")
                                 
                                 DispatchQueue.main.async {
-                                    print("ADD ALBUM \(album.asset!)")
+                                    //print("ADD ALBUM \(album.asset!)")
                                     
                                     
                                     self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
@@ -747,7 +770,7 @@ class CCViewController: UIViewController {
                                                 let realm = try! Realm()
                                                 try! realm.write {
                                                     enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                    print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                    //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                                                 }
                                                 completion(true,nil)
                                             }
@@ -758,7 +781,7 @@ class CCViewController: UIViewController {
                                             
                                             self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
                                                 
-                                                print("CC ALBUM \(clearcloudalbum)")
+                                                //print("CC ALBUM \(clearcloudalbum)")
                                                 self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
                                                     
                                                     if suc {
@@ -772,7 +795,7 @@ class CCViewController: UIViewController {
                                                             let realm = try! Realm()
                                                             try! realm.write {
                                                                 enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                                                                print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                                                                //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                                                             }
                                                             completion(true,nil)
                                                         }
@@ -808,10 +831,10 @@ class CCViewController: UIViewController {
                             /*
                             
                             BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:true) { (success:Bool, error:ServerError?, trialover:Bool ) in
-                                print("POST SUCCESS \(success) error \(error)")
+                                //print("POST SUCCESS \(success) error \(error)")
                                 if (success) {
                                     
-                                    print("ENHANCED AUDIO \(audiourl2)")
+                                    //print("ENHANCED AUDIO \(audiourl2)")
                                     
                                     
                                     do {
@@ -819,7 +842,7 @@ class CCViewController: UIViewController {
                                         let fileSize = resources.fileSize!
                                         print ("ENHANCED AUDIO SIZE \(fileSize)")
                                     } catch {
-                                        print("Error: \(error)")
+                                        //print("Error: \(error)")
                                     }
                                     
 
@@ -831,7 +854,7 @@ class CCViewController: UIViewController {
                                         
                                         let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
                                             (result : UIAlertAction) -> Void in
-                                            print("OK")
+                                            //print("OK")
                                             let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                                             let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
                                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -873,7 +896,7 @@ class CCViewController: UIViewController {
                              // BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2) { (success:Bool, error:ServerError? ) in
                              
                              BabbleLabsApi.shared.convertAudio(filepath: wavurl.path, email: LoginManager.shared.getUsername()!, destination: audiourlwav) { (success:Bool, error:ServerError? ) in
-                             print("POST SUCCESS \(success) error \(error)")
+                             //print("POST SUCCESS \(success) error \(error)")
                              if (success) {
                              
                              
@@ -881,10 +904,10 @@ class CCViewController: UIViewController {
                              
                              self.mergeFilesWithUrl(aVideoAsset: avAsset, audioUrl: audiourlwav, outputUrl: videourl, completion: { (success:Bool, error:String?) in
                              
-                             print("DONE MERGE \(videourl)")
+                             //print("DONE MERGE \(videourl)")
                              
                              DispatchQueue.main.async {
-                             print("ADD ALBUM \(album.asset!)")
+                             //print("ADD ALBUM \(album.asset!)")
                              
                              
                              self.addToAlbum(videourl: videourl, album: album.asset!, completion: { (suc:Bool, err:String?) in
@@ -899,7 +922,7 @@ class CCViewController: UIViewController {
                              let realm = try! Realm()
                              try! realm.write {
                              enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                             print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                             //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                              }
                              completion(true,nil)
                              }
@@ -910,7 +933,7 @@ class CCViewController: UIViewController {
                              
                              self.getClearCloudAlbum(completion: { (clearcloudalbum:PHAssetCollection?) in
                              
-                             print("CC ALBUM \(clearcloudalbum)")
+                             //print("CC ALBUM \(clearcloudalbum)")
                              self.addToAlbum(videourl: videourl, album: clearcloudalbum, completion: { (suc:Bool, err:String?) in
                              
                              if suc {
@@ -924,7 +947,7 @@ class CCViewController: UIViewController {
                              let realm = try! Realm()
                              try! realm.write {
                              enhancedVideo!.enhanced_video_id = fetchResult?.localIdentifier
-                             print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
+                             //print("UPDATED ENHANCED VIDEO ID -->\(enhancedVideo!.enhanced_video_id)")
                              }
                              completion(true,nil)
                              }
@@ -999,12 +1022,12 @@ class CCViewController: UIViewController {
                 //albumChangeRequest!.addAssets([assetPlaceholder!] as NSFastEnumeration)
                 
             }, completionHandler: { success, error in
-                print("try added video to album \(album) success = \(success) error=\(error)")
+                //print("try added video to album \(album) success = \(success) error=\(error)")
                 if success {
                     completion(true,nil)
                 
                 } else {
-                    print("success = \(success) error=\(error!.localizedDescription)")
+                    //print("success = \(success) error=\(error!.localizedDescription)")
                     
                     
                     
@@ -1057,7 +1080,7 @@ class CCViewController: UIViewController {
             },
                                                    completionHandler: {(success:Bool, error:Error!)in
                                                     if(success){
-                                                        print("Successfully created folder")
+                                                        //print("Successfully created folder")
                                                         let collection:PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
                                                         if let first_Obj:AnyObject = collection.firstObject{
                                                             //found the album
@@ -1072,7 +1095,7 @@ class CCViewController: UIViewController {
                                                             completion(album)
                                                         }*/
                                                     }else{
-                                                        print("Error creating folder")
+                                                        //print("Error creating folder")
                                                         completion(nil)
                                                     }
             })
@@ -1142,6 +1165,7 @@ class CCViewController: UIViewController {
         var options = AKConverter.Options()
         options.format = "m4a"
         options.sampleRate = sample_rate
+        AKLog("Converter sample rate: \(options.sampleRate)")
         options.channels = UInt32(1)
         let br = UInt32(16)
         options.bitRate = br * 1_000
@@ -1157,7 +1181,14 @@ class CCViewController: UIViewController {
         })
     }
     
-    func convertAudioSamplerate2(_ url: URL, outputURL: URL, sample_rate:Double) {
+    func convertAudioSamplerate3(_ audiourl: URL, outputURL: URL, sample_rate:Double, completion:@escaping ((Bool, String?) -> Void)) {
+        var engine = AVAudioEngine()
+
+
+    }
+
+    
+    func convertAudioSamplerate2(_ url: URL, outputURL: URL, sample_rate:Double, completion:@escaping ((Bool, String?) -> Void)) {
         var error : OSStatus = noErr
         var destinationFile: ExtAudioFileRef? = nil
         var sourceFile : ExtAudioFileRef? = nil
@@ -1191,19 +1222,19 @@ class CCViewController: UIViewController {
             nil,
             AudioFileFlags.eraseFile.rawValue,
             &destinationFile)
-        print("Error 1 in convertAudio: \(error.description)")
+        //print("Error 1 in convertAudio: \(error.description)")
         
         error = ExtAudioFileSetProperty(sourceFile!,
                                         kExtAudioFileProperty_ClientDataFormat,
                                         thePropertySize,
                                         &dstFormat)
-        print("Error 2 in convertAudio: \(error.description)")
+        //print("Error 2 in convertAudio: \(error.description)")
         
         error = ExtAudioFileSetProperty(destinationFile!,
                                         kExtAudioFileProperty_ClientDataFormat,
                                         thePropertySize,
                                         &dstFormat)
-        print("Error 3 in convertAudio: \(error.description)")
+        //print("Error 3 in convertAudio: \(error.description)")
         
         let bufferByteSize : UInt32 = 32768
         var srcBuffer = [UInt8](repeating: 0, count: 32768)
@@ -1225,7 +1256,7 @@ class CCViewController: UIViewController {
             }
             
             error = ExtAudioFileRead(sourceFile!, &numFrames, &fillBufList)
-            print("Error 4 in convertAudio: \(error.description)")
+            //print("Error 4 in convertAudio: \(error.description)")
             
             if(numFrames == 0){
                 error = noErr;
@@ -1234,13 +1265,14 @@ class CCViewController: UIViewController {
             
             sourceFrameOffset += numFrames
             error = ExtAudioFileWrite(destinationFile!, numFrames, &fillBufList)
-            print("Error 5 in convertAudio: \(error.description)")
+            //print("Error 5 in convertAudio: \(error.description)")
         }
         
         error = ExtAudioFileDispose(destinationFile!)
-        print("Error 6 in convertAudio: \(error.description)")
+        //print("Error 6 in convertAudio: \(error.description)")
         error = ExtAudioFileDispose(sourceFile!)
-        print("Error 7 in convertAudio: \(error.description)")
+        //print("Error 7 in convertAudio: \(error.description)")
+        completion(true,nil)
     }
     
     
@@ -1252,14 +1284,14 @@ class CCViewController: UIViewController {
         
         let orientation = self.orientation(forTrack: aVideoAsset)
         let is_portrait = (orientation == .portrait) || (orientation == .portraitUpsideDown)
-        print("IS PORTRAIT \(is_portrait)");
+        //print("IS PORTRAIT \(is_portrait)");
         
         //start merge
         
         //let aVideoAsset : AVAsset = AVAsset(url: videoUrl)
         let aAudioAsset : AVAsset = AVURLAsset(url: audioUrl)
-        print("aVideoAsset \(aVideoAsset) aAudioAsset \(aAudioAsset)")
-        print("aAudioAsset.tracks \(aAudioAsset.tracks)")
+        //print("aVideoAsset \(aVideoAsset) aAudioAsset \(aAudioAsset)")
+        //print("aAudioAsset.tracks \(aAudioAsset.tracks)")
 
         mutableCompositionVideoTrack.append(mixComposition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)!)
         mutableCompositionAudioTrack.append(mixComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)!)
@@ -1267,7 +1299,7 @@ class CCViewController: UIViewController {
         let aVideoAssetTrack : AVAssetTrack = aVideoAsset.tracks(withMediaType: AVMediaType.video)[0]
         let aAudioAssetTrack : AVAssetTrack = aAudioAsset.tracks(withMediaType: AVMediaType.audio)[0]
         
-        print("audio duration \(aAudioAssetTrack.timeRange.duration) video duration \(aVideoAssetTrack.timeRange.duration)")
+        //print("audio duration \(aAudioAssetTrack.timeRange.duration) video duration \(aVideoAssetTrack.timeRange.duration)")
 
         
         do{
@@ -1283,7 +1315,7 @@ class CCViewController: UIViewController {
             //            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAssetTrack.timeRange.duration), ofTrack: aAudioAssetTrack, atTime: kCMTimeZero)
             
         }catch{
-            print("zzError info: \(error)")
+            //print("zzError info: \(error)")
 
         }
         
@@ -1298,7 +1330,7 @@ class CCViewController: UIViewController {
             try firstTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAsset.duration), of: aVideoAsset.tracks(withMediaType: AVMediaType.video)[0], at: kCMTimeZero)
         }
         catch _ {
-            print("Failed to load first track")
+            //print("Failed to load first track")
         }
         
         
@@ -1307,7 +1339,7 @@ class CCViewController: UIViewController {
         assetExport.outputURL = outputUrl
         assetExport.shouldOptimizeForNetworkUse = true
         
-        print("aHERE 11")
+        //print("aHERE 11")
 
         assetExport.exportAsynchronously { () -> Void in
             switch assetExport.status {
@@ -1319,16 +1351,16 @@ class CCViewController: UIViewController {
                 //let assetsLib = ALAssetsLibrary()
                 //assetsLib.writeVideoAtPathToSavedPhotosAlbum(savePathUrl, completionBlock: nil)
                 
-                print("success")
+                //print("success")
                 completion(true,nil)
             case  AVAssetExportSessionStatus.failed:
-                print("failed \(assetExport.error)")
+                //print("failed \(assetExport.error)")
                 completion(false,assetExport.error?.localizedDescription)
             case AVAssetExportSessionStatus.cancelled:
-                print("cancelled \(assetExport.error)")
+                //print("cancelled \(assetExport.error)")
                 completion(false,assetExport.error?.localizedDescription)
             default:
-                print("complete")
+                //print("complete")
                 completion(true,nil)
             }
         }
@@ -1347,7 +1379,7 @@ class CCViewController: UIViewController {
         //let aVideoAsset : AVAsset = AVAsset(url: videoUrl)
         let aAudioAsset : AVAsset = AVURLAsset(url: audioUrl)
         
-        print("aAudioAsset.tracks \(aAudioAsset.tracks)")
+        //print("aAudioAsset.tracks \(aAudioAsset.tracks)")
         
         mutableCompositionAudioTrack.append(mixComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)!)
         
@@ -1366,7 +1398,7 @@ class CCViewController: UIViewController {
             //            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAssetTrack.timeRange.duration), ofTrack: aAudioAssetTrack, atTime: kCMTimeZero)
             
         }catch{
-            print("zzasdadsError info: \(error)")
+            //print("zzasdadsError info: \(error)")
             completion(false,error.localizedDescription)
             return
         }
@@ -1376,7 +1408,7 @@ class CCViewController: UIViewController {
         assetExport.outputURL = outputUrl
         assetExport.shouldOptimizeForNetworkUse = true
         
-        print("bHERE 11")
+        //print("bHERE 11")
         
         assetExport.exportAsynchronously { () -> Void in
             switch assetExport.status {
@@ -1388,16 +1420,16 @@ class CCViewController: UIViewController {
                 //let assetsLib = ALAssetsLibrary()
                 //assetsLib.writeVideoAtPathToSavedPhotosAlbum(savePathUrl, completionBlock: nil)
                 
-                print("success")
+                //print("success")
                 completion(true,nil)
             case  AVAssetExportSessionStatus.failed:
-                print("failed \(assetExport.error)")
+                //print("failed \(assetExport.error)")
                 completion(false,assetExport.error?.localizedDescription)
             case AVAssetExportSessionStatus.cancelled:
-                print("cancelled \(assetExport.error)")
+                //print("cancelled \(assetExport.error)")
                 completion(false,assetExport.error?.localizedDescription)
             default:
-                print("complete")
+                //print("complete")
                 completion(true,nil)
             }
         }

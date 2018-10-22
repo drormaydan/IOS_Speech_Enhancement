@@ -60,7 +60,9 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                                     self.username.isHidden = false
                                     self.email.isHidden = false
                                     self.username.text = "\(profile.firstName!) \(profile.lastName!)"
-                                    self.email.text = LoginManager.shared.getUsername()!
+                                    if let username = LoginManager.shared.getUsername() {
+                                        self.email.text = username
+                                    }
                                 }
                             }
                         }

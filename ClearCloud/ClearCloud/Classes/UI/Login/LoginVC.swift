@@ -41,7 +41,11 @@ class LoginVC: CCViewController {
         }
         
         if let url = URL(string: url_str) {
-            UIApplication.shared.open(url, options: [:])
+            //UIApplication.shared.open(url, options: [:])
+            let registerVC:RegisterVC = RegisterVC(nibName: "RegisterVC", bundle: nil)
+            registerVC.url = url
+            self.navigationController!.pushViewController(registerVC, animated: true)
+            
         }
     }
 

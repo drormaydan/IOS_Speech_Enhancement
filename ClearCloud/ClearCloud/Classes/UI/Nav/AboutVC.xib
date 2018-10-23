@@ -26,7 +26,7 @@
                         <constraint firstAttribute="height" constant="149" id="twN-KR-h5j"/>
                         <constraint firstAttribute="width" constant="300" id="xvd-Hg-7oS"/>
                     </constraints>
-                    <string key="text">BabbleLabs is revolutionizing the communication among humans and machines by enhancing speech quality, accuracy, and personalization — to power breakthrough voice applications and devices.</string>
+                    <string key="text">BabbleLabs enhances understanding by people and machines. Through speech science and deep learning, we boost speech quality, intelligibility, and personalization. Our software solutions power better audio and video content, services, and devices.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>

@@ -36,10 +36,10 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
         self.tableView.backgroundView = nil
         
         if asset.type == .video {
-            //print("ASSET ID \(self.asset.asset!.localIdentifier)")
+            print("ASSET ID \(self.asset.asset!.localIdentifier)")
             let realm = try! Realm()
             self.enhancedVideo = realm.objects(CCEnhancedVideo.self).filter("(original_video_id = %@) OR (enhanced_video_id = %@)", self.asset.asset!.localIdentifier, self.asset.asset!.localIdentifier).first
-            //print("self.enhancedVideo \(self.enhancedVideo)")
+            print("self.enhancedVideo \(self.enhancedVideo)")
             
             
             if self.enhancedVideo != nil {
@@ -49,6 +49,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [original_video_id], options: .none)
                     if phassets.count == 0 {
                         // original was deleted
+                        print("original was deleted")
                         let realm = try! Realm()
                         try! realm.write {
                             self.enhancedVideo!.original_video_id = nil
@@ -60,6 +61,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [enhanced_video_id], options: .none)
                     if phassets.count == 0 {
                         // enhanced was deleted
+                        print("enhanced was deleted")
                         let realm = try! Realm()
                         try! realm.write {
                             self.enhancedVideo!.enhanced_video_id = nil
@@ -74,14 +76,16 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                         self.showError(message: "The enhanced and original videos have been deleted outside the app.")
                         self.navigationController!.popViewController(animated: true)
                     }
-                } else if self.enhancedVideo!.enhanced_video_id != nil {
+                } else if self.enhancedVideo!.enhanced_video_id != nil && self.enhancedVideo!.original_video_id == nil {
                     // make enhanced the original
                     let realm = try! Realm()
                     try! realm.write {
+                        print("set enhanced to orig")
                         self.enhancedVideo!.original_video_id = self.enhancedVideo!.enhanced_video_id
                     }
                 }
-                
+                print("2 self.enhancedVideo \(self.enhancedVideo)")
+
             }
             
         } else {
@@ -257,8 +261,11 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
 
                     cell.asset = self.asset.asset!
                 } else {
-                    ////print("TRY FETCH \(self.enhancedVideo!.original_video_id!)")
+                    print("TRY FETCH \(self.enhancedVideo!.original_video_id!)")
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [self.enhancedVideo!.original_video_id!], options: .none)
+                    
+                    print("ORIG \(phassets.count)")
+
                     if phassets.count > 0 {
                         cell.asset = phassets[0]
                     } else {
@@ -269,6 +276,7 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             } else {
                 if let enhanced_video_id = self.enhancedVideo!.enhanced_video_id {
                     let phassets = PHAsset.fetchAssets(withLocalIdentifiers: [enhanced_video_id], options: .none)
+                    print("ENHANCED \(phassets.count)")
                     if phassets.count > 0 {
                         cell.asset = phassets[0]
                     }

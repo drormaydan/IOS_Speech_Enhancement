@@ -40,8 +40,10 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                                                object:nil, queue:nil,
                                                using:catchNotification)
         
+
     }
     
+
     func catchNotification(notification: Notification) -> Void {
         DispatchQueue.main.async {
             if LoginManager.shared.logged_in {
@@ -91,10 +93,29 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        if LoginManager.shared.logged_in {
+            let defaults: UserDefaults = UserDefaults.standard
+            let trial = defaults.bool(forKey: "trial")
+            if !trial {
+                return 2
+            }
+
+        }
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            if LoginManager.shared.logged_in {
+                let defaults: UserDefaults = UserDefaults.standard
+                let trial = defaults.bool(forKey: "trial")
+                if !trial {
+                    return 1
+                }
+                
+            }
+            return 0
+        }
         
         return self.menus.count
     }
@@ -102,19 +123,23 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:NavCell = self.tableView.dequeueReusableCell(withIdentifier: "NAV_CELL", for: indexPath) as! NavCell
         
-        cell.navimage.image = self.icons[indexPath.row]
-        cell.navlabel.text = self.menus[indexPath.row]
-        
-        if self.menus[indexPath.row] == "Logout" {
-            let defaults: UserDefaults = UserDefaults.standard
-            let trial = defaults.bool(forKey: "trial")
-            if trial {
-                cell.navlabel.text = "Login"
-            } else if !LoginManager.shared.logged_in {
-                cell.navlabel.text = "Login"
+        if indexPath.section == 0 {
+            cell.navlabel.text = "Add Money"
+            cell.navimage.image = UIImage.init(named: "payment")!.withRenderingMode(.alwaysOriginal)
+        } else {
+            cell.navimage.image = self.icons[indexPath.row]
+            cell.navlabel.text = self.menus[indexPath.row]
+            
+            if self.menus[indexPath.row] == "Logout" {
+                let defaults: UserDefaults = UserDefaults.standard
+                let trial = defaults.bool(forKey: "trial")
+                if trial {
+                    cell.navlabel.text = "Login"
+                } else if !LoginManager.shared.logged_in {
+                    cell.navlabel.text = "Login"
+                }
             }
         }
-        
         return cell
     }
     
@@ -122,36 +147,48 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
         
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         
-        
-        switch indexPath.row {
-        case 0:
-            if let url = URL(string: "mailto:support@babblelabs.com?subject=Babblelabs%20iPhone%20App%20Support") {
-                UIApplication.shared.open(url, options: [:])
-            }
-        case 1:
-            let albumsVC:AboutVC = AboutVC(nibName: "AboutVC", bundle: nil)
-            let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
-        case 2:
-            let defaults: UserDefaults = UserDefaults.standard
-            let trial = defaults.bool(forKey: "trial")
-            if trial || !LoginManager.shared.logged_in {
+        if indexPath.section == 0 {
+            ClearCloudProducts.store.requestProducts{ [weak self] success, products in
+                guard let self = self else { return }
+                if success {
+                    print("PRODUCTS \(products)")
+                    let product = products![0]
+                    ClearCloudProducts.store.buyProduct(product)
+
+                }
                 
-                let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+            }
+
+        } else {
+            switch indexPath.row {
+            case 0:
+                if let url = URL(string: "mailto:support@babblelabs.com?subject=Babblelabs%20iPhone%20App%20Support") {
+                    UIApplication.shared.open(url, options: [:])
+                }
+            case 1:
+                let albumsVC:AboutVC = AboutVC(nibName: "AboutVC", bundle: nil)
                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
-            } else {
-                
-                LoginManager.shared.logout()
-                NotificationCenter.default.post(name:Notification.Name(rawValue:"LoginNotification"),
-                                                object: nil,
-                                                userInfo: nil)
+            case 2:
+                let defaults: UserDefaults = UserDefaults.standard
+                let trial = defaults.bool(forKey: "trial")
+                if trial || !LoginManager.shared.logged_in {
+                    
+                    let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                    let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                } else {
+                    
+                    LoginManager.shared.logout()
+                    NotificationCenter.default.post(name:Notification.Name(rawValue:"LoginNotification"),
+                                                    object: nil,
+                                                    userInfo: nil)
+                }
+            default:
+                break
             }
-        default:
-            break
         }
-        
     }
 }

@@ -226,6 +226,21 @@ class CCViewController: UIViewController {
                                 appDelegate.sideMenuController.present(nav, animated: true, completion: nil)*/
                             }
                             
+                            let defaults: UserDefaults = UserDefaults.standard
+                            let trial = defaults.bool(forKey: "trial")
+                            if !trial {
+                                let addMoneyAction = UIAlertAction(title:NSLocalizedString("Add Money", comment: ""), style: UIAlertActionStyle.default) {
+                                    (result : UIAlertAction) -> Void in
+                                    ClearCloudProducts.store.requestProducts{ [weak self] success, products in
+                                        if success {
+                                            print("PRODUCTS \(products)")
+                                            let product = products![0]
+                                            ClearCloudProducts.store.buyProduct(product)
+                                        }
+                                    }
+                                }
+                                alertController.addAction(addMoneyAction)
+                            }
                             alertController.addAction(okAction)
                             self.present(alertController, animated: true, completion: nil)
                             completion(false,error!.getMessage()!)
@@ -468,6 +483,23 @@ class CCViewController: UIViewController {
                                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
                                             appDelegate.sideMenuController.present(nav, animated: true, completion: nil)*/
                                         }
+                                        
+                                        let defaults: UserDefaults = UserDefaults.standard
+                                        let trial = defaults.bool(forKey: "trial")
+                                        if !trial {
+                                            let addMoneyAction = UIAlertAction(title:NSLocalizedString("Add Money", comment: ""), style: UIAlertActionStyle.default) {
+                                                (result : UIAlertAction) -> Void in
+                                                ClearCloudProducts.store.requestProducts{ [weak self] success, products in
+                                                    if success {
+                                                        print("PRODUCTS \(products)")
+                                                        let product = products![0]
+                                                        ClearCloudProducts.store.buyProduct(product)
+                                                    }
+                                                }
+                                            }
+                                            alertController.addAction(addMoneyAction)
+                                        }
+
                                         
                                         alertController.addAction(okAction)
                                         self.present(alertController, animated: true, completion: nil)

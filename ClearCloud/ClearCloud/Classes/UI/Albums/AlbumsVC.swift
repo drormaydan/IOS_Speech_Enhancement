@@ -60,8 +60,8 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
                                                 userInfo: nil)
                 break
             case .error:
-                defaults.set(false, forKey: "trial")
-                defaults.synchronize()
+                //defaults.set(false, forKey: "trial")
+                //defaults.synchronize()
 
                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)

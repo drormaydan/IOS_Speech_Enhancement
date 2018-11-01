@@ -18,6 +18,10 @@
 		0D10895B21654C6D004597F1 /* OktaUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895A21654C6D004597F1 /* OktaUserProfile.swift */; };
 		0D3775B3217D5DDA00FB8CDD /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3775B1217D5DDA00FB8CDD /* RegisterVC.swift */; };
 		0D3775B4217D5DDA00FB8CDD /* RegisterVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D3775B2217D5DDA00FB8CDD /* RegisterVC.xib */; };
+		0D627E1421893A740085047D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D627E1321893A740085047D /* StoreKit.framework */; };
+		0D627E1621893AA60085047D /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E1521893AA60085047D /* IAPHelper.swift */; };
+		0D627E1821893B9B0085047D /* ClearCloudProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E1721893B9B0085047D /* ClearCloudProducts.swift */; };
+		0D627E1A218A88940085047D /* AppleReceiptRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E19218A88940085047D /* AppleReceiptRequest.swift */; };
 		0D937B562151990A00A240A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B552151990A00A240A1 /* AppDelegate.swift */; };
 		0D937B582151990A00A240A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B572151990A00A240A1 /* ViewController.swift */; };
 		0D937B5B2151990A00A240A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D937B592151990A00A240A1 /* Main.storyboard */; };
@@ -84,6 +88,10 @@
 		0D10895A21654C6D004597F1 /* OktaUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaUserProfile.swift; sourceTree = "<group>"; };
 		0D3775B1217D5DDA00FB8CDD /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		0D3775B2217D5DDA00FB8CDD /* RegisterVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RegisterVC.xib; sourceTree = "<group>"; };
+		0D627E1321893A740085047D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		0D627E1521893AA60085047D /* IAPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
+		0D627E1721893B9B0085047D /* ClearCloudProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCloudProducts.swift; sourceTree = "<group>"; };
+		0D627E19218A88940085047D /* AppleReceiptRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleReceiptRequest.swift; sourceTree = "<group>"; };
 		0D937B522151990A00A240A1 /* ClearCloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearCloud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D937B552151990A00A240A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D937B572151990A00A240A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -134,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E2269042446DADEDA30FF2A /* Pods_ClearCloud.framework in Frameworks */,
+				0D627E1421893A740085047D /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +271,8 @@
 			children = (
 				0D937B8C21519E7800A240A1 /* CCViewController.swift */,
 				0D10881E2162E5EC004597F1 /* ClearCloud-Bridging-Header.h */,
+				0D627E1521893AA60085047D /* IAPHelper.swift */,
+				0D627E1721893B9B0085047D /* ClearCloudProducts.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -324,6 +335,7 @@
 		0DB57B652154831900EFBDD6 /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				0D627E19218A88940085047D /* AppleReceiptRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -352,6 +364,7 @@
 		882B00F05A2AC795826F4083 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D627E1321893A740085047D /* StoreKit.framework */,
 				1EB20CAE0755E73EB971FB56 /* Pods_ClearCloud.framework */,
 			);
 			name = Frameworks;
@@ -440,6 +453,9 @@
 						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
 								enabled = 1;
 							};
 						};
@@ -620,10 +636,12 @@
 				0DB57B6C2154846F00EFBDD6 /* LoginManager.swift in Sources */,
 				0D10895721654B09004597F1 /* OktaApi.swift in Sources */,
 				0D10895921654C25004597F1 /* UserResponse.swift in Sources */,
+				0D627E1621893AA60085047D /* IAPHelper.swift in Sources */,
 				0D937B912151A17100A240A1 /* AlbumsVC.swift in Sources */,
 				0DB57B622151E5D400EFBDD6 /* CCEnhancedVideo.swift in Sources */,
 				0D937BA02151D24A00A240A1 /* AlbumDetailVC.swift in Sources */,
 				0D3775B3217D5DDA00FB8CDD /* RegisterVC.swift in Sources */,
+				0D627E1A218A88940085047D /* AppleReceiptRequest.swift in Sources */,
 				0DB57B5C2151DC0600EFBDD6 /* AudioCaptureVC.swift in Sources */,
 				0D937B562151990A00A240A1 /* AppDelegate.swift in Sources */,
 				0DB57B602151E5BC00EFBDD6 /* CCAudio.swift in Sources */,
@@ -634,6 +652,7 @@
 				0DB57B682154832C00EFBDD6 /* LoginResponse.swift in Sources */,
 				0D10895021651662004597F1 /* AboutVC.swift in Sources */,
 				0DB57B722155790F00EFBDD6 /* ItemDetailVC.swift in Sources */,
+				0D627E1821893B9B0085047D /* ClearCloudProducts.swift in Sources */,
 				0D10895421651672004597F1 /* LoginVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

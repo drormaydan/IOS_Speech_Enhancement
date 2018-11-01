@@ -117,6 +117,61 @@ class BabbleLabsApi: NSObject {
         }
     }
 
+    
+    func submitReceipt(apple_request:AppleReceiptRequest, completionHandler: @escaping (ServerError?, LoginResponse?) -> Void) {
+        if let reachability = reachability, reachability.isReachable {
+            if let sessionToken = sessionToken {
+                
+                let urlString = "\(API_URL)payments/api/appleReceipt"
+                let json = apple_request.toJSONString(prettyPrint: true)
+
+                let url = URL(string: urlString)!
+                let jsonData = json!.data(using: .utf8, allowLossyConversion: false)!
+                
+                var request = URLRequest(url: url)
+                request.httpMethod = HTTPMethod.post.rawValue
+                request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+                request.httpBody = jsonData
+                request.addValue("Bearer \(sessionToken)", forHTTPHeaderField: "Authorization")
+                
+                alamoFireManager!.request(request).responseJSON(completionHandler: {
+                    
+                    response in
+                    let resp = String(decoding: response.data!, as: UTF8.self)
+                    print("RESPONSE -->\(resp)")
+                    
+                    switch response.result {
+                    case .success:
+                        if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                            print("submitReceipt json --> \(utf8Text)")
+                            let serverResponse:LoginResponse = LoginResponse(JSONString: utf8Text)!
+                            completionHandler(nil, serverResponse)
+
+                            /*
+                            if let success = serverResponse.success, success {
+                                completionHandler(nil, serverResponse)
+                            } else {
+                                let serverError = ServerError.init(WithMessage: serverResponse.message!)
+                                completionHandler(serverError, nil)
+                            }*/
+                        } else {
+                            completionHandler(ServerError.defaultError, nil)
+                        }
+                    case .failure:
+                        //TMP
+                        //let resp = ServerResponse()
+                        //resp.success = true
+                        //completionHandler(nil, resp)
+                        
+                        completionHandler(ServerError.defaultError, nil)
+                    }
+                })
+            }
+        } else {
+            completionHandler(ServerError.noInternet, nil)
+        }
+    }
+    
     func convertAudio(filepath: String, email: String, destination: URL, video:Bool, sampleRate:Double?, completion:@escaping ((Bool, ServerError?, Bool) -> Void)) {
         if let reachability = reachability, reachability.isReachable {
             
@@ -222,7 +277,7 @@ class BabbleLabsApi: NSObject {
                     if reason.contains("You have exceeded your") {
                         let defaults: UserDefaults = UserDefaults.standard
                         defaults.set(true, forKey: "did_trial")
-                        defaults.set(false, forKey: "trial")
+                        //defaults.set(false, forKey: "trial")
                         defaults.synchronize()
                        // LoginManager.shared.logout()
                         completion(false, ServerError.init(WithMessage: reason), true)

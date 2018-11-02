@@ -22,6 +22,7 @@
 		0D627E1621893AA60085047D /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E1521893AA60085047D /* IAPHelper.swift */; };
 		0D627E1821893B9B0085047D /* ClearCloudProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E1721893B9B0085047D /* ClearCloudProducts.swift */; };
 		0D627E1A218A88940085047D /* AppleReceiptRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E19218A88940085047D /* AppleReceiptRequest.swift */; };
+		0D627E1E218BE3F90085047D /* EntitlementsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E1D218BE3F90085047D /* EntitlementsResponse.swift */; };
 		0D937B562151990A00A240A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B552151990A00A240A1 /* AppDelegate.swift */; };
 		0D937B582151990A00A240A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B572151990A00A240A1 /* ViewController.swift */; };
 		0D937B5B2151990A00A240A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D937B592151990A00A240A1 /* Main.storyboard */; };
@@ -92,6 +93,7 @@
 		0D627E1521893AA60085047D /* IAPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
 		0D627E1721893B9B0085047D /* ClearCloudProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCloudProducts.swift; sourceTree = "<group>"; };
 		0D627E19218A88940085047D /* AppleReceiptRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleReceiptRequest.swift; sourceTree = "<group>"; };
+		0D627E1D218BE3F90085047D /* EntitlementsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementsResponse.swift; sourceTree = "<group>"; };
 		0D937B522151990A00A240A1 /* ClearCloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearCloud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D937B552151990A00A240A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D937B572151990A00A240A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 				0DB57B672154832C00EFBDD6 /* LoginResponse.swift */,
 				0D10895821654C25004597F1 /* UserResponse.swift */,
 				0D10895A21654C6D004597F1 /* OktaUserProfile.swift */,
+				0D627E1D218BE3F90085047D /* EntitlementsResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				0DB57B5C2151DC0600EFBDD6 /* AudioCaptureVC.swift in Sources */,
 				0D937B562151990A00A240A1 /* AppDelegate.swift in Sources */,
 				0DB57B602151E5BC00EFBDD6 /* CCAudio.swift in Sources */,
+				0D627E1E218BE3F90085047D /* EntitlementsResponse.swift in Sources */,
 				0D937B952151A18100A240A1 /* LeftNavVC.swift in Sources */,
 				0D937B9C2151C92900A240A1 /* Album.swift in Sources */,
 				0DB57B6A2154839200EFBDD6 /* ServerError.swift in Sources */,

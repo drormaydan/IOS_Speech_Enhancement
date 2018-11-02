@@ -242,8 +242,10 @@ class CCViewController: UIViewController {
                                 alertController.addAction(addMoneyAction)
                             }
                             alertController.addAction(okAction)
-                            self.present(alertController, animated: true, completion: nil)
-                            completion(false,error!.getMessage()!)
+                            DispatchQueue.main.async {
+                                self.present(alertController, animated: true, completion: nil)
+                                completion(false,error!.getMessage()!)
+                            }
                             
                         } else {
                             completion(false,error!.getMessage()!)
@@ -345,6 +347,11 @@ class CCViewController: UIViewController {
                             
                             BabbleLabsApi.shared.convertAudio(filepath: audiourl.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:true, sampleRate:sample_rate) { (success:Bool, error:ServerError?, trialover:Bool ) in
                                 //print("POST SUCCESS \(success) error \(error)")
+                                NotificationCenter.default.post(name:Notification.Name(rawValue:"UpdateLimitNotification"),
+                                                                object: nil,
+                                                                userInfo: nil)
+
+                                
                                 if (success) {
                                     
                                     //print("ENHANCED AUDIO \(audiourl2)")
@@ -502,9 +509,10 @@ class CCViewController: UIViewController {
 
                                         
                                         alertController.addAction(okAction)
-                                        self.present(alertController, animated: true, completion: nil)
-                                        completion(false,error!.getMessage()!)
-
+                                        DispatchQueue.main.async {
+                                            self.present(alertController, animated: true, completion: nil)
+                                            completion(false,error!.getMessage()!)
+                                        }
                                         
                                     } else {
                                         self.showError(message: error!.getMessage()!)
@@ -665,6 +673,9 @@ class CCViewController: UIViewController {
                 
                 BabbleLabsApi.shared.convertAudio(filepath: url.path, email: LoginManager.shared.getUsername()!, destination: audiourl2, video:false, sampleRate:nil) { (success:Bool, error:ServerError?, trialover:Bool ) in
                     //print("POST SUCCESS \(success) error \(error)")
+                    NotificationCenter.default.post(name:Notification.Name(rawValue:"UpdateLimitNotification"),
+                                                    object: nil,
+                                                    userInfo: nil)
                     if (success) {
                         DispatchQueue.main.async {
                             let realm = try! Realm()
@@ -689,8 +700,10 @@ class CCViewController: UIViewController {
                             }
                             
                             alertController.addAction(okAction)
-                            self.present(alertController, animated: true, completion: nil)
-                            completion(false,error!.getMessage()!)
+                            DispatchQueue.main.async {
+                                self.present(alertController, animated: true, completion: nil)
+                                completion(false,error!.getMessage()!)
+                            }
                             
                         } else {
                             completion(false,error!.getMessage()!)

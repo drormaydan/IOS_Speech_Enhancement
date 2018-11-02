@@ -133,13 +133,14 @@ extension IAPHelper: SKPaymentTransactionObserver {
             
             let base64Encoded = receiptData.base64EncodedString()
 
-
             print("base64Encoded \(base64Encoded)")
             let req = AppleReceiptRequest()
             req.receiptdata = base64Encoded
             
             BabbleLabsApi.shared.submitReceipt(apple_request: req) { (error:ServerError?, response:LoginResponse?) in
-                
+                NotificationCenter.default.post(name:Notification.Name(rawValue:"UpdateLimitNotification"),
+                                                object: nil,
+                                                userInfo: nil)
             }
         }
 

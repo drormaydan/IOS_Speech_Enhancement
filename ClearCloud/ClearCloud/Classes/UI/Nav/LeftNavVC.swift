@@ -17,6 +17,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     
     let menus = ["Support", "About Us", "Logout"]
     let icons = [UIImage.init(named: "support"), UIImage.init(named: "about"),UIImage.init(named: "logout")]
+    @IBOutlet weak var accountBalance: UILabel!
     
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var username: UILabel!
@@ -35,15 +36,21 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
         
         self.username.isHidden = true
         self.email.isHidden = true
-        
+        self.accountBalance.isHidden = true
         NotificationCenter.default.addObserver(forName:Notification.Name(rawValue:"LoginNotification"),
                                                object:nil, queue:nil,
                                                using:catchNotification)
         
+        NotificationCenter.default.addObserver(forName:Notification.Name(rawValue:"UpdateLimitNotification"),
+                                               object:nil, queue:nil,
+                                               using:limitNotification)
 
     }
-    
 
+    func limitNotification(notification: Notification) -> Void {
+        self.getLimit()
+    }
+    
     func catchNotification(notification: Notification) -> Void {
         DispatchQueue.main.async {
             if LoginManager.shared.logged_in {
@@ -65,6 +72,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                                     if let username = LoginManager.shared.getUsername() {
                                         self.email.text = username
                                     }
+                                    self.getLimit()
                                 }
                             }
                         }
@@ -76,6 +84,27 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
             }
             
             self.tableView.reloadData()
+        }
+    }
+    
+    func getLimit() {
+        BabbleLabsApi.shared.entitlements(email: self.email.text!) { (error:ServerError?, response:EntitlementsResponse?) in
+            if let response = response {
+                if let unbilledUsageInCents = response.unbilledUsageInCents, let customerDollarLimit = response.customerDollarLimit {
+                    let unbilled:Double = Double(unbilledUsageInCents/100)
+                    let limit:Double = Double(customerDollarLimit)
+                
+                    self.accountBalance.isHidden = false
+                    if unbilled > limit {
+                        self.accountBalance.text = "Balance: $0"
+                    } else {
+                        let avail = limit - unbilled
+                        self.accountBalance.text = String(format: "Balance: $%.02f", avail)
+
+                    }
+                }
+                
+            }
         }
     }
     
@@ -93,6 +122,9 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        
+        return 2
+/*
         if LoginManager.shared.logged_in {
             let defaults: UserDefaults = UserDefaults.standard
             let trial = defaults.bool(forKey: "trial")
@@ -101,7 +133,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
             }
 
         }
-        return 1
+        return 1*/
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

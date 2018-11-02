@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LeftNavVC" customModule="ClearCloud" customModuleProvider="target">
             <connections>
+                <outlet property="accountBalance" destination="eno-5s-fKh" id="Ci1-sQ-REC"/>
                 <outlet property="email" destination="rZe-nk-T4F" id="3G4-YZ-3DK"/>
                 <outlet property="tableView" destination="uSM-FM-pYK" id="JZ1-WT-2MV"/>
                 <outlet property="tableheader" destination="iQF-gH-fHu" id="dmy-yW-qT8"/>
@@ -48,7 +49,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C3x-aS-jvm">
-                    <rect key="frame" x="16" y="51" width="79" height="21"/>
+                    <rect key="frame" x="16" y="34" width="79" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="7Ni-nY-H3C"/>
                     </constraints>
@@ -57,9 +58,18 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rZe-nk-T4F">
-                    <rect key="frame" x="16" y="74" width="35" height="17"/>
+                    <rect key="frame" x="16" y="57" width="35" height="17"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="17" id="G4d-Ig-DID"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eno-5s-fKh">
+                    <rect key="frame" x="16" y="77" width="35" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="17" id="1Or-vx-oTT"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -68,10 +78,12 @@
             </subviews>
             <color key="backgroundColor" red="0.16057190299034119" green="0.59230637550354004" blue="0.95108658075332642" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="zPG-HN-1w3" firstAttribute="bottom" secondItem="rZe-nk-T4F" secondAttribute="bottom" constant="9" id="Ad6-57-xzd"/>
+                <constraint firstItem="eno-5s-fKh" firstAttribute="top" secondItem="rZe-nk-T4F" secondAttribute="bottom" constant="3" id="Etf-cV-RXE"/>
                 <constraint firstItem="rZe-nk-T4F" firstAttribute="leading" secondItem="zPG-HN-1w3" secondAttribute="leading" constant="16" id="FTL-8L-mlO"/>
                 <constraint firstItem="rZe-nk-T4F" firstAttribute="top" secondItem="C3x-aS-jvm" secondAttribute="bottom" constant="2" id="dXm-7o-hAE"/>
+                <constraint firstItem="eno-5s-fKh" firstAttribute="leading" secondItem="zPG-HN-1w3" secondAttribute="leading" constant="16" id="gBT-PI-H14"/>
                 <constraint firstItem="C3x-aS-jvm" firstAttribute="leading" secondItem="zPG-HN-1w3" secondAttribute="leading" constant="16" id="owk-DG-duI"/>
+                <constraint firstItem="zPG-HN-1w3" firstAttribute="bottom" secondItem="eno-5s-fKh" secondAttribute="bottom" constant="6" id="tNe-sz-cD0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="zPG-HN-1w3"/>

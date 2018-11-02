@@ -80,6 +80,7 @@ class BabbleLabsApi: NSObject {
         }
     }
     
+    
     func login(userId: String, password: String, completionHandler: @escaping (ServerError?, LoginResponse?) -> Void) {
         if let reachability = reachability, reachability.isReachable {
             
@@ -116,7 +117,33 @@ class BabbleLabsApi: NSObject {
             completionHandler(ServerError.noInternet, nil)
         }
     }
+    // entitlements/api/entitlementMetadata/
 
+    func entitlements(email:String ,completionHandler: @escaping (ServerError?, EntitlementsResponse?) -> Void) {
+        if let reachability = reachability, reachability.isReachable {
+            if let sessionToken = sessionToken {
+                let parameters: Parameters = [:]
+                
+                Alamofire.request("\(API_URL)entitlements/api/entitlementMetadata/\(email)", method: .get, parameters: parameters, headers: ["Authorization" : "Bearer \(sessionToken)"]).validate().responseJSON(completionHandler: {
+                    response in
+                    switch response.result {
+                    case .success:
+                        if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                            print("entitlements --> \(utf8Text)")
+                            let serverResponse:EntitlementsResponse = EntitlementsResponse(JSONString: utf8Text)!
+                            completionHandler(nil, serverResponse)
+                        } else {
+                            completionHandler(ServerError.defaultError, nil)
+                        }
+                    case .failure:
+                        completionHandler(ServerError.defaultError, nil)
+                    }
+                })
+            }
+        } else {
+            completionHandler(ServerError.noInternet, nil)
+        }
+    }
     
     func submitReceipt(apple_request:AppleReceiptRequest, completionHandler: @escaping (ServerError?, LoginResponse?) -> Void) {
         if let reachability = reachability, reachability.isReachable {
@@ -274,7 +301,7 @@ class BabbleLabsApi: NSObject {
                     }
                 } else if httpresponse.statusCode == 403 {
                     let reason:String = httpresponse.allHeaderFields["X-BabbleLabs-Message"] as! String
-                    if reason.contains("You have exceeded your") {
+                    if reason.contains("You have exceeded your") || reason.contains("You have used your complimentary") {
                         let defaults: UserDefaults = UserDefaults.standard
                         defaults.set(true, forKey: "did_trial")
                         //defaults.set(false, forKey: "trial")

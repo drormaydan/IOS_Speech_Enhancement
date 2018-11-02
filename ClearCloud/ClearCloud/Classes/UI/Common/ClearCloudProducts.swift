@@ -10,7 +10,7 @@ import Foundation
 
 public struct ClearCloudProducts {
     
-    public static let MoreMoney = "clearcloud_5"
+    public static let MoreMoney = "com.babblelabs.clearcloud.minutes_5"
     
     private static let productIdentifiers: Set<ProductIdentifier> = [ClearCloudProducts.MoreMoney]
     

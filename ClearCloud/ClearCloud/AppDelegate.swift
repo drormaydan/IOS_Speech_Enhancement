@@ -29,8 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         // disable logging
-        NetworkActivityLogger.shared.level = .debug
-        NetworkActivityLogger.shared.startLogging()
+        //NetworkActivityLogger.shared.level = .debug
+        //NetworkActivityLogger.shared.startLogging()
 
         IQKeyboardManager.shared.enable = true
         UINavigationBar.appearance().barTintColor = UIColor.white

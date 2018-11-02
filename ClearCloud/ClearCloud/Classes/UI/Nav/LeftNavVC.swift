@@ -60,6 +60,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                     self.username.isHidden = false
                     self.username.text = "Free Trial"
                     self.email.isHidden = true
+                    self.getLimit()
                 } else {
                     OktaApi.shared.getUser(email: LoginManager.shared.getUsername()!, completionHandler: { (error:ServerError?, response:UserResponse?) in
                         if let response = response {
@@ -81,6 +82,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
             } else {
                 self.username.isHidden = true
                 self.email.isHidden = true
+                self.accountBalance.isHidden = true
             }
             
             self.tableView.reloadData()
@@ -88,22 +90,24 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func getLimit() {
-        BabbleLabsApi.shared.entitlements(email: self.email.text!) { (error:ServerError?, response:EntitlementsResponse?) in
-            if let response = response {
-                if let unbilledUsageInCents = response.unbilledUsageInCents, let customerDollarLimit = response.customerDollarLimit {
-                    let unbilled:Double = Double(unbilledUsageInCents/100)
-                    let limit:Double = Double(customerDollarLimit)
-                
-                    self.accountBalance.isHidden = false
-                    if unbilled > limit {
-                        self.accountBalance.text = "Balance: $0"
-                    } else {
-                        let avail = limit - unbilled
-                        self.accountBalance.text = String(format: "Balance: $%.02f", avail)
-
+        if let username = LoginManager.shared.getUsername() {
+            BabbleLabsApi.shared.entitlements(email: username) { (error:ServerError?, response:EntitlementsResponse?) in
+                if let response = response {
+                    if let unbilledUsageInCents = response.unbilledUsageInCents, let customerDollarLimit = response.customerDollarLimit {
+                        let unbilled:Double = Double(unbilledUsageInCents)/100.0
+                        let limit:Double = Double(customerDollarLimit)
+                        
+                        self.accountBalance.isHidden = false
+                        if unbilled > limit {
+                            self.accountBalance.text = "Balance: $0"
+                        } else {
+                            let avail = limit - unbilled
+                            self.accountBalance.text = String(format: "Balance: $%.02f", avail)
+                            
+                        }
                     }
+                    
                 }
-                
             }
         }
     }
@@ -138,6 +142,8 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
+            return 1
+/*
             if LoginManager.shared.logged_in {
                 let defaults: UserDefaults = UserDefaults.standard
                 let trial = defaults.bool(forKey: "trial")
@@ -146,7 +152,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                 }
                 
             }
-            return 0
+            return 0*/
         }
         
         return self.menus.count

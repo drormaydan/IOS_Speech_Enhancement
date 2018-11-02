@@ -12,7 +12,8 @@ class EntitlementsResponse: NSObject, Mappable {
 
     var unbilledUsageInCents: Int?
     var customerDollarLimit: Int?
-
+    var accountListingState: String?
+    
     override init() {}
     
     // MARK: ServerObject
@@ -22,6 +23,7 @@ class EntitlementsResponse: NSObject, Mappable {
     public func mapping(map: Map) {
         unbilledUsageInCents <- map["unbilledUsageInCents"]
         customerDollarLimit <- map["customerDollarLimit"]
+        accountListingState <- map["accountListingState"]
     }
 
 }

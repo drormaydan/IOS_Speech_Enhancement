@@ -301,16 +301,35 @@ class BabbleLabsApi: NSObject {
                     }
                 } else if httpresponse.statusCode == 403 {
                     let reason:String = httpresponse.allHeaderFields["X-BabbleLabs-Message"] as! String
-                    if reason.contains("You have exceeded your") || reason.contains("You have used your complimentary") {
-                        let defaults: UserDefaults = UserDefaults.standard
-                        defaults.set(true, forKey: "did_trial")
-                        //defaults.set(false, forKey: "trial")
-                        defaults.synchronize()
-                       // LoginManager.shared.logout()
-                        completion(false, ServerError.init(WithMessage: reason), true)
-                        return
+                   
+                    if let username = LoginManager.shared.getUsername() {
+                        
+                        BabbleLabsApi.shared.entitlements(email: username) { (error:ServerError?, response:EntitlementsResponse?) in
+                            if let response = response {
+                                if let unbilledUsageInCents = response.unbilledUsageInCents, let customerDollarLimit = response.customerDollarLimit, let accountListingState = response.accountListingState {
+                                    let unbilled:Double = Double(unbilledUsageInCents)/100.0
+                                    let limit:Double = Double(customerDollarLimit)
+
+                                    if unbilled > limit && (!accountListingState.contains("Black")) {
+                                        completion(false, ServerError.init(WithMessage: reason), true)
+                                    } else {
+                                        completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)
+                                    }
+                                }
+                            }
+                        }
                     } else {
-                        completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)
+                        if reason.contains("You have exceeded your") || reason.contains("You have used your complimentary") {
+                            let defaults: UserDefaults = UserDefaults.standard
+                            defaults.set(true, forKey: "did_trial")
+                            //defaults.set(false, forKey: "trial")
+                            defaults.synchronize()
+                            // LoginManager.shared.logout()
+                            completion(false, ServerError.init(WithMessage: reason), true)
+                            return
+                        } else {
+                            completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)
+                        }
                     }
                 } else {
                     completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)

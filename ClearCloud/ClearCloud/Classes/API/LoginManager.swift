@@ -17,7 +17,7 @@ import RealmSwift
 class LoginManager: NSObject {
     
     static let shared: LoginManager = LoginManager()
-    
+        
     var logged_in:Bool = false
     
     enum LoginStatus {

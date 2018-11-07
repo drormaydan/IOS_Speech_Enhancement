@@ -11,7 +11,9 @@ import ObjectMapper
 class AppleReceiptRequest: NSObject, Mappable {
     // MARK: Properties
     var receiptdata: String?
-    
+    var amountInCents: Int?
+    var currency: String?
+
     override init() {}
     
     // MARK: ServerObject
@@ -20,6 +22,7 @@ class AppleReceiptRequest: NSObject, Mappable {
     
     public func mapping(map: Map) {
         receiptdata <- map["receipt-data"]
+        amountInCents <- map["amountInCents"]
     }
     
 }

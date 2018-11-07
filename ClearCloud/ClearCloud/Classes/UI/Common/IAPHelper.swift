@@ -22,6 +22,9 @@ open class IAPHelper: NSObject  {
     private var productsRequest: SKProductsRequest?
     private var productsRequestCompletionHandler: ProductsRequestCompletionHandler?
     
+    public static var price:Int? = nil
+    public static var currency:String? = nil
+    
     public init(productIds: Set<ProductIdentifier>) {
         productIdentifiers = productIds
         for productIdentifier in productIds {
@@ -73,8 +76,22 @@ extension IAPHelper {
 
 // MARK: - SKProductsRequestDelegate
 
+
 extension IAPHelper: SKProductsRequestDelegate {
     
+    func priceStringForProduct(item: SKProduct) -> String? {
+        let price = item.price
+        if price == NSDecimalNumber(decimal: 0.00) {
+            return "GET" //or whatever you like really... maybe 'Free'
+        } else {
+            let numberFormatter = NumberFormatter()
+            let locale = item.priceLocale
+            numberFormatter.numberStyle = .currency
+            numberFormatter.locale = locale
+            return numberFormatter.string(from: price)
+        }
+    }
+
     public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         let products = response.products
         print("Loaded list of products... \(products)")
@@ -82,7 +99,9 @@ extension IAPHelper: SKProductsRequestDelegate {
         clearRequestAndHandler()
         
         for p in products {
-            print("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
+            IAPHelper.price = Int(ceil(100.0*p.price.floatValue))
+            IAPHelper.currency = p.priceLocale.currencyCode!
+            print("Found product: \(p.productIdentifier) \(p.localizedTitle) \(IAPHelper.price!) \(IAPHelper.currency!)")
         }
     }
     
@@ -136,6 +155,8 @@ extension IAPHelper: SKPaymentTransactionObserver {
             print("base64Encoded \(base64Encoded)")
             let req = AppleReceiptRequest()
             req.receiptdata = base64Encoded
+            req.amountInCents = IAPHelper.price!
+            req.currency = IAPHelper.currency!
             
             BabbleLabsApi.shared.submitReceipt(apple_request: req) { (error:ServerError?, response:LoginResponse?) in
                 NotificationCenter.default.post(name:Notification.Name(rawValue:"UpdateLimitNotification"),

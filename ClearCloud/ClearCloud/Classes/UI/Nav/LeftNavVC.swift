@@ -142,8 +142,8 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 1
-/*
+//            return 1
+
             if LoginManager.shared.logged_in {
                 let defaults: UserDefaults = UserDefaults.standard
                 let trial = defaults.bool(forKey: "trial")
@@ -152,7 +152,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                 }
                 
             }
-            return 0*/
+            return 0
         }
         
         return self.menus.count

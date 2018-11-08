@@ -169,15 +169,11 @@ class CCViewController: UIViewController {
             case .error:
                 //print("REG ERROR")
                 self.showError(message: error!)
-                completion(false,nil)
+                completion(false,"Please log in to enhance.")
                 break
             case .notLoggedIn:
                 //print("REG NOT LOGGED")
-                completion(false,nil)
-                let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
-                let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                completion(false,"Please log in to enhance.")
                 break
             }
         })

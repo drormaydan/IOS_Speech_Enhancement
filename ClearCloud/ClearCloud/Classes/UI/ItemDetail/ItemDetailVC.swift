@@ -192,7 +192,19 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
                 self.refresh()
             } else {
                 //print("ENHANCE ERROR \(error)")
-                self.showError(message: error!)
+                if let error = error {
+                    if error == "Please log in to enhance." {
+                        let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
+                        let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
+                    } else {
+                        self.showError(message: error)
+                    }
+                    
+                } else {
+                    self.showError(message: "Sorry, there was an error. Please try again.")
+                }
             }
         }
     }

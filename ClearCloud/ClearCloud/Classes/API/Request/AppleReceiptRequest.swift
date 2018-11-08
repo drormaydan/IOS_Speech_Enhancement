@@ -23,6 +23,7 @@ class AppleReceiptRequest: NSObject, Mappable {
     public func mapping(map: Map) {
         receiptdata <- map["receipt-data"]
         amountInCents <- map["amountInCents"]
+        currency <- map["currency"]
     }
     
 }

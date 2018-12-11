@@ -258,7 +258,7 @@ class CCViewController: UIViewController {
                 guard (phasset.mediaType == PHAssetMediaType.video)
                     
                     else {
-                        //print("Not a valid video media type")
+                        completion(false,"asset is not a video")
                         return
                 }
                 
@@ -279,6 +279,11 @@ class CCViewController: UIViewController {
                 PHCachingImageManager().requestAVAsset(forVideo: phasset, options: nil, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) in
                     if let avAsset = asset {
                         
+                        guard (avAsset.tracks(withMediaType: AVMediaType.audio).count > 0) else {
+                            completion(false,"asset does not have an audio track")
+                            return
+                        }
+
                         // get sample rate
                         
                         let aAudioAssetTrack : AVAssetTrack = avAsset.tracks(withMediaType: AVMediaType.audio)[0]
@@ -388,6 +393,12 @@ class CCViewController: UIViewController {
                                                             //print("ADD ALBUM \(album.asset!)")
                                                             
                                                             let asset = AVAsset(url: videourl)
+                                                            
+                                                            guard (asset.tracks(withMediaType: AVMediaType.audio).count > 0) else {
+                                                                completion(false,"asset does not have an audio track")
+                                                                return
+                                                            }
+
                                                             let aAudioAssetTrack : AVAssetTrack = asset.tracks(withMediaType: AVMediaType.audio)[0]
                                                             let desc = aAudioAssetTrack.formatDescriptions[0] as! CMAudioFormatDescription
                                                             let basic = CMAudioFormatDescriptionGetStreamBasicDescription(desc)

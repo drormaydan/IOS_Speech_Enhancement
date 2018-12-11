@@ -54,7 +54,9 @@ class AssetCell: UICollectionViewCell {
                 var thumb = UIImage()
                 option.isSynchronous = true
                 manager.requestImage(for: self.asset.asset!, targetSize: CGSize(width: self.thumbnail.frame.width, height: self.thumbnail.frame.height), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
-                    thumb = result!
+                    if let result = result {
+                        thumb = result
+                    }
                 })
                 self.thumbnail.image = thumb
                 

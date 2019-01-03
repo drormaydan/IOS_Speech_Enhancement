@@ -202,6 +202,8 @@ class BabbleLabsApi: NSObject {
     func convertAudio(filepath: String, email: String, destination: URL, video:Bool, sampleRate:Double?, completion:@escaping ((Bool, ServerError?, Bool) -> Void)) {
         if let reachability = reachability, reachability.isReachable {
             
+            print("CONVERT AUDIO \(filepath)")
+            
             var urlComponents = URLComponents()
             urlComponents.scheme = "https"
             urlComponents.host = "api.babblelabs.com"

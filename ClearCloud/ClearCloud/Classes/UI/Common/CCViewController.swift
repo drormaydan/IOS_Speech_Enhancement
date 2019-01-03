@@ -1435,6 +1435,13 @@ class CCViewController: UIViewController {
         
         mutableCompositionAudioTrack.append(mixComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)!)
         
+        
+        if (aAudioAsset.tracks(withMediaType: AVMediaType.audio).count == 0) {
+            // no audio file
+            completion(false,"Sorry, there was a problem enhancing the file. Please try again.")
+            return
+        }
+        
         let aAudioAssetTrack : AVAssetTrack = aAudioAsset.tracks(withMediaType: AVMediaType.audio)[0]
         
         

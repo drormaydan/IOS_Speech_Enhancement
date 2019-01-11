@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PermissionsInfoVC" customModule="ClearCloud" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to ClearCloud by BabbleLabs" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="07L-4j-IwP">
+                    <rect key="frame" x="31" y="42" width="268" height="62"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="62" id="Mne-Rm-g9a"/>
+                        <constraint firstAttribute="width" constant="268" id="xBg-c8-ase"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                    <color key="textColor" red="0.25904944539070129" green="0.46193438768386841" blue="0.48481082916259766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hxq-ZB-rQ7">
+                    <rect key="frame" x="24" y="112" width="311" height="226"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="311" id="rWc-M1-YaH"/>
+                        <constraint firstAttribute="height" constant="226" id="zAH-CB-lpv"/>
+                    </constraints>
+                    <string key="text">ClearCloud will ask to access the camera, microphone and photos to allow enhancment of existing video and audio on your device.
+
+ClearCloud and BabbleLabs do not store or share any of your data. Please visit our Terms of Service for more information.</string>
+                    <color key="textColor" red="0.25904944540000002" green="0.4619343877" blue="0.48481082920000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dNJ-az-3q5">
+                    <rect key="frame" x="91" y="607" width="193" height="40"/>
+                    <color key="backgroundColor" red="0.19010147450000001" green="0.64063912629999997" blue="0.84328573939999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="ebj-cP-T2I"/>
+                        <constraint firstAttribute="width" constant="193" id="eln-GN-dxF"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                    <state key="normal" title="Next">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="clickNext:" destination="-1" eventType="touchUpInside" id="KSn-Af-GJw"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="hxq-ZB-rQ7" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="24" id="CBi-ie-yRr"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="hxq-ZB-rQ7" secondAttribute="trailing" constant="40" id="HFd-Zg-zYE"/>
+                <constraint firstItem="hxq-ZB-rQ7" firstAttribute="top" secondItem="07L-4j-IwP" secondAttribute="bottom" constant="8" id="JXp-zY-Yan"/>
+                <constraint firstItem="07L-4j-IwP" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="31" id="UOo-bv-Jpf"/>
+                <constraint firstItem="dNJ-az-3q5" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Xtf-D5-WpJ"/>
+                <constraint firstItem="07L-4j-IwP" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="22" id="efu-JX-okK"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="07L-4j-IwP" secondAttribute="trailing" constant="76" id="rfH-kn-ECk"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="dNJ-az-3q5" secondAttribute="bottom" constant="20" id="wcc-TS-020"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="138.40000000000001" y="154.27286356821591"/>
+        </view>
+    </objects>
+</document>

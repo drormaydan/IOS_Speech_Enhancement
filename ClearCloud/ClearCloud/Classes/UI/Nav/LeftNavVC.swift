@@ -19,6 +19,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
     let icons = [UIImage.init(named: "support"), UIImage.init(named: "about"),UIImage.init(named: "logout")]
     @IBOutlet weak var accountBalance: UILabel!
     
+    @IBOutlet weak var version: UILabel!
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var username: UILabel!
     @IBOutlet var tableheader: UIView!
@@ -33,6 +34,11 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
         self.tableView.register(UINib(nibName: "NavCell", bundle: nil), forCellReuseIdentifier: "NAV_CELL")
         self.tableView.backgroundColor = UIColor.clear
         self.tableView.backgroundView = nil
+        
+        let v : Any! = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
+        let build : Any! = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion")
+
+        version.text = "ClearCloud v \(v!) (\(build!))"
         
         self.username.isHidden = true
         self.email.isHidden = true
@@ -99,11 +105,10 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
                         
                         self.accountBalance.isHidden = false
                         if unbilled > limit {
-                            self.accountBalance.text = "Balance: $0"
+                            self.accountBalance.text = "Available Balance: $0"
                         } else {
                             let avail = limit - unbilled
-                            self.accountBalance.text = String(format: "Balance: $%.02f", avail)
-                            
+                            self.accountBalance.text = String(format: "Available Balance: $%.02f", avail)
                         }
                     }
                     
@@ -162,7 +167,7 @@ class LeftNavVC: CCViewController, UITableViewDelegate, UITableViewDataSource {
         let cell:NavCell = self.tableView.dequeueReusableCell(withIdentifier: "NAV_CELL", for: indexPath) as! NavCell
         
         if indexPath.section == 0 {
-            cell.navlabel.text = "Add Money"
+            cell.navlabel.text = "Add Funds"
             cell.navimage.image = UIImage.init(named: "payment")!.withRenderingMode(.alwaysOriginal)
         } else {
             cell.navimage.image = self.icons[indexPath.row]

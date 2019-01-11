@@ -99,6 +99,17 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
     func reload() {
+        
+        if (UserDefaults.standard.object(forKey: "showed_info") == nil) {
+            UserDefaults.standard.set(true, forKey: "showed_info")
+            UserDefaults.standard.synchronize()
+            let albumsVC:PermissionsInfoVC = PermissionsInfoVC(nibName: "PermissionsInfoVC", bundle: nil)
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.sideMenuController.present(albumsVC, animated: true, completion: nil)
+            
+            return
+        }
+
         let photos = PHPhotoLibrary.authorizationStatus()
         if photos == .notDetermined {
             PHPhotoLibrary.requestAuthorization({status in
@@ -122,8 +133,17 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         // Dispose of any resources that can be recreated.
     }
 
+    var showed_tutorial = false
+    
     func loadAlbums() {
-                
+        print("LOAD ALBUMS")
+        if !showed_tutorial &&  (UserDefaults.standard.object(forKey: "showed_tutorial") == nil) {
+            showed_tutorial = true
+            let albumsVC:TutorialVC = TutorialVC(nibName: "TutorialVC", bundle: nil)
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.sideMenuController.present(albumsVC, animated: true, completion: nil)
+        }
+
         self.albums.removeAll()
         
         let album = Album()

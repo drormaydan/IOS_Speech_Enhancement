@@ -302,13 +302,14 @@ class AudioVideoCell: UITableViewCell {
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         try? AVAudioSession.sharedInstance().setActive(true)
 
+        /*
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, with: [.mixWithOthers, .allowBluetooth])
             //  try AVAudioSession.sharedInstance().setMode(AVAudioSessionModeVideoRecording)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch let error as NSError {
             //print(error.description)
-        }
+        }*/
 
         if (type == .audio) {
             let avPlayerItem = AVPlayerItem.init(url: url! as URL)

@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_image" translatesAutoresizingMaskIntoConstraints="NO" id="GxS-SP-R9W">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splashimage" translatesAutoresizingMaskIntoConstraints="NO" id="GxS-SP-R9W">
                                 <rect key="frame" x="44.5" y="215.5" width="286" height="236"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="236" id="Cxr-gm-N2f"/>
@@ -32,11 +32,11 @@
                                     <constraint firstAttribute="height" constant="18" id="McV-D9-lad"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.25904944540000002" green="0.4619343877" blue="0.48481082920000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.10518362373113632" green="0.098084069788455963" blue="0.09795505553483963" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="RO7-1j-OmL" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1Xh-ey-lJt"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RO7-1j-OmL" secondAttribute="bottom" constant="20" id="XON-sR-XcR"/>
@@ -52,6 +52,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash_image" width="195.5" height="144"/>
+        <image name="splashimage" width="333.5" height="245.5"/>
     </resources>
 </document>

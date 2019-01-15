@@ -40,6 +40,10 @@
 		0D937B9C2151C92900A240A1 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B9B2151C92900A240A1 /* Album.swift */; };
 		0D937BA02151D24A00A240A1 /* AlbumDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D937B9E2151D24A00A240A1 /* AlbumDetailVC.swift */; };
 		0D937BA12151D24A00A240A1 /* AlbumDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D937B9F2151D24A00A240A1 /* AlbumDetailVC.xib */; };
+		0DB4947821E8331A00283A4D /* PermissionsInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB4947621E8331A00283A4D /* PermissionsInfoVC.swift */; };
+		0DB4947921E8331A00283A4D /* PermissionsInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB4947721E8331A00283A4D /* PermissionsInfoVC.xib */; };
+		0DB4947C21E908AE00283A4D /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB4947A21E908AE00283A4D /* TutorialVC.swift */; };
+		0DB4947D21E908AE00283A4D /* TutorialVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB4947B21E908AE00283A4D /* TutorialVC.xib */; };
 		0DB57B552151D45400EFBDD6 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B532151D45400EFBDD6 /* AssetCell.swift */; };
 		0DB57B562151D45400EFBDD6 /* AssetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB57B542151D45400EFBDD6 /* AssetCell.xib */; };
 		0DB57B582151D4D400EFBDD6 /* CCAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B572151D4D400EFBDD6 /* CCAsset.swift */; };
@@ -117,6 +121,10 @@
 		0D937B9B2151C92900A240A1 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		0D937B9E2151D24A00A240A1 /* AlbumDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetailVC.swift; sourceTree = "<group>"; };
 		0D937B9F2151D24A00A240A1 /* AlbumDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumDetailVC.xib; sourceTree = "<group>"; };
+		0DB4947621E8331A00283A4D /* PermissionsInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsInfoVC.swift; sourceTree = "<group>"; };
+		0DB4947721E8331A00283A4D /* PermissionsInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PermissionsInfoVC.xib; sourceTree = "<group>"; };
+		0DB4947A21E908AE00283A4D /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
+		0DB4947B21E908AE00283A4D /* TutorialVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialVC.xib; sourceTree = "<group>"; };
 		0DB57B532151D45400EFBDD6 /* AssetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		0DB57B542151D45400EFBDD6 /* AssetCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AssetCell.xib; sourceTree = "<group>"; };
 		0DB57B572151D4D400EFBDD6 /* CCAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCAsset.swift; sourceTree = "<group>"; };
@@ -243,6 +251,7 @@
 		0D937B8421519E1D00A240A1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				0DB4947521E8278E00283A4D /* Intro */,
 				0D1089472164437A004597F1 /* Login */,
 				0DB57B6F215578E700EFBDD6 /* ItemDetail */,
 				0DB57B592151DB1100EFBDD6 /* AudioCapture */,
@@ -314,6 +323,17 @@
 				0DB57B572151D4D400EFBDD6 /* CCAsset.swift */,
 			);
 			path = AlbumDetail;
+			sourceTree = "<group>";
+		};
+		0DB4947521E8278E00283A4D /* Intro */ = {
+			isa = PBXGroup;
+			children = (
+				0DB4947621E8331A00283A4D /* PermissionsInfoVC.swift */,
+				0DB4947721E8331A00283A4D /* PermissionsInfoVC.xib */,
+				0DB4947A21E908AE00283A4D /* TutorialVC.swift */,
+				0DB4947B21E908AE00283A4D /* TutorialVC.xib */,
+			);
+			path = Intro;
 			sourceTree = "<group>";
 		};
 		0DB57B592151DB1100EFBDD6 /* AudioCapture */ = {
@@ -504,7 +524,9 @@
 				0D937B602151990C00A240A1 /* LaunchScreen.storyboard in Resources */,
 				0DB57B77215579D300EFBDD6 /* AudioVideoCell.xib in Resources */,
 				0D937B9A2151C91B00A240A1 /* AlbumCell.xib in Resources */,
+				0DB4947D21E908AE00283A4D /* TutorialVC.xib in Resources */,
 				0D10894D21651640004597F1 /* NavCell.xib in Resources */,
+				0DB4947921E8331A00283A4D /* PermissionsInfoVC.xib in Resources */,
 				0D937B5D2151990C00A240A1 /* Assets.xcassets in Resources */,
 				0D10895121651662004597F1 /* AboutVC.xib in Resources */,
 				0D3775B4217D5DDA00FB8CDD /* RegisterVC.xib in Resources */,
@@ -646,7 +668,9 @@
 				0D3775B3217D5DDA00FB8CDD /* RegisterVC.swift in Sources */,
 				0D627E1A218A88940085047D /* AppleReceiptRequest.swift in Sources */,
 				0DB57B5C2151DC0600EFBDD6 /* AudioCaptureVC.swift in Sources */,
+				0DB4947821E8331A00283A4D /* PermissionsInfoVC.swift in Sources */,
 				0D937B562151990A00A240A1 /* AppDelegate.swift in Sources */,
+				0DB4947C21E908AE00283A4D /* TutorialVC.swift in Sources */,
 				0DB57B602151E5BC00EFBDD6 /* CCAudio.swift in Sources */,
 				0D627E1E218BE3F90085047D /* EntitlementsResponse.swift in Sources */,
 				0D937B952151A18100A240A1 /* LeftNavVC.swift in Sources */,

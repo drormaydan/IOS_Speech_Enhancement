@@ -93,7 +93,7 @@
                     </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.30726981163024902" green="0.53130048513412476" blue="0.72846901416778564" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.30588235294117649" green="0.52941176470588236" blue="0.72941176470588232" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="zPG-HN-1w3" firstAttribute="trailing" secondItem="tTu-C1-oTd" secondAttribute="trailing" id="E94-Fd-gtI"/>
                 <constraint firstItem="eno-5s-fKh" firstAttribute="top" secondItem="rZe-nk-T4F" secondAttribute="bottom" constant="3" id="Etf-cV-RXE"/>

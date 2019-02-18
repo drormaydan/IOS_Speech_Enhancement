@@ -58,6 +58,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.window!.makeKeyAndVisible()
 
+        FBSDKApplicationDelegate.sharedInstance()?.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
         Fabric.with([Crashlytics.self])
         return true
     }
@@ -134,6 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

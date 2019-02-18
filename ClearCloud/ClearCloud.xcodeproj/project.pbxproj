@@ -16,6 +16,10 @@
 		0D10895721654B09004597F1 /* OktaApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895621654B09004597F1 /* OktaApi.swift */; };
 		0D10895921654C25004597F1 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895821654C25004597F1 /* UserResponse.swift */; };
 		0D10895B21654C6D004597F1 /* OktaUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D10895A21654C6D004597F1 /* OktaUserProfile.swift */; };
+		0D30CBBC2208ECFC0080135D /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBB82208ECFB0080135D /* FBSDKCoreKit.framework */; };
+		0D30CBBD2208ECFC0080135D /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBB92208ECFB0080135D /* FBSDKLoginKit.framework */; };
+		0D30CBBE2208ECFC0080135D /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBBA2208ECFB0080135D /* Bolts.framework */; };
+		0D30CBBF2208ECFC0080135D /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBBB2208ECFC0080135D /* FBSDKShareKit.framework */; };
 		0D3775B3217D5DDA00FB8CDD /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3775B1217D5DDA00FB8CDD /* RegisterVC.swift */; };
 		0D3775B4217D5DDA00FB8CDD /* RegisterVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D3775B2217D5DDA00FB8CDD /* RegisterVC.xib */; };
 		0D627E1421893A740085047D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D627E1321893A740085047D /* StoreKit.framework */; };
@@ -91,6 +95,10 @@
 		0D10895621654B09004597F1 /* OktaApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaApi.swift; sourceTree = "<group>"; };
 		0D10895821654C25004597F1 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		0D10895A21654C6D004597F1 /* OktaUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaUserProfile.swift; sourceTree = "<group>"; };
+		0D30CBB82208ECFB0080135D /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		0D30CBB92208ECFB0080135D /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		0D30CBBA2208ECFB0080135D /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		0D30CBBB2208ECFC0080135D /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		0D3775B1217D5DDA00FB8CDD /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		0D3775B2217D5DDA00FB8CDD /* RegisterVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RegisterVC.xib; sourceTree = "<group>"; };
 		0D627E1321893A740085047D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -151,7 +159,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D30CBBE2208ECFC0080135D /* Bolts.framework in Frameworks */,
 				3E2269042446DADEDA30FF2A /* Pods_ClearCloud.framework in Frameworks */,
+				0D30CBBF2208ECFC0080135D /* FBSDKShareKit.framework in Frameworks */,
+				0D30CBBC2208ECFC0080135D /* FBSDKCoreKit.framework in Frameworks */,
+				0D30CBBD2208ECFC0080135D /* FBSDKLoginKit.framework in Frameworks */,
 				0D627E1421893A740085047D /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -187,6 +199,10 @@
 		0D937B492151990A00A240A1 = {
 			isa = PBXGroup;
 			children = (
+				0D30CBBA2208ECFB0080135D /* Bolts.framework */,
+				0D30CBB82208ECFB0080135D /* FBSDKCoreKit.framework */,
+				0D30CBB92208ECFB0080135D /* FBSDKLoginKit.framework */,
+				0D30CBBB2208ECFC0080135D /* FBSDKShareKit.framework */,
 				0D937B542151990A00A240A1 /* ClearCloud */,
 				0D937B692151990C00A240A1 /* ClearCloudTests */,
 				0D937B742151990C00A240A1 /* ClearCloudUITests */,
@@ -858,6 +874,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/include/**",
 					"$(PROJECT_DIR)/FFmpegWrapper/FFmpegWrapper/**",
@@ -890,6 +910,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/include/**",
 					"$(PROJECT_DIR)/FFmpegWrapper/FFmpegWrapper/**",

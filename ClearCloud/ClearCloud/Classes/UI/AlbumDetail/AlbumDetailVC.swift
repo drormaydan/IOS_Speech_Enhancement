@@ -134,8 +134,9 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         if self.assets_to_enhance.count == 0 {
             self.hideHud()
             self.clickSelect(sender: nil)
-            
-            self.reload()
+            DispatchQueue.main.async {
+                self.reload()
+            }
 
         } else {
             let asset = self.assets_to_enhance.remove(at: 0)

@@ -204,10 +204,10 @@ class AudioVideoCell: UITableViewCell {
                                                                         try! realm.write {
                                                                             realm.delete(enhancedVideo)
                                                                         }
-                                                                        self.owner.navigationController!.popViewController(animated: true)
+                                                                        self.owner.navigationController?.popViewController(animated: true)
                                                                     } else {
                                                                         
-                                                                        self.owner.navigationController!.popViewController(animated: true)
+                                                                        self.owner.navigationController?.popViewController(animated: true)
                                                                     }
                                                                     
                                                                     

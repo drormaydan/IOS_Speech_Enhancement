@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,6 +22,8 @@
 		0D30CBBF2208ECFC0080135D /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBBB2208ECFC0080135D /* FBSDKShareKit.framework */; };
 		0D3775B3217D5DDA00FB8CDD /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3775B1217D5DDA00FB8CDD /* RegisterVC.swift */; };
 		0D3775B4217D5DDA00FB8CDD /* RegisterVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D3775B2217D5DDA00FB8CDD /* RegisterVC.xib */; };
+		0D4D8B88239D99E700154BA8 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D4D8B86239D99E700154BA8 /* MainInterface.storyboard */; };
+		0D4D8B8C239D99E700154BA8 /* ClearCloud.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0D4D8B82239D99E700154BA8 /* ClearCloud.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0D627E1421893A740085047D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D627E1321893A740085047D /* StoreKit.framework */; };
 		0D627E1621893AA60085047D /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E1521893AA60085047D /* IAPHelper.swift */; };
 		0D627E1821893B9B0085047D /* ClearCloudProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D627E1721893B9B0085047D /* ClearCloudProducts.swift */; };
@@ -64,10 +66,20 @@
 		0DB57B732155790F00EFBDD6 /* ItemDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB57B712155790F00EFBDD6 /* ItemDetailVC.xib */; };
 		0DB57B76215579D300EFBDD6 /* AudioVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B74215579D300EFBDD6 /* AudioVideoCell.swift */; };
 		0DB57B77215579D300EFBDD6 /* AudioVideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DB57B75215579D300EFBDD6 /* AudioVideoCell.xib */; };
+		0DEFF9AE2397555E006512FF /* Icon-App-76x76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DEFF9AD2397555E006512FF /* Icon-App-76x76@2x.png */; };
+		0DEFF9B023975582006512FF /* docicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DEFF9AF23975582006512FF /* docicon.png */; };
 		3E2269042446DADEDA30FF2A /* Pods_ClearCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EB20CAE0755E73EB971FB56 /* Pods_ClearCloud.framework */; };
+		B082CC3C463D1D941B651E54 /* Pods_ClearCloudShareExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6355672D9C1A8C1AF1B7077D /* Pods_ClearCloudShareExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0D4D8B8A239D99E700154BA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0D937B4A2151990A00A240A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0D4D8B81239D99E700154BA8;
+			remoteInfo = ClearCloudShareExtension;
+		};
 		0D937B672151990C00A240A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0D937B4A2151990A00A240A1 /* Project object */;
@@ -83,6 +95,20 @@
 			remoteInfo = ClearCloud;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0D4D8B90239D99E700154BA8 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0D4D8B8C239D99E700154BA8 /* ClearCloud.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0D10881E2162E5EC004597F1 /* ClearCloud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearCloud-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -101,6 +127,10 @@
 		0D30CBBB2208ECFC0080135D /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		0D3775B1217D5DDA00FB8CDD /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		0D3775B2217D5DDA00FB8CDD /* RegisterVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RegisterVC.xib; sourceTree = "<group>"; };
+		0D4D8B82239D99E700154BA8 /* ClearCloud.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ClearCloud.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D4D8B84239D99E700154BA8 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		0D4D8B87239D99E700154BA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		0D4D8B89239D99E700154BA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D627E1321893A740085047D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		0D627E1521893AA60085047D /* IAPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
 		0D627E1721893B9B0085047D /* ClearCloudProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearCloudProducts.swift; sourceTree = "<group>"; };
@@ -129,6 +159,8 @@
 		0D937B9B2151C92900A240A1 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		0D937B9E2151D24A00A240A1 /* AlbumDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetailVC.swift; sourceTree = "<group>"; };
 		0D937B9F2151D24A00A240A1 /* AlbumDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumDetailVC.xib; sourceTree = "<group>"; };
+		0DAE60EE239EB512006E9CCE /* ClearCloud.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClearCloud.entitlements; sourceTree = "<group>"; };
+		0DAE60EF239EB791006E9CCE /* ClearCloud.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClearCloud.entitlements; sourceTree = "<group>"; };
 		0DB4947621E8331A00283A4D /* PermissionsInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsInfoVC.swift; sourceTree = "<group>"; };
 		0DB4947721E8331A00283A4D /* PermissionsInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PermissionsInfoVC.xib; sourceTree = "<group>"; };
 		0DB4947A21E908AE00283A4D /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
@@ -149,12 +181,25 @@
 		0DB57B712155790F00EFBDD6 /* ItemDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemDetailVC.xib; sourceTree = "<group>"; };
 		0DB57B74215579D300EFBDD6 /* AudioVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioVideoCell.swift; sourceTree = "<group>"; };
 		0DB57B75215579D300EFBDD6 /* AudioVideoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioVideoCell.xib; sourceTree = "<group>"; };
+		0DEFF9AD2397555E006512FF /* Icon-App-76x76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-App-76x76@2x.png"; path = "ClearCloud/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png"; sourceTree = "<group>"; };
+		0DEFF9AF23975582006512FF /* docicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = docicon.png; path = ClearCloud/docicon.png; sourceTree = "<group>"; };
 		1EB20CAE0755E73EB971FB56 /* Pods_ClearCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		46605C726F32277C36F04CE4 /* Pods-ClearCloudShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearCloudShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ClearCloudShareExtension/Pods-ClearCloudShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		4D6074BD564377A56F4AB095 /* Pods-ClearCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-ClearCloud/Pods-ClearCloud.release.xcconfig"; sourceTree = "<group>"; };
 		5C6613A06A84876D0E31E8B8 /* Pods-ClearCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ClearCloud/Pods-ClearCloud.debug.xcconfig"; sourceTree = "<group>"; };
+		6355672D9C1A8C1AF1B7077D /* Pods_ClearCloudShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearCloudShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE8EF9AD7E63693D599ED68D /* Pods-ClearCloudShareExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearCloudShareExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-ClearCloudShareExtension/Pods-ClearCloudShareExtension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0D4D8B7F239D99E700154BA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B082CC3C463D1D941B651E54 /* Pods_ClearCloudShareExtension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0D937B4F2151990A00A240A1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -196,9 +241,22 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
+		0D4D8B83239D99E700154BA8 /* ClearCloudShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				0DAE60EF239EB791006E9CCE /* ClearCloud.entitlements */,
+				0D4D8B84239D99E700154BA8 /* ShareViewController.swift */,
+				0D4D8B86239D99E700154BA8 /* MainInterface.storyboard */,
+				0D4D8B89239D99E700154BA8 /* Info.plist */,
+			);
+			path = ClearCloudShareExtension;
+			sourceTree = "<group>";
+		};
 		0D937B492151990A00A240A1 = {
 			isa = PBXGroup;
 			children = (
+				0DEFF9AF23975582006512FF /* docicon.png */,
+				0DEFF9AD2397555E006512FF /* Icon-App-76x76@2x.png */,
 				0D30CBBA2208ECFB0080135D /* Bolts.framework */,
 				0D30CBB82208ECFB0080135D /* FBSDKCoreKit.framework */,
 				0D30CBB92208ECFB0080135D /* FBSDKLoginKit.framework */,
@@ -206,6 +264,7 @@
 				0D937B542151990A00A240A1 /* ClearCloud */,
 				0D937B692151990C00A240A1 /* ClearCloudTests */,
 				0D937B742151990C00A240A1 /* ClearCloudUITests */,
+				0D4D8B83239D99E700154BA8 /* ClearCloudShareExtension */,
 				0D937B532151990A00A240A1 /* Products */,
 				D7E0F3E410243D516923A7E5 /* Pods */,
 				882B00F05A2AC795826F4083 /* Frameworks */,
@@ -218,6 +277,7 @@
 				0D937B522151990A00A240A1 /* ClearCloud.app */,
 				0D937B662151990C00A240A1 /* ClearCloudTests.xctest */,
 				0D937B712151990C00A240A1 /* ClearCloudUITests.xctest */,
+				0D4D8B82239D99E700154BA8 /* ClearCloud.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -225,6 +285,7 @@
 		0D937B542151990A00A240A1 /* ClearCloud */ = {
 			isa = PBXGroup;
 			children = (
+				0DAE60EE239EB512006E9CCE /* ClearCloud.entitlements */,
 				0D937B8321519E1200A240A1 /* Classes */,
 				0D937B552151990A00A240A1 /* AppDelegate.swift */,
 				0D937B572151990A00A240A1 /* ViewController.swift */,
@@ -405,6 +466,7 @@
 			children = (
 				0D627E1321893A740085047D /* StoreKit.framework */,
 				1EB20CAE0755E73EB971FB56 /* Pods_ClearCloud.framework */,
+				6355672D9C1A8C1AF1B7077D /* Pods_ClearCloudShareExtension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -414,6 +476,8 @@
 			children = (
 				5C6613A06A84876D0E31E8B8 /* Pods-ClearCloud.debug.xcconfig */,
 				4D6074BD564377A56F4AB095 /* Pods-ClearCloud.release.xcconfig */,
+				46605C726F32277C36F04CE4 /* Pods-ClearCloudShareExtension.debug.xcconfig */,
+				CE8EF9AD7E63693D599ED68D /* Pods-ClearCloudShareExtension.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -421,6 +485,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0D4D8B81239D99E700154BA8 /* ClearCloudShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D4D8B8D239D99E700154BA8 /* Build configuration list for PBXNativeTarget "ClearCloudShareExtension" */;
+			buildPhases = (
+				27B64B52D5FFF5A236A0EF04 /* [CP] Check Pods Manifest.lock */,
+				0D4D8B7E239D99E700154BA8 /* Sources */,
+				0D4D8B7F239D99E700154BA8 /* Frameworks */,
+				0D4D8B80239D99E700154BA8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ClearCloudShareExtension;
+			productName = ClearCloudShareExtension;
+			productReference = 0D4D8B82239D99E700154BA8 /* ClearCloud.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		0D937B512151990A00A240A1 /* ClearCloud */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0D937B7A2151990C00A240A1 /* Build configuration list for PBXNativeTarget "ClearCloud" */;
@@ -431,10 +513,12 @@
 				0D937B502151990A00A240A1 /* Resources */,
 				9D38E4440A16897B8AB46BBA /* [CP] Embed Pods Frameworks */,
 				0D10895E21667746004597F1 /* ShellScript */,
+				0D4D8B90239D99E700154BA8 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0D4D8B8B239D99E700154BA8 /* PBXTargetDependency */,
 			);
 			name = ClearCloud;
 			productName = ClearCloud;
@@ -483,10 +567,13 @@
 		0D937B4A2151990A00A240A1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1100;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Boris Katok";
 				TargetAttributes = {
+					0D4D8B81239D99E700154BA8 = {
+						CreatedOnToolsVersion = 11.0;
+					};
 					0D937B512151990A00A240A1 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
@@ -525,22 +612,33 @@
 				0D937B512151990A00A240A1 /* ClearCloud */,
 				0D937B652151990C00A240A1 /* ClearCloudTests */,
 				0D937B702151990C00A240A1 /* ClearCloudUITests */,
+				0D4D8B81239D99E700154BA8 /* ClearCloudShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0D4D8B80239D99E700154BA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D4D8B88239D99E700154BA8 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0D937B502151990A00A240A1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0D10895521651672004597F1 /* LoginVC.xib in Resources */,
 				0D937BA12151D24A00A240A1 /* AlbumDetailVC.xib in Resources */,
+				0DEFF9AE2397555E006512FF /* Icon-App-76x76@2x.png in Resources */,
 				0DB57B5D2151DC0600EFBDD6 /* AudioCaptureVC.xib in Resources */,
 				0D937B602151990C00A240A1 /* LaunchScreen.storyboard in Resources */,
 				0DB57B77215579D300EFBDD6 /* AudioVideoCell.xib in Resources */,
 				0D937B9A2151C91B00A240A1 /* AlbumCell.xib in Resources */,
 				0DB4947D21E908AE00283A4D /* TutorialVC.xib in Resources */,
+				0DEFF9B023975582006512FF /* docicon.png in Resources */,
 				0D10894D21651640004597F1 /* NavCell.xib in Resources */,
 				0DB4947921E8331A00283A4D /* PermissionsInfoVC.xib in Resources */,
 				0D937B5D2151990C00A240A1 /* Assets.xcassets in Resources */,
@@ -588,56 +686,43 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 73ee240f257350c355a2f3d0475f5a4c518f10f5 f020130c134290f8a6369d33cec515fa705f56cec4192a227d08702e1f64f464\n";
 		};
+		27B64B52D5FFF5A236A0EF04 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ClearCloudShareExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9D38E4440A16897B8AB46BBA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ClearCloud/Pods-ClearCloud-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityLogger/AlamofireNetworkActivityLogger.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
-				"${BUILT_PRODUCTS_DIR}/Cache/Cache.framework",
-				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/DateTimePicker/DateTimePicker.framework",
-				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/MBAutoGrowingTextView/MBAutoGrowingTextView.framework",
-				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
-				"${BUILT_PRODUCTS_DIR}/PGSideMenu/PGSideMenu.framework",
-				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/ReachabilitySwift.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/UITextView+Placeholder/UITextView_Placeholder.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClearCloud/Pods-ClearCloud-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityLogger.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cache.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateTimePicker.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBAutoGrowingTextView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PGSideMenu.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReachabilitySwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextView_Placeholder.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClearCloud/Pods-ClearCloud-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ClearCloud/Pods-ClearCloud-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearCloud/Pods-ClearCloud-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DDDA0962D0809F25DD8A2AE9 /* [CP] Check Pods Manifest.lock */ = {
@@ -661,6 +746,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0D4D8B7E239D99E700154BA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0D937B4E2151990A00A240A1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -720,6 +812,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0D4D8B8B239D99E700154BA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0D4D8B81239D99E700154BA8 /* ClearCloudShareExtension */;
+			targetProxy = 0D4D8B8A239D99E700154BA8 /* PBXContainerItemProxy */;
+		};
 		0D937B682151990C00A240A1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0D937B512151990A00A240A1 /* ClearCloud */;
@@ -733,6 +830,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0D4D8B86239D99E700154BA8 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D4D8B87239D99E700154BA8 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		0D937B592151990A00A240A1 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -752,6 +857,59 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0D4D8B8E239D99E700154BA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46605C726F32277C36F04CE4 /* Pods-ClearCloudShareExtension.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ClearCloudShareExtension/ClearCloud.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = DUZ2AZ526G;
+				INFOPLIST_FILE = ClearCloudShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.ClearCloudShareExtension;
+				PRODUCT_NAME = ClearCloud;
+				PROVISIONING_PROFILE_SPECIFIER = ClearCloudShare2;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0D4D8B8F239D99E700154BA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CE8EF9AD7E63693D599ED68D /* Pods-ClearCloudShareExtension.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ClearCloudShareExtension/ClearCloud.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = DUZ2AZ526G;
+				INFOPLIST_FILE = ClearCloudShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.2;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.ClearCloudShareExtension;
+				PRODUCT_NAME = ClearCloud;
+				PROVISIONING_PROFILE_SPECIFIER = ClearCloudShare2;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		0D937B782151990C00A240A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -872,7 +1030,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = ClearCloud/ClearCloud.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -893,11 +1053,13 @@
 					"$(PROJECT_DIR)/ClearCloud/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/lib",
 				);
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = ClearCloud2;
 				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -908,7 +1070,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = ClearCloud/ClearCloud.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -929,10 +1093,12 @@
 					"$(PROJECT_DIR)/ClearCloud/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/FFmpeg/ffmpeg-ios-static-libs/lib",
 				);
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = ClearCloud2;
 				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1022,6 +1188,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0D4D8B8D239D99E700154BA8 /* Build configuration list for PBXNativeTarget "ClearCloudShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D4D8B8E239D99E700154BA8 /* Debug */,
+				0D4D8B8F239D99E700154BA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0D937B4D2151990A00A240A1 /* Build configuration list for PBXProject "ClearCloud" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

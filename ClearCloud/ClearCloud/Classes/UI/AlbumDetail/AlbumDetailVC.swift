@@ -167,7 +167,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, 0, 0)
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -186,7 +186,7 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
                 if self.album.type == .video {
                     
                     
-                    if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+                    if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
                         //print("captureVideoPressed and camera available.")
                         
                         let imagePicker = UIImagePickerController()
@@ -264,8 +264,8 @@ class AlbumDetailVC: CCViewController, UICollectionViewDelegate, UICollectionVie
         return CGSize(width: width, height: width)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let videoUrl = info[UIImagePickerControllerMediaURL] as! URL
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let videoUrl = info[UIImagePickerController.InfoKey.mediaURL] as! URL
         let pathString = videoUrl.relativePath
         //print("GOT URL \(videoUrl)")
         self.dismiss(animated: true, completion: {

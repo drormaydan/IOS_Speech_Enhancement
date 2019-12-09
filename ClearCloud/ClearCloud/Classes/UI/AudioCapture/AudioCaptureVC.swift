@@ -60,10 +60,10 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
     }
     
     func makeBackButton2() {
-        let buttonBack: UIButton = UIButton(type: UIButtonType.custom) as UIButton
+        let buttonBack: UIButton = UIButton(type: UIButton.ButtonType.custom) as UIButton
         buttonBack.frame = CGRect(x: 0, y: 0, width: 40, height: 40) // CGFloat, Double, Int
-        buttonBack.setImage(#imageLiteral(resourceName: "baseline_arrow_back_ios_black_24pt"), for: UIControlState.normal)
-        buttonBack.addTarget(self, action: #selector(clickBack2(sender:)), for: UIControlEvents.touchUpInside)
+        buttonBack.setImage(#imageLiteral(resourceName: "baseline_arrow_back_ios_black_24pt"), for: UIControl.State.normal)
+        buttonBack.addTarget(self, action: #selector(clickBack2(sender:)), for: UIControl.Event.touchUpInside)
         
         let rightBarButtonItem: UIBarButtonItem = UIBarButtonItem(customView: buttonBack)
         // self.navigationItem.setLeftBarButton(rightBarButtonItem, animated: false)
@@ -119,7 +119,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
         self.timeLabel.isHidden = false
         self.timeLabel.text = "00:00:00"
         do {
-            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try recordingSession.setCategory(AVAudioSession.Category.playAndRecord)
             try recordingSession.setActive(true)
             recordingSession.requestRecordPermission() { [unowned self] allowed in
                 DispatchQueue.main.async {

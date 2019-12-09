@@ -43,10 +43,10 @@ class CCViewController: UIViewController {
     }
     
     func makeBackButton() {
-        let buttonBack: UIButton = UIButton(type: UIButtonType.custom) as UIButton
+        let buttonBack: UIButton = UIButton(type: UIButton.ButtonType.custom) as UIButton
         buttonBack.frame = CGRect(x: 0, y: 0, width: 40, height: 40) // CGFloat, Double, Int
-        buttonBack.setImage(#imageLiteral(resourceName: "ic_arrow_back_48pt"), for: UIControlState.normal)
-        buttonBack.addTarget(self, action: #selector(clickBack(sender:)), for: UIControlEvents.touchUpInside)
+        buttonBack.setImage(#imageLiteral(resourceName: "ic_arrow_back_48pt"), for: UIControl.State.normal)
+        buttonBack.addTarget(self, action: #selector(clickBack(sender:)), for: UIControl.Event.touchUpInside)
         
         let rightBarButtonItem: UIBarButtonItem = UIBarButtonItem(customView: buttonBack)
         // self.navigationItem.setLeftBarButton(rightBarButtonItem, animated: false)
@@ -57,10 +57,10 @@ class CCViewController: UIViewController {
     }
     
     func makeMenuButton() {
-        let buttonBack: UIButton = UIButton(type: UIButtonType.custom) as UIButton
+        let buttonBack: UIButton = UIButton(type: UIButton.ButtonType.custom) as UIButton
         buttonBack.frame = CGRect(x: 0, y: 0, width: 40, height: 40) // CGFloat, Double, Int
-        buttonBack.setImage(#imageLiteral(resourceName: "baseline_menu_black_24pt"), for: UIControlState.normal)
-        buttonBack.addTarget(self, action: #selector(clickMenu(sender:)), for: UIControlEvents.touchUpInside)
+        buttonBack.setImage(#imageLiteral(resourceName: "baseline_menu_black_24pt"), for: UIControl.State.normal)
+        buttonBack.addTarget(self, action: #selector(clickMenu(sender:)), for: UIControl.Event.touchUpInside)
         
         let rightBarButtonItem: UIBarButtonItem = UIBarButtonItem(customView: buttonBack)
         // self.navigationItem.setLeftBarButton(rightBarButtonItem, animated: false)
@@ -71,10 +71,10 @@ class CCViewController: UIViewController {
     }
     
     func makeCloseButton() {
-        let buttonBack: UIButton = UIButton(type: UIButtonType.custom) as UIButton
+        let buttonBack: UIButton = UIButton(type: UIButton.ButtonType.custom) as UIButton
         buttonBack.frame = CGRect(x: 0, y: 0, width: 40, height: 40) // CGFloat, Double, Int
-        buttonBack.setImage(#imageLiteral(resourceName: "ic_close_48pt"), for: UIControlState.normal)
-        buttonBack.addTarget(self, action: #selector(clickClose(sender:)), for: UIControlEvents.touchUpInside)
+        buttonBack.setImage(#imageLiteral(resourceName: "ic_close_48pt"), for: UIControl.State.normal)
+        buttonBack.addTarget(self, action: #selector(clickClose(sender:)), for: UIControl.Event.touchUpInside)
         
         let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         negativeSpacer.width = -13
@@ -145,10 +145,10 @@ class CCViewController: UIViewController {
     
     func showError(message:String) {
         DispatchQueue.main.async {
-            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
+            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertController.Style.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
             
             // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
-            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertAction.Style.default) {
                 (result : UIAlertAction) -> Void in
                 //print("OK")
             }
@@ -210,9 +210,9 @@ class CCViewController: UIViewController {
                     } else {
                         if trialover {
                             
-                            let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertControllerStyle.alert)
+                            let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertController.Style.alert)
                             
-                            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertAction.Style.default) {
                                 (result : UIAlertAction) -> Void in
                                 //print("OK")
                                 /*
@@ -225,7 +225,7 @@ class CCViewController: UIViewController {
                             let defaults: UserDefaults = UserDefaults.standard
                             let trial = defaults.bool(forKey: "trial")
                             if !trial {
-                                let addMoneyAction = UIAlertAction(title:NSLocalizedString("Add Money", comment: ""), style: UIAlertActionStyle.default) {
+                                let addMoneyAction = UIAlertAction(title:NSLocalizedString("Add Money", comment: ""), style: UIAlertAction.Style.default) {
                                     (result : UIAlertAction) -> Void in
                                     ClearCloudProducts.store.requestProducts{ [weak self] success, products in
                                         if success {
@@ -485,9 +485,9 @@ class CCViewController: UIViewController {
                                 } else {
                                     if trialover {
                                         
-                                        let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertControllerStyle.alert)
+                                        let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertController.Style.alert)
                                         
-                                        let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                                        let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertAction.Style.default) {
                                             (result : UIAlertAction) -> Void in
                                             //print("OK")
                                            
@@ -501,7 +501,7 @@ class CCViewController: UIViewController {
                                         let defaults: UserDefaults = UserDefaults.standard
                                         let trial = defaults.bool(forKey: "trial")
                                         if !trial {
-                                            let addMoneyAction = UIAlertAction(title:NSLocalizedString("Add Money", comment: ""), style: UIAlertActionStyle.default) {
+                                            let addMoneyAction = UIAlertAction(title:NSLocalizedString("Add Money", comment: ""), style: UIAlertAction.Style.default) {
                                                 (result : UIAlertAction) -> Void in
                                                 ClearCloudProducts.store.requestProducts{ [weak self] success, products in
                                                     if success {
@@ -695,9 +695,9 @@ class CCViewController: UIViewController {
                     } else {
                         if trialover {
                             
-                            let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertControllerStyle.alert)
+                            let alertController = UIAlertController(title: nil, message: error!.getMessage()!, preferredStyle: UIAlertController.Style.alert)
                             
-                            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertActionStyle.default) {
+                            let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: UIAlertAction.Style.default) {
                                 (result : UIAlertAction) -> Void in
                                 //print("OK")
                                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
@@ -1160,9 +1160,9 @@ class CCViewController: UIViewController {
 
     // MARK: - Rotate Video to Original Orientation
     
-    func orientationFromTransform(transform: CGAffineTransform) -> (orientation: UIImageOrientation, isPortrait: Bool) {
+    func orientationFromTransform(transform: CGAffineTransform) -> (orientation: UIImage.Orientation, isPortrait: Bool) {
         
-        var assetOrientation = UIImageOrientation.up
+        var assetOrientation = UIImage.Orientation.up
         var isPortrait = false
         
         if transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0 {
@@ -1193,7 +1193,7 @@ class CCViewController: UIViewController {
         if assetInfo.isPortrait {
             scaleToFitRatio = UIScreen.main.bounds.width / assetTrack.naturalSize.height
             let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
-            instruction.setTransform( assetTrack.preferredTransform.concatenating( scaleFactor), at: kCMTimeZero)
+            instruction.setTransform( assetTrack.preferredTransform.concatenating( scaleFactor), at: CMTime.zero)
             
         }
         else {
@@ -1206,7 +1206,7 @@ class CCViewController: UIViewController {
                 let centerFix = CGAffineTransform(translationX: assetTrack.naturalSize.width, y: yFix)
                 concat = fixUpsideDown.concatenating(centerFix).concatenating(scaleFactor)
             }
-            instruction.setTransform(concat, at: kCMTimeZero)
+            instruction.setTransform(concat, at: CMTime.zero)
         }
         
         return instruction
@@ -1355,12 +1355,12 @@ class CCViewController: UIViewController {
 
         
         do{
-            try mutableCompositionVideoTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAssetTrack.timeRange.duration), of: aVideoAssetTrack, at: kCMTimeZero)
+            try mutableCompositionVideoTrack[0].insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: aVideoAssetTrack.timeRange.duration), of: aVideoAssetTrack, at: CMTime.zero)
             
             //In my case my audio file is longer then video file so i took videoAsset duration
             //instead of audioAsset duration
             
-            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: kCMTimeZero)
+            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: aVideoAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: CMTime.zero)
             
             //Use this instead above line if your audiofile and video file's playing durations are same
             
@@ -1374,12 +1374,12 @@ class CCViewController: UIViewController {
         // =========> VERY IMPORTANT -- fixes orientation of video
         mutableCompositionVideoTrack[0].preferredTransform = aVideoAssetTrack.preferredTransform
         
-        totalVideoCompositionInstruction.timeRange = CMTimeRangeMake(kCMTimeZero,aVideoAssetTrack.timeRange.duration )
+        totalVideoCompositionInstruction.timeRange = CMTimeRangeMake(start: CMTime.zero,duration: aVideoAssetTrack.timeRange.duration )
         
         let firstTrack = mixComposition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: Int32(kCMPersistentTrackID_Invalid))
         
         do {
-            try firstTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAsset.duration), of: aVideoAsset.tracks(withMediaType: AVMediaType.video)[0], at: kCMTimeZero)
+            try firstTrack!.insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: aVideoAsset.duration), of: aVideoAsset.tracks(withMediaType: AVMediaType.video)[0], at: CMTime.zero)
         }
         catch _ {
             //print("Failed to load first track")
@@ -1450,7 +1450,7 @@ class CCViewController: UIViewController {
             //In my case my audio file is longer then video file so i took videoAsset duration
             //instead of audioAsset duration
             
-            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aAudioAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: kCMTimeZero)
+            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: aAudioAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: CMTime.zero)
             
             //Use this instead above line if your audiofile and video file's playing durations are same
             
@@ -1503,8 +1503,8 @@ extension UIView{
     func boundInside(superView: UIView){
         
         self.translatesAutoresizingMaskIntoConstraints = false
-        superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: NSLayoutFormatOptions.directionLeadingToTrailing, metrics:nil, views:["subview":self]))
-        superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: NSLayoutFormatOptions.directionLeadingToTrailing, metrics:nil, views:["subview":self]))
+        superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: NSLayoutConstraint.FormatOptions.directionLeadingToTrailing, metrics:nil, views:["subview":self]))
+        superView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: NSLayoutConstraint.FormatOptions.directionLeadingToTrailing, metrics:nil, views:["subview":self]))
         
         
     }

@@ -232,11 +232,14 @@ class ItemDetailVC: CCViewController, UITableViewDelegate, UITableViewDataSource
             if (self.enhancedVideo == nil) {
                 return 1
             }
-            if self.enhancedVideo!.enhanced_video_id == nil {
+            if !self.enhancedVideo!.isInvalidated {
+                if self.enhancedVideo!.enhanced_video_id == nil {
+                    return 1
+                }
+            } else {
                 return 1
             }
             return 2
-
         }
     }
     

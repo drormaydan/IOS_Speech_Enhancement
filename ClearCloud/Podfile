@@ -4,7 +4,8 @@ platform :ios, '10.0'
 #  pod 'FFmpegWrapper'
    pod 'JGProgressHUD'
   pod 'UITextView+Placeholder'
-  pod 'RealmSwift' 
+#  pod 'RealmSwift' 
+   pod 'RealmSwift', '~> 3.19.0' 
   pod 'Alamofire'
   pod 'AlamofireObjectMapper'
   pod 'AlamofireNetworkActivityLogger'
@@ -19,19 +20,23 @@ platform :ios, '10.0'
   pod 'DateTimePicker'
   pod 'MBAutoGrowingTextView', '~> 0.1.0'
   pod "PGSideMenu"
-  pod 'AudioKit', '~> 4.0'
+  pod 'AudioKit', '4.9.2'
   pod 'CryptoSwift'
 end
 
 target 'ClearCloud' do
    shared_pods
 end
+target 'ClearCloudShareExtension' do
+   pod 'RealmSwift', '~> 3.19.0'
+end
+
 post_install do |installer|
-    installer.pods_project.targets.each do |target|
-        if target.name == '<insert target name of your pod here>'
-            target.build_configurations.each do |config|
-                config.build_settings['SWIFT_VERSION'] = '3.2'
-            end
-        end
+  installer.pods_project.targets.each do |target|
+    if target.name == 'PGSideMenu'
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '4.0'
+      end
     end
+  end
 end

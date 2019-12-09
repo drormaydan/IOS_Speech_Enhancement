@@ -299,7 +299,7 @@ class AudioVideoCell: UITableViewCell {
         }
         self.setNames()
         loaded = true
-        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
         try? AVAudioSession.sharedInstance().setActive(true)
 
         /*
@@ -318,11 +318,11 @@ class AudioVideoCell: UITableViewCell {
             
             av.player = player
             av.view.frame = self.videoView.frame
-            self.owner.addChildViewController(av)
+            self.owner.addChild(av)
             self.videoView.addSubview(av.view)
             //self.videoView.sendSubview(toBack: av.view)
-            av.didMove(toParentViewController: self.owner)
-            av.videoGravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+            av.didMove(toParent: self.owner)
+            av.videoGravity = AVLayerVideoGravity(rawValue: AVLayerVideoGravity.resizeAspectFill.rawValue)
             av.view.boundInside(superView: self.videoView)
             
             //player.play()
@@ -350,11 +350,11 @@ class AudioVideoCell: UITableViewCell {
                             
                             self.av.player = player
                             self.av.view.frame = self.videoView.frame
-                            self.owner.addChildViewController(self.av)
+                            self.owner.addChild(self.av)
                             self.videoView.addSubview(self.av.view)
                             //self.videoView.sendSubview(toBack: av.view)
-                            self.av.didMove(toParentViewController: self.owner)
-                            self.av.videoGravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                            self.av.didMove(toParent: self.owner)
+                            self.av.videoGravity = AVLayerVideoGravity(rawValue: AVLayerVideoGravity.resizeAspectFill.rawValue)
                             self.av.view.boundInside(superView: self.videoView)
                         }
                     } else {

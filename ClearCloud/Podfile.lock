@@ -5,11 +5,11 @@ PODS:
   - AlamofireObjectMapper (5.1.0):
     - Alamofire (~> 4.1)
     - ObjectMapper (~> 3.3)
-  - AudioKit (4.5.0):
-    - AudioKit/Core (= 4.5.0)
-    - AudioKit/UI (= 4.5.0)
-  - AudioKit/Core (4.5.0)
-  - AudioKit/UI (4.5.0):
+  - AudioKit (4.9.2):
+    - AudioKit/Core (= 4.9.2)
+    - AudioKit/UI (= 4.9.2)
+  - AudioKit/Core (4.9.2)
+  - AudioKit/UI (4.9.2):
     - AudioKit/Core
   - Cache (5.2.0)
   - Crashlytics (3.10.8):
@@ -25,11 +25,11 @@ PODS:
   - ObjectMapper (3.3.0)
   - PGSideMenu (1.2.0)
   - ReachabilitySwift (3)
-  - Realm (3.10.0):
-    - Realm/Headers (= 3.10.0)
-  - Realm/Headers (3.10.0)
-  - RealmSwift (3.10.0):
-    - Realm (= 3.10.0)
+  - Realm (3.19.1):
+    - Realm/Headers (= 3.19.1)
+  - Realm/Headers (3.19.1)
+  - RealmSwift (3.19.1):
+    - Realm (= 3.19.1)
   - SwiftyJSON (4.2.0)
   - "UITextView+Placeholder (1.2.1)"
 
@@ -37,7 +37,7 @@ DEPENDENCIES:
   - Alamofire
   - AlamofireNetworkActivityLogger
   - AlamofireObjectMapper
-  - AudioKit (~> 4.0)
+  - AudioKit (= 4.9.2)
   - Cache
   - Crashlytics
   - CryptoSwift
@@ -50,16 +50,15 @@ DEPENDENCIES:
   - MBProgressHUD
   - PGSideMenu
   - ReachabilitySwift (~> 3)
-  - RealmSwift
+  - RealmSwift (~> 3.19.0)
   - SwiftyJSON
   - "UITextView+Placeholder"
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - AlamofireNetworkActivityLogger
     - AlamofireObjectMapper
-    - AudioKit
     - Cache
     - Crashlytics
     - CryptoSwift
@@ -73,16 +72,18 @@ SPEC REPOS:
     - ObjectMapper
     - PGSideMenu
     - ReachabilitySwift
-    - Realm
-    - RealmSwift
     - SwiftyJSON
     - "UITextView+Placeholder"
+  trunk:
+    - AudioKit
+    - Realm
+    - RealmSwift
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   AlamofireNetworkActivityLogger: 6f3076652ab7fa6c819b59be08ea038d339e36d8
   AlamofireObjectMapper: 3395e698901d8b0e6f48b7d0c43bd47875325102
-  AudioKit: 38345036d4a71df2b61233fc919c459a14e8911b
+  AudioKit: ee388f0c9ad4e90b6106c14caaf809cd7ca220da
   Cache: 807c5d86d01a177f06ede9865add3aea269bbfd4
   Crashlytics: 058dc1ba579f6c100bc60a6878703779bff383c4
   CryptoSwift: 1c07ca50843dd48bc54e6ea53d7a4dba3b645716
@@ -91,16 +92,16 @@ SPEC CHECKSUMS:
   IQKeyboardManagerSwift: c14eca30f6001457d6ddf25e313f23fb6578c41c
   JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
   Kingfisher: 43c4b802d8b5256cf1f4379e9cd10b329be6d3e2
-  MBAutoGrowingTextView: 3955d4513be3d184fe2cb7739999c1f994dcd4d5
+  MBAutoGrowingTextView: 83f6f791dda264a21aba75a24b7ac08fc36d4755
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   ObjectMapper: b612bf8c8e99c4dc0bb6013a51f7c27966ed5da9
   PGSideMenu: 7e034935823aeb6940adb5c2774894bc18e57850
   ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
-  Realm: 85ab9e4f779d66f6e9ffeb118dc25b7f130c96ac
-  RealmSwift: 69121c8b86d0ae005fb779efdb10e606732e1c74
+  Realm: fb377747e694c7deb62d402400454134fe321bee
+  RealmSwift: 1302b0ab60f3105a2b214a735eeb0938607cf16b
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   "UITextView+Placeholder": 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
 
-PODFILE CHECKSUM: e50cef8eea1fa0b2215b378132dea0872109a462
+PODFILE CHECKSUM: bcc2dec6c7ba08bc840f837cd75a10618319f314
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4

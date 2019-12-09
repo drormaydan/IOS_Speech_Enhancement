@@ -129,7 +129,7 @@ class BabbleLabsApi: NSObject {
                     switch response.result {
                     case .success:
                         if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                            print("entitlements --> \(utf8Text)")
+                           // print("entitlements --> \(utf8Text)")
                             let serverResponse:EntitlementsResponse = EntitlementsResponse(JSONString: utf8Text)!
                             completionHandler(nil, serverResponse)
                         } else {
@@ -311,8 +311,8 @@ class BabbleLabsApi: NSObject {
                                 if let unbilledUsageInCents = response.unbilledUsageInCents, let customerDollarLimit = response.customerDollarLimit, let accountListingState = response.accountListingState {
                                     let unbilled:Double = Double(unbilledUsageInCents)/100.0
                                     let limit:Double = Double(customerDollarLimit)
-
-                                    if unbilled > limit && (!accountListingState.contains("Black")) {
+print("unbilled \(unbilled) limit\(limit) reason \(reason)")
+                                    if unbilled >= limit && (!accountListingState.contains("Black")) {
                                         completion(false, ServerError.init(WithMessage: reason), true)
                                     } else {
                                         completion(false, ServerError.init(WithMessage: "Sorry, there was an error"), false)

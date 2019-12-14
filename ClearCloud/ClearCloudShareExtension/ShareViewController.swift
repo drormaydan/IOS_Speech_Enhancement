@@ -10,11 +10,16 @@ import UIKit
 import Social
 import MobileCoreServices
 import AVFoundation
+import RealmSwift
 
 class ShareViewController: SLComposeServiceViewController {
 
     let videoContentType = kUTTypeMovie as String
     let audioContentType = kUTTypeAudio as String
+    let appGroupID = "group.com.babblelabs.clearcloud"
+    var containerURL: URL {
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID)!
+    }
 
     override func isContentValid() -> Bool {
         // Do validation of contentText and/or NSExtensionContext attachments here
@@ -23,11 +28,9 @@ class ShareViewController: SLComposeServiceViewController {
             for provider: Any in inputItems.attachments! {
                 let itemProvider = provider as! NSItemProvider
                 if itemProvider.hasItemConformingToTypeIdentifier(videoContentType) {
-                    print("VIDEO ITEM")
                     return true
                 }
                 if itemProvider.hasItemConformingToTypeIdentifier(audioContentType) {
-                    print("AUDIO ITEM")
                     return true
                 }
 
@@ -38,76 +41,50 @@ class ShareViewController: SLComposeServiceViewController {
 
     override func didSelectPost() {
         // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
+        let group = DispatchGroup()
+
         for item: Any in self.extensionContext!.inputItems {
             let inputItems = item as! NSExtensionItem
-            print("inputItems \(inputItems)")
+
             for provider: Any in inputItems.attachments! {
                 let itemProvider = provider as! NSItemProvider
-                if itemProvider.hasItemConformingToTypeIdentifier(videoContentType) {
-                    print("1 VIDEO ITEM")
-                    
-                    itemProvider.loadItem(forTypeIdentifier: videoContentType, options: nil) { data, error in
+                
+                if itemProvider.hasItemConformingToTypeIdentifier("public.file-url") {
+                    group.enter()
+                    itemProvider.loadItem(forTypeIdentifier: "public.file-url" as String, options: nil) { data, error in
                         if let url = data as? URL {
-                            print("1 VIDEO ITEM \(url)")
-                            let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/rewrite.m4a")
                             
-                            if FileManager.default.fileExists(atPath: audiourl2.path) {
-                                do {
-                                    try FileManager.default.removeItem(atPath: audiourl2.path)
-                                }
-                                catch {
-                                    print("Could not remove file at url: \(audiourl2)")
-                                }
-                            }
-                            
-                            print("ORIGINAL AUDIO \(url)")
-                            
-                            
-                            rewriteAudioFile(audioUrl: url, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
-                                if success {
-                                    print("REWROTE AUDIO TO \(audiourl2)")
-                                    processAudio(audioFilename: audiourl2)
-                                   // self.albumsVC.reload()
-                                }
-                            })
-
-
+                            let fileName: String = "\(ProcessInfo.processInfo.globallyUniqueString)_\(".mp4")"
+                            let path = self.containerURL.appendingPathComponent(fileName).path
+                            try? (try? Data(contentsOf: url))?.write(to: URL(fileURLWithPath: path), options: [.atomic])
+                            group.leave()
+                        } else {
+                            group.leave()
+                        }
+                    }
+                } else if itemProvider.hasItemConformingToTypeIdentifier(videoContentType) {
+                    group.enter()
+                    itemProvider.loadItem(forTypeIdentifier: videoContentType as String, options: nil) { data, error in
+                        if let url = data as? URL {
+                            let fileName: String = "\(ProcessInfo.processInfo.globallyUniqueString)_\(".mp4")"
+                            let path = self.containerURL.appendingPathComponent(fileName).path
+                            try? (try? Data(contentsOf: url))?.write(to: URL(fileURLWithPath: path), options: [.atomic])
+                            group.leave()
+                        } else {
+                            group.leave()
                         }
                     }
 
                 } else if itemProvider.hasItemConformingToTypeIdentifier(audioContentType) {
-                    print("1 AUDIO ITEM zz")
-                    
-                    
+                    group.enter()
                     itemProvider.loadItem(forTypeIdentifier: audioContentType, options: nil) { data, error in
-                        print("1 AUDIO ITEM error \(error)")
                         if let url = data as? URL {
-                            print("1 AUDIO ITEM \(url)")
-                            let audiourl2 : URL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/rewrite.m4a")
-                            
-                            if FileManager.default.fileExists(atPath: audiourl2.path) {
-                                do {
-                                    try FileManager.default.removeItem(atPath: audiourl2.path)
-                                }
-                                catch {
-                                    print("Could not remove file at url: \(audiourl2)")
-                                }
-                            }
-                            
-                            print("ORIGINAL AUDIO \(url)")
-                            
-                            
-                            rewriteAudioFile(audioUrl: url, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
-                                if success {
-                                    print("REWROTE AUDIO TO \(audiourl2)")
-                                    processAudio(audioFilename: audiourl2)
-                                   // self.albumsVC.reload()
-                                }
-                            })
-
-
+                            let fileName: String = "\(ProcessInfo.processInfo.globallyUniqueString)_\(".m4a")"
+                            let path = self.containerURL.appendingPathComponent(fileName).path
+                            try? (try? Data(contentsOf: url))?.write(to: URL(fileURLWithPath: path), options: [.atomic])
+                            group.leave()
                         } else {
-                            print("1 AUDIO ITEM not URL \(data)")
+                            group.leave()
                         }
                     }
 
@@ -116,8 +93,9 @@ class ShareViewController: SLComposeServiceViewController {
             }
         }
         
-        // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+        group.notify(queue: .main) {
+            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+        }
     }
     func processAudio(audioFilename:URL) {
           let audio = CCAudio()
@@ -133,55 +111,24 @@ class ShareViewController: SLComposeServiceViewController {
           let docsDir = dirPaths.first!
           let newDir = docsDir.appendingPathComponent(audio.unique_id!)
           let audiourl = newDir.appendingPathComponent("audio.m4a")
-          // let testaudiourl = newDir.appendingPathComponent("caf")
-          
-         // let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
-          
           
           do {
               try filemgr.createDirectory(atPath: newDir.path,
                                           withIntermediateDirectories: true, attributes: nil)
-              //print("CREATED DIR \(newDir)")
               
               try filemgr.copyItem(at: audioFilename, to: audiourl)
-              //print("COPIED AUDIO TO \(audiourl)")
               
               audio.local_audio_path = audiourl.path.replacingOccurrences(of: docsDir.path, with: "")
-              //print("FINAL AUDIO PATH \(audio.local_audio_path!)")
-              
-              /*
-               // test
-               var options = AKConverter.Options()
-               options.format = "caf"
-               options.sampleRate = 22500
-               options.channels = UInt32(1)
-               let br = UInt32(16)
-               options.bitRate = br * 1_000
-               let converter = AKConverter(inputURL: audiourl, outputURL: testaudiourl, options: options)
-               converter.start(completionHandler: { error in
-               if let error = error {
-               AKLog("Error during convertion: \(error)")
-               } else {
-               AKLog("Conversion Complete! \(testaudiourl)")
-               }
-               })*/
-              
               
               do {
                   let attr = try filemgr.attributesOfItem(atPath: audiourl.path)
                   let fileSize = attr[FileAttributeKey.size] as! UInt64
-                  //print("audio \(audio.local_audio_path!) fileSize \(fileSize)")
                   audio.audio_size = Double(fileSize)
                   
                   let aAudioAsset : AVAsset = AVURLAsset(url: audiourl)
-
-                  
-                 // let userCalendar = Calendar.current
-                 // let requestedComponent: Set<Calendar.Component> = [.hour,.minute,.second]
-                 // let timeDifference = userCalendar.dateComponents(requestedComponent, from: audio.local_time_start!, to: endTime!)
                   audio.duration = Int(CMTimeGetSeconds(aAudioAsset.duration))
               } catch {
-                  //print("audio Error: \(error)")
+                  print("ERROR \(error.localizedDescription)")
               }
               
               
@@ -196,19 +143,13 @@ class ShareViewController: SLComposeServiceViewController {
                       try FileManager.default.removeItem(atPath: audioFilename.path)
                   }
                   catch {
-                      //print("Could not remove file at url: \(audioFilename)")
+                      print("Could not remove file at url: \(audioFilename)")
                   }
               }
               
               
           } catch let error as NSError {
-              //print("ERROR \(error)")
-              /*
-              let alertController = UIAlertController(title:NSLocalizedString("Error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
-              let okAction = UIAlertAction(title:NSLocalizedString("OK", comment: ""), style: .default, handler: nil)
-              alertController.addAction(okAction)
-              self.present(alertController, animated: true, completion: nil)
-              */
+            print("ERROR \(error.localizedDescription)")
           }
           
       
@@ -216,15 +157,8 @@ class ShareViewController: SLComposeServiceViewController {
     func rewriteAudioFile(audioUrl:URL, outputUrl:URL, completion:@escaping ((Bool, String?) -> Void)) {
           let mixComposition : AVMutableComposition = AVMutableComposition()
           var mutableCompositionAudioTrack : [AVMutableCompositionTrack] = []
-          //let totalVideoCompositionInstruction : AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
-          
-          //start merge
-          
-          //let aVideoAsset : AVAsset = AVAsset(url: videoUrl)
           let aAudioAsset : AVAsset = AVURLAsset(url: audioUrl)
-          
-          //print("aAudioAsset.tracks \(aAudioAsset.tracks)")
-          
+                    
           mutableCompositionAudioTrack.append(mixComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)!)
           
           
@@ -238,16 +172,8 @@ class ShareViewController: SLComposeServiceViewController {
           
           
           do{
-              
-              //In my case my audio file is longer then video file so i took videoAsset duration
-              //instead of audioAsset duration
-              
-              try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aAudioAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: kCMTimeZero)
-              
-              //Use this instead above line if your audiofile and video file's playing durations are same
-              
-              //            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(kCMTimeZero, aVideoAssetTrack.timeRange.duration), ofTrack: aAudioAssetTrack, atTime: kCMTimeZero)
-              
+            try mutableCompositionAudioTrack[0].insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: aAudioAssetTrack.timeRange.duration), of: aAudioAssetTrack, at: CMTime.zero)
+                            
           }catch{
               //print("zzasdadsError info: \(error)")
               completion(false,error.localizedDescription)
@@ -259,19 +185,11 @@ class ShareViewController: SLComposeServiceViewController {
           assetExport.outputURL = outputUrl
           assetExport.shouldOptimizeForNetworkUse = true
           
-          //print("bHERE 11")
           
           assetExport.exportAsynchronously { () -> Void in
               switch assetExport.status {
                   
               case AVAssetExportSessionStatus.completed:
-                  
-                  //Uncomment this if u want to store your video in asset
-                  
-                  //let assetsLib = ALAssetsLibrary()
-                  //assetsLib.writeVideoAtPathToSavedPhotosAlbum(savePathUrl, completionBlock: nil)
-                  
-                  //print("success")
                   completion(true,nil)
               case  AVAssetExportSessionStatus.failed:
                   //print("failed \(assetExport.error)")

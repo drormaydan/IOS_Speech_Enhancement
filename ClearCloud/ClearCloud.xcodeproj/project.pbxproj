@@ -20,6 +20,8 @@
 		0D30CBBD2208ECFC0080135D /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBB92208ECFB0080135D /* FBSDKLoginKit.framework */; };
 		0D30CBBE2208ECFC0080135D /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBBA2208ECFB0080135D /* Bolts.framework */; };
 		0D30CBBF2208ECFC0080135D /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D30CBBB2208ECFC0080135D /* FBSDKShareKit.framework */; };
+		0D31EAD923A478DF001F13F4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4D8B84239D99E700154BA8 /* ShareViewController.swift */; };
+		0D31EADA23A479E4001F13F4 /* CCAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB57B5F2151E5BC00EFBDD6 /* CCAudio.swift */; };
 		0D3775B3217D5DDA00FB8CDD /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3775B1217D5DDA00FB8CDD /* RegisterVC.swift */; };
 		0D3775B4217D5DDA00FB8CDD /* RegisterVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D3775B2217D5DDA00FB8CDD /* RegisterVC.xib */; };
 		0D4D8B88239D99E700154BA8 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D4D8B86239D99E700154BA8 /* MainInterface.storyboard */; };
@@ -750,6 +752,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D31EADA23A479E4001F13F4 /* CCAudio.swift in Sources */,
+				0D31EAD923A478DF001F13F4 /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -862,8 +866,9 @@
 			baseConfigurationReference = 46605C726F32277C36F04CE4 /* Pods-ClearCloudShareExtension.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ClearCloudShareExtension/ClearCloud.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				INFOPLIST_FILE = ClearCloudShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -877,7 +882,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.ClearCloudShareExtension;
 				PRODUCT_NAME = ClearCloud;
-				PROVISIONING_PROFILE_SPECIFIER = ClearCloudShare2;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -889,8 +894,9 @@
 			baseConfigurationReference = CE8EF9AD7E63693D599ED68D /* Pods-ClearCloudShareExtension.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ClearCloudShareExtension/ClearCloud.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				INFOPLIST_FILE = ClearCloudShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -903,7 +909,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud.ClearCloudShareExtension;
 				PRODUCT_NAME = ClearCloud;
-				PROVISIONING_PROFILE_SPECIFIER = ClearCloudShare2;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1028,11 +1034,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5C6613A06A84876D0E31E8B8 /* Pods-ClearCloud.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ClearCloud/ClearCloud.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1056,7 +1064,7 @@
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = ClearCloud2;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1068,11 +1076,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4D6074BD564377A56F4AB095 /* Pods-ClearCloud.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ClearCloud/ClearCloud.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DUZ2AZ526G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1096,7 +1106,7 @@
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.babblelabs.clearcloud;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = ClearCloud2;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ClearCloud/Classes/UI/Common/ClearCloud-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

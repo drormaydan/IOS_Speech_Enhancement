@@ -545,6 +545,7 @@ class AudioCaptureVC: CCViewController, AVAudioRecorderDelegate {
             self.rewriteAudioFile(audioUrl: audioFilename, outputUrl: audiourl2, completion: { (success:Bool, error:String?) in
                 self.hideHud()
                 DispatchQueue.main.async {
+                    print("REWROTE AUDIO TO \(audiourl2)")
                     if success {
                         do {
                             try filemgr.removeItem(at: audioFilename)

@@ -16,22 +16,22 @@ import Photos
 import CryptoSwift
 
 class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
-
+    
     @IBOutlet weak var collectionView: UICollectionView!
     var albums:[Album] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         makeMenuButton()
         setLogoImage()
-
+        
         collectionView.register(AlbumCell.self, forCellWithReuseIdentifier: "ALBUM_CELL")
         collectionView.register(UINib(nibName: "AlbumCell", bundle:nil), forCellWithReuseIdentifier: "ALBUM_CELL")
         collectionView.backgroundColor = UIColor.clear
         collectionView.backgroundView = nil
-
+        
         
         let defaults: UserDefaults = UserDefaults.standard
         let did_trial = defaults.bool(forKey: "did_trial")
@@ -62,12 +62,12 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
             case .error:
                 //defaults.set(false, forKey: "trial")
                 //defaults.synchronize()
-
+                
                 let albumsVC:LoginVC = LoginVC(nibName: "LoginVC", bundle: nil)
                 let nav:UINavigationController = UINavigationController(rootViewController: albumsVC)
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
-
+                
                 break
             case .notLoggedIn:
                 if !self.showed_login {
@@ -80,7 +80,17 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
                 break
             }
         }
-
+        
+        NotificationCenter.default.addObserver(forName:Notification.Name(rawValue:"RefreshMain"),
+                                               object:nil, queue:nil,
+                                               using:catchNotification)
+        
+    }
+    
+    func catchNotification(notification: Notification) -> Void {
+        DispatchQueue.main.async {
+            self.reload()
+        }
     }
     
     func openLogin() {
@@ -89,9 +99,9 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.sideMenuController.present(nav, animated: true, completion: nil)
     }
-
+    
     var showed_login = false
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -109,7 +119,7 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
             
             return
         }
-
+        
         let photos = PHPhotoLibrary.authorizationStatus()
         if photos == .notDetermined {
             PHPhotoLibrary.requestAuthorization({status in
@@ -127,12 +137,12 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
             }
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     var showed_tutorial = false
     
     func loadAlbums() {
@@ -143,25 +153,25 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.sideMenuController.present(albumsVC, animated: true, completion: nil)
         }
-
+        
         self.albums.removeAll()
         
         let album = Album()
         album.name = "Audio Files"
         album.type = .audio
         self.albums.append(album)
-
+        
         let fetchOptions = PHFetchOptions()
         
         let smartAlbums:PHFetchResult<PHCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumVideos, options: fetchOptions) as! PHFetchResult<PHCollection>
         let smartAlbums2:PHFetchResult<PHCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOptions) as! PHFetchResult<PHCollection>
         let smartAlbums3:PHFetchResult<PHCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumFavorites, options: fetchOptions) as! PHFetchResult<PHCollection>
-
+        
         let topLevelfetchOptions = PHFetchOptions()
         
         
-//        let fetchResult : PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumVideos, options: fetchOptions)
-
+        //        let fetchResult : PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumVideos, options: fetchOptions)
+        
         
         let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollections(with: topLevelfetchOptions)
         
@@ -170,7 +180,7 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         
         let allAlbums = [topLevelUserCollections, smartAlbums, smartAlbums2, smartAlbums3]
         //print("allAlbums \(allAlbums)")
-
+        
         for i in 0 ..< allAlbums.count {
             let result = allAlbums[i]
             
@@ -212,8 +222,8 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
         }
     }
     
-
-
+    
+    
     // MARK: - CollectionView
     
     
@@ -254,14 +264,14 @@ class AlbumsVC: CCViewController, UICollectionViewDelegate, UICollectionViewData
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let screenSize: CGRect = UIScreen.main.bounds
-
+        
         
         let width = ((screenSize.width-20)/2)-10
         //print("width =\(width)")
         
         return CGSize(width: width, height: width-12+12+59)
     }
-
+    
 }
 extension String {
     //: ### Base64 encoding a string
